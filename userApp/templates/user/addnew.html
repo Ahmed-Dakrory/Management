@@ -1,0 +1,338 @@
+
+{% extends 'theme.html' %}
+{%load static%}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+
+{% block 'title' %}
+  {% trans 'المستخدمين' %}
+{% endblock %}
+
+
+{% block 'content' %}
+
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 style="float: right;"> 
+          <ol class="breadcrumb float-sm-left">
+            
+            <li  class="breadcrumb-item"><a href="{%url 'mainApp:home'%}">{%  trans 'الصفحةالرئيسية'%}</a></li>
+            <li  class="breadcrumb-item"><a href="{%url 'userApp:listOf_user'%}">{% trans 'قائمة المستخدمين'%}</a></li>
+            <li class="breadcrumb-item active"> {% trans 'المستخدمين'%}</li>
+          </ol>
+         </h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div class="container post-listing">
+    <!-- <input type="hidden" id="dataOfrole" value="{{roleDetails.id}}"> -->
+    
+
+    <div class="row ">
+      <div class="col-md-12 col-xm-12 single-post">
+        
+       
+        <div class="box-body">
+            <div class="tab-content">
+              <div class="tab-pane form-horizontal active" id="Listed">
+                
+               
+
+
+                <!--Start of the Form-->
+                <div dir="rtl" class="card">
+                    <div class="card-header card-header-primary greenbar" style="text-align: justify;">
+                      <h4 class="card-title">{%  trans 'اضافة مستخدم'%}</h4>
+                      <p class="card-category">{%  trans 'برجاء ادخال بيانات المستخدم'%}</p>
+                    </div>
+                    <div class="card-body" style="text-align: justify;">
+                      <form  method="POST" id="form" class="needs-validation form-horizontal" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="username">{%  trans 'اسم المستخدم'%}</label>
+                              <input type="hidden" id="id" name="id" value="{{UserData.id}}">
+                              <input type="text" required="" class="form-control required mb-3" {% if type == 'edit' %} disabled {% endif %} name="username" value="{{UserData.username}}" id="username">
+                              <div class="invalid-feedback">
+                                {%  trans ' برجاء ادخال اسم المستخدم '%}
+                              </div>  
+                            </div>
+                            <div id="usernameError">
+
+                            </div>
+                          </div>
+
+
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="first_name">{%  trans 'الاسم الأول'%}</label>
+                              <input type="text" required="" class="form-control required mb-3" name="first_name" value="{{UserData.first_name}}" id="first_name">
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال هذا الحقل'%}
+                              </div>  
+                            </div>
+                          </div>
+
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="last_name">{%  trans 'الاسم الأخير'%}</label>
+                              <input type="text" required="" class="form-control required mb-3" name="last_name" value="{{UserData.last_name}}" id="last_name">
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال هذا الحقل'%}
+                              </div>  
+                            </div>
+                          </div>
+                        
+                        </div>
+
+
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="email">{%  trans 'البريد الالكترونى'%}</label>
+                              <input type="email" required=""  class="form-control required mb-3" name="email" value="{{UserData.email}}" id="email">
+                              <div class="invalid-feedback">
+                                {%  trans ' برجاء ادخال البريد الالكترونى '%} 
+                              </div>  
+                            </div>
+                            <div id="emailError"></div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="password">{%  trans 'الرقم السرى'%}</label>
+                              <input type="password"   class="form-control " name="password" value="" id="password">
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال رقم الرقم السرى '%} 
+                              </div>  
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="phone">{%  trans 'رقم الهاتف'%}</label>
+                              <input type="tel" required=""  class="form-control required mb-3" name="phone" value="{{UserData.phone}}" id="phone">
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال رقم الهاتف '%} 
+                              </div>  
+                            </div>
+                            <div id="phoneError"></div>
+
+                          </div>
+                        </div>
+
+
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="address">{%  trans 'العنوان'%}</label>
+                              <input type="text" required=""  class="form-control required mb-3" name="address" value="{{UserData.address}}" id="address">
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال العنوان '%} 
+                              </div>  
+                            </div>
+                          </div>
+                        </div>
+
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group bmd-form-group">
+                            <label  class="pb-1" for="role">{%  trans '* صلاحية البيانات '%} </label>
+                            <select required="" type="text" class="form-control required mb-3" name="role" value="{{UserData.role.id}}" id="role">
+                                <option value="">{%  trans 'اختر احد الأنواع'%}</option>
+                                {% for item in all_role %}
+                                <option value="{{item.id}}"  {% if item.id == UserData.role.id %} selected {% endif %}>{{item.name}}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                              {%  trans 'برجاء اختيار احد الصلاحيات'%}
+                            </div>  
+                        </div>
+                          
+                        </div>
+
+
+
+
+                        <div class="col-md-6">
+                          <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="id_number">{%  trans '* رقم البطاقة'%} </label>
+                              <input type="number" required=""  class="form-control required mb-3" name="id_number" value="{{UserData.id_number}}" id="id_number">
+                                
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال ادخال البطاقة'%}
+                              </div>  
+                          </div>
+                          
+                        </div>
+                    </div>
+
+                        
+                    
+                      
+                         
+                        <br/>
+                        <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
+                        <button type="submit" class="btn btn-primary" >{% trans "Save" %}</button>
+
+                        <div class="clearfix"></div>
+                      </form>
+                    </div>
+                  </div>
+
+                <!--End of the Form-->
+
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+
+
+
+{% block Extrajavascripts %}
+
+
+<script>
+
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+    if (form.checkValidity() === false) {
+    event.preventDefault();
+    event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+    }, false);
+    });
+    }, false);
+    })();
+
+
+
+
+
+// new functionality on submit checking if the user name doesn't exist before 
+
+
+
+
+
+$(document).ready(function() {
+      
+   
+    var form = $('form')
+    $('form').submit(function (e) {
+          _this = $(this)
+          e.preventDefault();
+        var username = $('#username').val()
+        var email =  $('#email').val()
+        var phone =  $('#phone').val()
+        var id =  $('#id').val()
+
+
+        console.log('-------------------')
+     
+      $.ajax({ 
+        type: 'POST',
+        url: '/{{LANGUAGE_CODE}}/checkUniquenessOfUsername',
+        dataType: 'json',
+        data: { 
+            'username':username,
+            'email':email,
+            'phone':phone,
+            'id':id,
+        },
+        headers:{
+            "X-CSRFToken": csrftoken
+                },
+        async: true,
+        cache: true,
+        success: function(result) {
+          // console.log(result[nameExists],"*********************************888888888888888")
+          console.log(result['nameExists'],"*********1")
+          if(result['nameExists'] == "true"){
+            $('#usernameError').empty()
+            $('#emailError').empty()
+            $('#phoneError').empty()
+
+            $('#usernameError').append("اسم المستخدم موجود بالفعل*")
+          } 
+          else if(result['emailExists'] == "true"){
+            $('#usernameError').empty()
+            $('#emailError').empty()
+            $('#phoneError').empty()
+            $('#emailError').append(" الايميل موجود بالفعل*")
+
+          }
+          else if(result['phoneExists'] == "true"){
+            $('#usernameError').empty()
+            $('#emailError').empty()
+            $('#phoneError').empty()
+            $('#phoneError').append(" رقم الهاتف موجود بالفعل*")
+
+          }
+          else{
+            console.log("not exists ")
+            if ( $('form')[0].checkValidity() ) {
+              $('#usernameError').empty()
+            $('#emailError').empty()
+            $('#phoneError').empty()
+            _this.unbind('submit').submit();
+
+                          }
+
+          }
+
+
+        },
+          
+    });
+
+
+    });
+
+});
+
+
+
+
+$('#regionalBranches').val($('#regionalBranches').attr('value'));
+
+$('#sector').val($('#sector').attr('value'));
+$('#centralAdministration').val($('#centralAdministration').attr('value'));
+
+fill_sectorAndSelect(true);
+fill_centralAdminstrationAndSelect(true);
+
+
+
+</script>
+                         
+   
+{% endblock %}

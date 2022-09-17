@@ -1,0 +1,613 @@
+
+
+
+  .tasks{
+    position: fixed;
+    bottom: 3px;
+    right: 33%;
+    z-index: 999;
+  }
+
+
+  @keyframes progress-bar-stripes {
+    from {
+      background-position: 1rem 0;
+    }
+  
+    to {
+      background-position: 0 0;
+    }
+  }
+  
+  .progress-holder {
+    display: flex;
+    height: 2.5rem;
+    overflow: hidden;
+    font-size: 1.95rem;
+    background-color: #b7b2b2;
+    border-radius: 0.25rem;
+    box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #ffffff;
+    text-align: center;
+    background-color: #6194c4!important;
+    transition: width 0.6s ease;
+  }
+  
+  .progress-bar-striped {
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+  }
+  
+  .progress-bar-animated {
+    animation: progress-bar-stripes 1s linear infinite;
+  }
+  
+  .media {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+
+
+/* The Modal (background) */
+.dialogHover {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .dialogHover-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    border: 1px solid #888;
+    width: 51%;
+    border-radius: 9px;
+  }
+  
+  /* The Close Button */
+  .closeButtonOfDialog {  
+    cursor: pointer;
+    color: #5d5a5a;
+    text-align: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closeButtonOfDialog:hover,
+  .closeButtonOfDialog:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .closeButtonOfProgressbar{
+    cursor: pointer;
+    color: #4a4343;
+    position: absolute;
+    right: 29px;
+    font-size: 28px;
+    font-weight: bold;
+    width: 31px;
+    height: 31px;
+    padding-top: 4px;
+    border-radius: 50%;
+    background: #e4e4e499;
+    box-shadow: 1px 3px 1px 1px grey;
+  }
+  
+  .closeButtonOfProgressbar:hover,
+  .closeButtonOfProgressbar:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  
+  .dialogHeader{
+    background-color: #779ab4;
+      border-top-right-radius: 7px;
+      border-top-left-radius: 7px;
+      color: white;
+  }
+  
+
+
+  
+/* Modal Content/Box */
+.dialogHover-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    border: 1px solid #888;
+    width: 51%;
+    border-radius: 9px;
+  }
+  
+  /* The Close Button */
+  .closeButtonOfDialog {  
+    cursor: pointer;
+    color: #5d5a5a;
+    text-align: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closeButtonOfDialog:hover,
+  .closeButtonOfDialog:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .closeButtonOfProgressbar{
+    cursor: pointer;
+    color: #546165;
+    position: absolute;
+    right: 29px;
+    line-height: 22px;font-size: 22px;
+    font-weight: bold;
+    width: 26px;
+    height: 26px;
+    padding-top: 0px;
+    border-radius: 50%;
+    background: #e4e4e499;
+    box-shadow: 1px 3px 1px 1px grey;
+  }
+  
+  .closeButtonOfProgressbar:hover,
+  .closeButtonOfProgressbar:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  
+  .dialogHeader{
+    background-color: #779ab4;
+      border-top-right-radius: 7px;
+      border-top-left-radius: 7px;
+      color: white;
+  }
+  
+  #loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    width: 103%;
+    height: 298%;
+    background-color: rgba(192, 192, 192, 0.5);
+  }
+  
+  
+  #loadingImg {
+    width: 100%;
+    height: 91px;
+    position: fixed;
+    top: 39%;
+    background-image: url(https://i.stack.imgur.com/MnyxU.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 59px 59px;
+  }
+  #notificationDropDown{
+    height: 395px;
+    }
+  
+  
+  #notificationDropDown{
+    overflow:hidden;
+     overflow-y:scroll;
+    }
+  
+
+
+
+
+    #loaderHandler{
+      position: fixed;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        background: #ffffff91;
+        z-index: 9999;
+    }
+    
+     
+      
+      /* Safari */
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+  
+      
+  
+  
+  
+  
+      
+  
+  
+  #loaderMain {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      right: 47%;
+      top: 34%;
+      
+      -webkit-transform-style: preserve-3d;
+      -moz-transform-style: preserve-3d;
+      -ms-transform-style: preserve-3d;
+      -o-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      -webkit-perspective: 600;
+      -moz-perspective: 600;
+      perspective: 600;
+    }
+    #loaderMain span {
+      display: block;
+      position: absolute;
+      -webkit-transform-origin: 50% 100%;
+      -moz-transform-origin: 50% 100%;
+      -ms-transform-origin: 50% 100%;
+      -o-transform-origin: 50% 100%;
+      transform-origin: 50% 100%;
+    }
+    #loaderMain span:after {
+      display: block;
+      content: "";
+      border-style: solid;
+      border-color: transparent;
+      border-width: 100px 58px 0;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    #loaderMain span:nth-child(1) {
+      -webkit-transform: rotate3d(0, 0, 1, 90deg);
+      -moz-transform: rotate3d(0, 0, 1, 90deg);
+      -ms-transform: rotate3d(0, 0, 1, 90deg);
+      -o-transform: rotate3d(0, 0, 1, 90deg);
+      transform: rotate3d(0, 0, 1, 90deg);
+    }
+    #loaderMain span:nth-child(1):after {
+      border-top-color: #19487e;
+      -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+      -o-transform: rotate3d(0.5, 1, 0, 180deg);
+      transform: rotate3d(0.5, 1, 0, 180deg);
+      -webkit-animation: split 2s 0.1111111111s ease infinite;
+      -moz-animation: split 2s 0.1111111111s ease infinite;
+      animation: split 2s 0.1111111111s ease infinite;
+    }
+    #loaderMain span:nth-child(2) {
+      -webkit-transform: rotate3d(0, 0, 1, 150deg);
+      -moz-transform: rotate3d(0, 0, 1, 150deg);
+      -ms-transform: rotate3d(0, 0, 1, 150deg);
+      -o-transform: rotate3d(0, 0, 1, 150deg);
+      transform: rotate3d(0, 0, 1, 150deg);
+    }
+    #loaderMain span:nth-child(2):after {
+      border-top-color: #0d4789;
+      -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+      -o-transform: rotate3d(0.5, 1, 0, 180deg);
+      transform: rotate3d(0.5, 1, 0, 180deg);
+      -webkit-animation: split 2s 0.2222222222s ease infinite;
+      -moz-animation: split 2s 0.2222222222s ease infinite;
+      animation: split 2s 0.2222222222s ease infinite;
+    }
+    #loaderMain span:nth-child(3) {
+      -webkit-transform: rotate3d(0, 0, 1, 210deg);
+      -moz-transform: rotate3d(0, 0, 1, 210deg);
+      -ms-transform: rotate3d(0, 0, 1, 210deg);
+      -o-transform: rotate3d(0, 0, 1, 210deg);
+      transform: rotate3d(0, 0, 1, 210deg);
+    }
+    #loaderMain span:nth-child(3):after {
+      border-top-color: rgb(82, 132, 206);
+      -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+      -o-transform: rotate3d(0.5, 1, 0, 180deg);
+      transform: rotate3d(0.5, 1, 0, 180deg);
+      -webkit-animation: split 2s 0.3333333333s ease infinite;
+      -moz-animation: split 2s 0.3333333333s ease infinite;
+      animation: split 2s 0.3333333333s ease infinite;
+    }
+    #loaderMain span:nth-child(4) {
+      -webkit-transform: rotate3d(0, 0, 1, 270deg);
+      -moz-transform: rotate3d(0, 0, 1, 270deg);
+      -ms-transform: rotate3d(0, 0, 1, 270deg);
+      -o-transform: rotate3d(0, 0, 1, 270deg);
+      transform: rotate3d(0, 0, 1, 270deg);
+    }
+    #loaderMain span:nth-child(4):after {
+      border-top-color: #4363a7;
+      -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+      -o-transform: rotate3d(0.5, 1, 0, 180deg);
+      transform: rotate3d(0.5, 1, 0, 180deg);
+      -webkit-animation: split 2s 0.4444444444s ease infinite;
+      -moz-animation: split 2s 0.4444444444s ease infinite;
+      animation: split 2s 0.4444444444s ease infinite;
+    }
+    #loaderMain span:nth-child(5) {
+      -webkit-transform: rotate3d(0, 0, 1, 330deg);
+      -moz-transform: rotate3d(0, 0, 1, 330deg);
+      -ms-transform: rotate3d(0, 0, 1, 330deg);
+      -o-transform: rotate3d(0, 0, 1, 330deg);
+      transform: rotate3d(0, 0, 1, 330deg);
+    }
+    #loaderMain span:nth-child(5):after {
+      border-top-color: #3379ca;
+      -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+      -o-transform: rotate3d(0.5, 1, 0, 180deg);
+      transform: rotate3d(0.5, 1, 0, 180deg);
+      -webkit-animation: split 2s 0.5555555556s ease infinite;
+      -moz-animation: split 2s 0.5555555556s ease infinite;
+      animation: split 2s 0.5555555556s ease infinite;
+    }
+    #loaderMain span:nth-child(6) {
+      -webkit-transform: rotate3d(0, 0, 1, 390deg);
+      -moz-transform: rotate3d(0, 0, 1, 390deg);
+      -ms-transform: rotate3d(0, 0, 1, 390deg);
+      -o-transform: rotate3d(0, 0, 1, 390deg);
+      transform: rotate3d(0, 0, 1, 390deg);
+    }
+    #loaderMain span:nth-child(6):after {
+      border-top-color: #406c9f;
+      -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+      -o-transform: rotate3d(0.5, 1, 0, 180deg);
+      transform: rotate3d(0.5, 1, 0, 180deg);
+      -webkit-animation: split 2s 0.6666666667s ease infinite;
+      -moz-animation: split 2s 0.6666666667s ease infinite;
+      animation: split 2s 0.6666666667s ease infinite;
+    }
+    
+    @-webkit-keyframes split {
+      0% {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+      25% {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotate3d(0, 1, 0, 360deg);
+      }
+      50% {
+        opacity: 1;
+        -webkit-transform-origin: 100% 0%;
+        -webkit-transform: rotate3d(0, 1, 0, 360deg);
+      }
+      75% {
+        opacity: 0;
+        -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+      100% {
+        opacity: 1;
+        -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+    }
+    @-moz-keyframes split {
+      0% {
+        -moz-transform-origin: 50% 100%;
+        -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+      25% {
+        -moz-transform-origin: 50% 100%;
+        -moz-transform: rotate3d(0, 1, 0, 360deg);
+      }
+      50% {
+        opacity: 1;
+        -moz-transform-origin: 100% 0%;
+        -moz-transform: rotate3d(0, 1, 0, 360deg);
+      }
+      75% {
+        opacity: 0;
+        -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+      100% {
+        opacity: 1;
+        -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+    }
+    @keyframes split {
+      0% {
+        -webkit-transform-origin: 50% 100%;
+        -moz-transform-origin: 50% 100%;
+        -ms-transform-origin: 50% 100%;
+        -o-transform-origin: 50% 100%;
+        transform-origin: 50% 100%;
+        -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+        -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+        -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+        -o-transform: rotate3d(0.5, 1, 0, 180deg);
+        transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+      25% {
+        -webkit-transform-origin: 50% 100%;
+        -moz-transform-origin: 50% 100%;
+        -ms-transform-origin: 50% 100%;
+        -o-transform-origin: 50% 100%;
+        transform-origin: 50% 100%;
+        -webkit-transform: rotate3d(0, 1, 0, 360deg);
+        -moz-transform: rotate3d(0, 1, 0, 360deg);
+        -ms-transform: rotate3d(0, 1, 0, 360deg);
+        -o-transform: rotate3d(0, 1, 0, 360deg);
+        transform: rotate3d(0, 1, 0, 360deg);
+      }
+      50% {
+        opacity: 1;
+        -webkit-transform-origin: 100% 0%;
+        -moz-transform-origin: 100% 0%;
+        -ms-transform-origin: 100% 0%;
+        -o-transform-origin: 100% 0%;
+        transform-origin: 100% 0%;
+        -webkit-transform: rotate3d(0, 1, 0, 360deg);
+        -moz-transform: rotate3d(0, 1, 0, 360deg);
+        -ms-transform: rotate3d(0, 1, 0, 360deg);
+        -o-transform: rotate3d(0, 1, 0, 360deg);
+        transform: rotate3d(0, 1, 0, 360deg);
+      }
+      75% {
+        opacity: 0;
+        -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+        -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+        -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+        -o-transform: rotate3d(0.5, 1, 0, 180deg);
+        transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+      100% {
+        opacity: 1;
+        -webkit-transform: rotate3d(0.5, 1, 0, 180deg);
+        -moz-transform: rotate3d(0.5, 1, 0, 180deg);
+        -ms-transform: rotate3d(0.5, 1, 0, 180deg);
+        -o-transform: rotate3d(0.5, 1, 0, 180deg);
+        transform: rotate3d(0.5, 1, 0, 180deg);
+      }
+    }
+    
+  
+  
+  
+    body::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #F5F5F5;
+  }
+  
+  body::-webkit-scrollbar {
+      width: 6px;
+      background-color: #2689fa;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+      background-color: #2689fa;
+  }
+  
+  
+  
+  .leaflet-top, .leaflet-bottom {
+    position: absolute;
+    z-index: 12!important;
+    pointer-events: none;
+}
+
+.leaflet-pane {
+  z-index: 9!important;
+}
+
+
+.bg-green-open{
+  background: #e1f8de;
+}
+
+.bg-blue-open{
+  background: #aebbfa;
+}
+
+.bg-yellow-open{
+  background: #eff6af;
+}
+
+.bg-red-open{
+  background: #f0caca;
+}
+
+.fs-12{
+  font-size: 12px;
+}
+
+.fs-11{
+  font-size: 11px!important;
+}
+
+
+
+.form-control.required.calculated{
+  
+background-color: #cacaca!important;
+}
+
+.btn-arrow{
+  background-color: #8484844f!important;
+  border-radius: 37px!important;
+  color: #4481ff!important;
+}
+
+.emptyColor{
+  border-color: #ed1313!important;
+}
+
+
+
+.centerall{
+  position: absolute;
+  top: 50%;right: 33%;
+}
+
+
+.bg-blue-open > span{
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.bg-yellow-open > span{
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.bg-red-open > span{
+  font-size: 15px;
+  font-weight: 700;
+}
+
+
+.bg-green-open > span{
+  font-size: 15px;
+  font-weight: 700;
+}
+
+
+.form-control.required {
+  background-color: #d5e9f1!important;
+}
+
+.detailed_class.form-control{
+  background-color: #d5e9f1!important;
+}
+
+
+
+.bg-milano{
+    background: #fafafa;
+
+}

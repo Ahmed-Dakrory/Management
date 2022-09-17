@@ -1,0 +1,235 @@
+
+{% extends 'theme.html' %}
+{%load static%}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+
+{% block 'title' %}
+  {% trans 'الصلاحيات' %}
+{% endblock %}
+
+
+{% block 'content' %}
+
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 style="float: right;"> 
+          <ol class="breadcrumb float-sm-left">
+            
+            <li  class="breadcrumb-item"><a href="{%url 'mainApp:home'%}">{%  trans 'الصفحةالرئيسية'%}</a></li>
+            <li  class="breadcrumb-item"><a href="{%url 'userApp:listOf_role'%}">{% trans 'قائمة الصلاحيات'%}</a></li>
+            <li class="breadcrumb-item active"> {% trans 'الصلاحية'%}</li>
+          </ol>
+         </h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<div class="container post-listing">
+ 
+
+    <div class="row ">
+      <div class="col-md-12 col-xm-12 single-post">
+        
+       
+        <div class="box-body">
+            <div class="tab-content">
+              <div class="tab-pane form-horizontal active" id="Listed">
+                <div class="form-group col-md-12 col-xm-12 ">
+                  <!-- <p id="descriptionForState" class="col-md-12 no-padding mt-3" style="text-align: right;">
+                    {{permissionGeneralDetails.notes}}
+                  </p> -->
+                </div>
+               
+
+
+                <!--Start of the Form-->
+                <div dir="rtl" class="card">
+                    <div class="card-header card-header-primary greenbar" style="text-align: justify;">
+                      <h4 class="card-title">اضافة صلاحية</h4>
+                      <p class="card-category">برجاء ادخال بيانات الصلاحية</p>
+                    </div>
+                    <div class="card-body" style="text-align: justify;">
+                      <form  method="POST" id="form" class="needs-validation form-horizontal" novalidate>
+                        {% csrf_token %}
+                        <input name="jsonAllElements" id="jsonAllElements" value="{{thisElementData.accessabilities}}" type="hidden"/>
+                        
+
+                        <div class="row">
+                          <div class="col-md-2">
+                            <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
+                            <button type="submit" class="btn btn-primary pull-right mb-3 mt-3"  >{% trans "Save" %}</button>
+
+                          </div>
+                          <div class="col-md-1">
+                            <a href="{% url 'userApp:listOf_role' %}" class="btn btn-danger pull-right mb-3 mt-3">رجوع</a>
+                          </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                              <label for="name" class="pt-3 pb-3">{% trans 'اسم الصلاحية بالعربية' %}</label>
+                              <input type="text" required="" type="text" class="form-control required" name="name" value="{{thisElementData.name}}" id="name">
+                              <div class="invalid-feedback">
+                                {% trans 'برجاء ادخال اسم الصلاحية'%}
+                              </div>  
+                          </div>
+                            
+                          </div>
+
+
+                          <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                              <label for="name_en" class="pt-3 pb-3">{% trans 'اسم الصلاحية بالانجليزية' %}</label>
+                              <input type="text" required="" type="text" class="form-control required" name="name_en" value="{{thisElementData.name_en}}" id="name_en">
+                              <div class="invalid-feedback">
+                                {% trans 'برجاء ادخال اسم الصلاحية'%}
+                              </div>  
+                          </div>
+                            
+                          </div>
+
+
+
+                      </div>
+                       
+                   
+                          
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group bmd-form-group">
+                              <label class="bmd-label-floating fontOfMain p-3">{% trans 'اختر الأذونات *'%}</label>
+                            </div>
+                            <div class="border p-3">
+                            {% if all_permissionGeneral.count <= 0 %}
+                            <div id="displayOfNoCriteria">
+                                <p>لا يوجد اى اذونات متاحة</p>
+                            </div>
+                            {% else %}
+                            <div id="permissionGeneralBoxAll" class="boxOfpermissionGeneral row ">
+                              {%for mainPermissions in all_permissionGeneral%}
+                                <div class="list-group col-md-4" id="permissionNumber_{{mainPermissions.number}}">
+                                  <button type="button" data-toggle="collapse" data-target="#classPermission_{{mainPermissions.number}}"  class="list-group-item list-group-item-dark m-1" >
+                                    <div class="form-group bmd-form-group" style="text-align: right;">
+                                      <input type="checkbox" id="selectall{{mainPermissions.number}}" name="selectall" onclick="toggle(this,{{mainPermissions.number}})" autocomplete="off" >
+
+                                      <label class="bmd-label-floating fontOfCheckBox">{% if LANGUAGE_CODE == 'ar' %} {{mainPermissions.mainNameAr}}  {% elif LANGUAGE_CODE == 'en' %} {{mainPermissions.mainNameEn}}  {% endif %} </label>
+                                    </div>
+                                  </button>
+
+                                  <div id="classPermission_{{mainPermissions.number}}" class="collapse">
+                                    {%for item in mainPermissions.allPermissionsRelated%}
+                                      
+                                      <div class="list-group-item list-group-item-action" >
+                                        <div class="input-group mb-3" >
+                                          <div class="input-group-prepend">
+                                            <div class=" p-0 me-2">
+                                          <input type="checkbox" id="checkRel_{{item.id}}"  {% if item.id in allSelectedPermissions %} checked {% endif %}  name="permissionGeneralCheckBox" value="{{item.id}}" class=" p-0"/>
+                                        </div>
+                                      </div>
+                                          <label for="checkRel_{{item.id}}" class="bmd-label-floating fontOfCheckBox">{% if LANGUAGE_CODE == 'ar' %} {{item.name}} {% elif LANGUAGE_CODE == 'en' %} {{item.nameEn}} {% endif %}</label>
+                                          </div>
+                                      </div>
+                                    {% endfor %}
+                                  </div>
+
+                                </div>
+                              {% endfor %}
+                            </div>
+                            {% endif %} 
+                          </div>
+                            
+
+                          </div>
+
+                        </div>
+                        <br/>
+                        <div class="row">
+                          <div class="col-md-2">
+                            <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
+                            <button type="submit" class="btn btn-primary pull-right mb-3 mt-3"  >{% trans "Save" %}</button>
+
+                          </div>
+                          <div class="col-md-1">
+                            <a href="{% url 'userApp:listOf_role' %}" class="btn btn-danger pull-right mb-3 mt-3">رجوع</a>
+                          </div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </form>
+                    </div>
+                  </div>
+
+                <!--End of the Form-->
+
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+
+
+
+{% block javaNew %}
+
+
+<script>
+
+if($('#jsonAllElements').val()==''){
+  allElementJson = [];
+}else{
+  allElementJson = JSON.parse($('#jsonAllElements').val());
+}
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+    if (form.checkValidity() === false) {
+    event.preventDefault();
+    event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+    }, false);
+    });
+    }, false);
+    })();
+
+
+
+
+
+
+toggle = function(source,number) {
+  checkboxes = $('#permissionNumber_'+number.toString()+' :input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i] != source)
+    checkboxes[i].checked = source.checked;
+    }
+    }
+
+
+// $("#role_parts_id").select2();
+
+</script>
+                         
+   
+{% endblock %}

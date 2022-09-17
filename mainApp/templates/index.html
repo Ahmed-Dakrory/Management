@@ -1,0 +1,467 @@
+
+{% extends 'theme.html' %}
+{%load static%}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+
+{% block 'title' %}
+  {% trans 'قائمة الأحذية' %}
+{% endblock %}
+
+
+{% block 'content' %}
+
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+
+  
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 style="float: right;"> 
+          <ol class="breadcrumb float-sm-left">
+            
+            <li  class="breadcrumb-item"><a href="{%url 'mainApp:home'%}">{%  trans 'الصفحةالرئيسية'%}</a></li>
+            <li class="breadcrumb-item active"> {% trans 'المصانع'%}</li>
+          </ol>
+         </h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+           
+           
+            <!-- Header -->
+            <div class="card-header">
+              <div class="row justify-content-between align-items-center flex-grow-1">
+                <div class="col-md">
+                  <div class="d-flex justify-content-between align-items-center">
+                 
+                    <!-- Datatable Info -->
+                    <div id="datatableCounterInfo">
+                      <div class="d-flex align-items-center">
+                        <a class="btn btn-outline-success btn-sm"  type="button" href="#">  <i class="tio-delete-outlined"></i> {% trans 'اضافة DMZ'%}</a>
+                      </div>
+                    </div>
+                    <!-- End Datatable Info -->
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                <div class="col-auto">
+                  <!-- Filter -->
+                  <div class="row align-items-sm-center">
+                    <div class="col-md">
+                      <!-- Dropdown -->
+                      <div class="dropdown me-2">
+                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="usersExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi-download me-2"></i> Export
+                        </button>
+              
+                        <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="usersExportDropdown">
+                          <span class="dropdown-header">Options</span>
+                          <a id="export-copy" class="dropdown-item" href="javascript:;">
+                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/illustrations/copy-icon.svg'%}" alt="Image Description">
+                            Copy
+                          </a>
+                          <a id="export-print" class="dropdown-item" href="javascript:;">
+                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/illustrations/print-icon.svg'%}" alt="Image Description">
+                            Print
+                          </a>
+                          <div class="dropdown-divider"></div>
+                          <span class="dropdown-header">Download options</span>
+                          <a id="export-excel" class="dropdown-item" href="javascript:;">
+                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/brands/excel-icon.svg'%}" alt="Image Description">
+                            Excel
+                          </a>
+                          <a id="export-csv" class="dropdown-item" href="javascript:;">
+                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/components/placeholder-csv-format.svg'%}" alt="Image Description">
+                            .CSV
+                          </a>
+                          <a id="export-pdf" class="dropdown-item" href="javascript:;">
+                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/brands/pdf-icon.svg'%}" alt="Image Description">
+                            PDF
+                          </a>
+                        </div>
+                      </div>
+                      <!-- End Dropdown -->
+                    </div>
+
+
+
+
+                    <div class="col-md">
+                      <form  class="container needs-validation form-horizontal" novalidate>
+                        <!-- Search -->
+                        <div class="input-group input-group-merge input-group-flush">
+                          <div class="input-group-prepend input-group-text">
+                            <i class="bi-search"></i>
+                          </div>
+                          <input id="datatableSearch" type="search" class="form-control" placeholder="{% trans 'البحث' %}" aria-label="{% trans 'البحث' %}">
+                        </div>
+                        <!-- End Search -->
+                      </form>
+                    </div>
+                    <!-- End Col -->
+                  </div>
+                  <!-- End Filter -->
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Row -->
+            </div>
+            <!-- End Header -->
+
+
+            <div class="card-body table-responsive datatable-custom">
+              <table id="example2" class="table table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer table-striped">
+                <thead class="thead-light">
+                <tr>
+                  <th>{% trans 'اسم المنطقة DMZ'%}</th>
+                  <th>{% trans 'الوصف'%}</th>
+                  <th>{% trans 'تاريخ الاضافة'%}</th>
+                  <th>{% trans 'تعديل'%}</th>
+                  <th>{% trans 'مسح'%}</th>
+                </tr>
+                </thead>
+  
+              </table>
+            </div>
+            <!-- /.card-body -->
+
+            
+            <!-- Footer -->
+            <div class="card-footer">
+              <!-- Pagination -->
+              <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+                <div class="col-auto">
+                  <div class="row align-items-sm-center">
+                <div class="col-auto">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <!-- <h4 class="card-header-title">{% trans 'المناطق المنفذه علي مستوى الجمهورية'%}</h4> -->
+
+                    <!-- Datatable Info -->
+                    <div id="datatableCounterInfo">
+                      <div class="d-flex align-items-center">
+                        <a class="btn btn-outline-success btn-sm"  type="button" href="#">  <i class="tio-delete-outlined"></i> {% trans 'اضافة DMZ'%}</a>
+                      </div>
+                    </div>
+                    <!-- End Datatable Info -->
+                  </div>
+                  </div>
+                
+                <div class="col-auto">
+                  <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
+                    <span class="me-2">{% trans 'يظهر' %}:</span>
+
+                    <!-- Select -->
+                    <div class="tom-select-custom">
+                      <select id="datatableEntries" class="js-select form-select form-select-borderless w-auto" autocomplete="off" data-hs-tom-select-options='{
+                                "searchInDropdown": false,
+                                "hideSearch": true
+                              }'>
+                        <option value="4">4</option>
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+                    <!-- End Select -->
+
+                    <span class="text-secondary me-2">{% trans 'من' %}</span>
+
+                    <!-- Pagination Quantity -->
+                    <span id="datatableWithPaginationInfoTotalQty"></span>
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                </div>
+                </div>
+
+                <div class="col-sm-auto">
+                  <div class="d-flex justify-content-center justify-content-sm-end">
+                    <!-- Pagination -->
+                    <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+                  </div>
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Pagination -->
+            </div>
+            <!-- End Footer -->
+
+          </div>
+          <!-- /.card -->
+
+
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+{% endblock %}
+
+
+{% block javaNew %}
+<script>
+  // INITIALIZATION OF DATATABLES
+      // =======================================================
+      $(function () {
+
+      // INITIALIZATION OF DATATABLES
+      // =======================================================
+      HSCore.components.HSDatatables.init($('#example2'), {
+        "processing": true,
+        "serverSide": true,
+        "select": {
+          style: 'multi',
+          selector: 'td:first-child input[type="checkbox"]',
+          classMap: {
+            checkAll: '#datatableCheckAll',
+            counter: '#datatableCounter',
+            counterInfo: '#datatableCounterInfo'
+          }
+        },
+        "language": {
+          zeroRecords: `<div class="text-center p-4">
+                <img class="mb-3" src="{% static 'svg/illustrations/oc-error.svg'%}" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+                <img class="mb-3" src="{% static 'svg/illustrations-light/oc-error.svg'%}" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
+              <p class="mb-0">No data to show</p>
+              </div>`
+        },
+        "columnDefs": [{
+                        "targets": [0, 1, 4],
+                        "orderable": false
+                      }],
+        "order": [],
+        "info": {
+          "totalQty": "#datatableWithPaginationInfoTotalQty"
+        },
+        "search": "#datatableSearch",
+        "entries": "#datatableEntries",
+        "pageLength": 20,
+        "isResponsive": false,
+        "dom": "Bfrtip",
+        "buttons": [
+          {
+            "extend": "copy",
+            "className": "d-none"
+          },
+          {
+            "extend": "excel",
+            "className": "d-none"
+          },
+          {
+            "extend": "csv",
+            "className": "d-none"
+          },
+          {
+            "extend": "pdf",
+            "className": "d-none"
+          },
+          {
+            "extend": "print",
+            "className": "d-none"
+          }
+        ],
+        "isShowPaging": false,
+        "pagination": "datatablePagination",
+        "ajax": {
+                "url": "/getListOf_dmz",
+                "data": function ( d ) {
+                //  d.bodyiesOfWatertype = $('#dataOfWaterType').val();
+                    
+                }
+            },
+        "aoColumns": [
+           
+            {
+              className: "","mData": null, "sWidth": "25%","mRender": function (item) { 
+                  return '<a>'+item.name+'</a>';
+                
+            }
+            },   
+            {
+              className: "", "mData": null, "sWidth": "25%","mRender": function (item) {
+                  return '<a>'+item.description+'</a>';
+            }
+            },
+            {
+              className: "","mData": null, "sWidth": "25%","mRender": function (item) { 
+                  return '<a>'+item.created+'</a>';
+                
+            }
+            }
+            ,
+            {
+              className: "", "mData": null, "sWidth": "12.5%","mRender": function (item) { 
+                
+                
+                return '  <a class="btn btn-outline-success btn-sm"  href="/add-all-dmz-data/edit/'+item.id+'"><i class="bi-gear"></i> {% trans "تعديل"%}</a>';
+             
+
+                }
+            }                 
+            ,
+            {
+              className: "", "mData": null, "sWidth": "12.5%","mRender": function (item) { 
+                
+                
+                return '  <a class="btn btn-outline-success btn-sm"  href="javascript:void(0)" nameOfItem="'+item.name+'"  idOfItem="'+item.id+'" onclick="askToDeleteItemWithId(this);"><i class="bi-trash"></i> {% trans "مسح"%}</a>';
+             
+
+                }
+            }              
+             
+        ]
+
+  
+      });
+  
+  
+    
+  
+      const datatable = HSCore.components.HSDatatables.getItem(0)
+  
+      document.getElementById('export-copy').addEventListener('click', function () {
+        datatable.button('.buttons-copy').trigger()
+      })
+  
+      document.getElementById('export-excel').addEventListener('click', function () {
+        datatable.button('.buttons-excel').trigger()
+      })
+  
+      document.getElementById('export-csv').addEventListener('click', function () {
+        datatable.button('.buttons-csv').trigger()
+      })
+  
+      document.getElementById('export-pdf').addEventListener('click', function () {
+        datatable.button('.buttons-pdf').trigger()
+      })
+  
+      document.getElementById('export-print').addEventListener('click', function () {
+        datatable.button('.buttons-print').trigger()
+      })
+  
+      
+  
+      document.querySelectorAll('.js-datatable-filter').forEach(function (item) {
+        item.addEventListener('change',function(e) {
+          const elVal = e.target.value,
+      targetColumnIndex = e.target.getAttribute('data-target-column-index'),
+      targetTable = e.target.getAttribute('data-target-table');
+  
+      HSCore.components.HSDatatables.getItem(targetTable).column(targetColumnIndex).search(elVal !== 'null' ? elVal : '').draw()
+        })
+      })
+  
+      
+    });
+  
+   
+
+
+
+
+        function askToDeleteItemWithId(element){
+  Swal.fire({
+              title: '<strong>{% trans "هل تريد مسح هذا العنصر؟" %} </strong>',
+              icon: 'warning',
+              html:
+                '<div class="tD-responsive table-responsive">'+
+                '<table class="tD table">'+
+                    '<thead><tr><th colspan="2">{% trans "بيانات العنصر" %}</th></tr></thead>'+
+                    '<tbody>'+
+                        '<tr>'+
+                            '<td width="20%"><strong>{% trans "عنصر" %} </strong></td>'+
+                            '<td>'+$(element).attr('nameOfItem')+'</td>'+
+                        '</tr>'+
+                    '</tbody>'+
+                '</table>'+
+            '</div>',
+              showCloseButton: true,
+              showCancelButton: true,
+              focusConfirm: false,
+
+              confirmButtonText:'<i class="bi-trash"></i> {% trans "مسح" %}',
+              confirmButtonColor: '#d33',
+              confirmButtonAriaLabel: 'Thumbs up, great!',
+              cancelButtonText:'<i class="bi-x-circle-fill"></i> {% trans "اغلاق" %}',
+              cancelButtonAriaLabel: 'Thumbs down'
+            }).then((result) => {
+              if (result.value) {
+
+
+                showLoader();
+                $.ajax({
+                  type: 'POST',
+                  url: '/delete_dmz',
+                  dataType: 'json',
+                  data: { 
+                      'id': $(element).attr('idOfItem')
+                  },
+                  headers:{
+                      "X-CSRFToken": csrftoken
+                          },
+                  cache: false,
+                  success: function(result) {
+                    hideLoader();
+                      if(result.Result == "Success"){
+                        Swal.fire(
+                          '{% trans "تم" %}',
+                          '{% trans "تم المسح بنجاح" %}',
+                          'success'
+                        ).then((result) => {
+                          if (result.value) {
+                        location.reload();
+                          }
+                        });
+                        }else{
+                          Swal.fire(
+                            '{% trans "خطأ" %}',
+                            '{% trans "حدث خطأ عند المسح" %}',
+                            '{% trans "مشكلة" %}'
+                          )
+                        }
+                  
+                  },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                  hideLoader();
+                  Swal.fire(
+                    '{% trans "خطأ" %}',
+                    '{% trans "حدث خطأ عند المسح" %}',
+                    '{% trans "مشكلة" %}'
+                  )
+                  }
+              });
+
+                
+              }
+            });
+}
+
+
+
+</script>
+{% endblock %}

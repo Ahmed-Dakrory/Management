@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+{%load static%}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<html lang="{{LANGUAGE_CODE}}" {% if LANGUAGE_CODE == 'ar' %}dir="rtl"{% endif %}>
+<head>
+  <!-- Required Meta Tags Always Come First -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Title -->
+  <title>
+    
+    {% block 'title' %}
+    {% trans 'الرئيسية' %}
+    {% endblock %}
+
+  </title>
+  
+
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="./favicon.ico">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- CSS Implementing Plugins -->
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/font/bootstrap-icons.css'%}">
+
+  <link rel="stylesheet" href="{%static 'plugins/select2/css/select2.min.css'%}">
+  <link rel="stylesheet" href="{%static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css'%}">
+
+  <link rel="stylesheet" href="{% static 'vendor/chart.js/dist/Chart.min.css'%}">
+  <link rel="stylesheet" href="{% static 'vendor/daterangepicker/daterangepicker.css'%}">
+  <link rel="stylesheet" href="{% static 'vendor/tom-select/dist/css/tom-select.bootstrap5.css'%}">
+  <link rel="stylesheet" href="{% static 'css/helper.css'%}">
+
+  
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{%static 'plugins/fontawesome-free/css/all.min.css'%}">
+
+<link rel="stylesheet" href="{%static 'plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css'%}">
+<!-- BS Stepper -->
+<link rel="stylesheet" href="{%static 'plugins/bs-stepper/css/bs-stepper.min.css'%}">
+<!-- dropzonejs -->
+<link rel="stylesheet" href="{%static 'plugins/dropzone/min/dropzone.min.css'%}">
+
+<link rel="stylesheet" href="{%static 'css/main_elements.css'%}">
+  <!-- CSS Front Template -->
+
+
+  {% if LANGUAGE_CODE == 'ar' %}
+  
+  <link rel="preload" href="{% static 'css/theme.min_rtl2.css'%}" data-hs-appearance="default" as="style">
+    <link href='https://fonts.googleapis.com/css?family=Cairo' rel='stylesheet'>
+    <style>
+        body{
+            --bs-body-font-family: 'Cairo';
+        }
+
+
+       
+    </style>
+  {% else %}
+  <link rel="preload" href="{% static 'css/theme.min.css'%}" data-hs-appearance="default" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  {% endif %}
+ 
+  <link rel="preload" href="{% static 'css/theme-dark.min.css'%}" data-hs-appearance="dark" as="style">
+
+  <style data-hs-appearance-onload-styles>
+    *
+    {
+      transition: unset !important;
+    }
+
+    body
+    {
+      opacity: 0;
+    }
+  </style>
+
+  <script>
+            window.hs_config = {"autopath":"@@autopath","deleteLine":"hs-builder:delete","deleteLine:build":"hs-builder:build-delete","deleteLine:dist":"hs-builder:dist-delete","previewMode":false,"startPath":"/index.html","vars":{"themeFont":"https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap","version":"?v=1.0"},"layoutBuilder":{"extend":{"switcherSupport":true},"header":{"layoutMode":"default","containerMode":"container-fluid"},"sidebarLayout":"default"},"themeAppearance":{"layoutSkin":"default","sidebarSkin":"default","styles":{"colors":{"primary":"#377dff","transparent":"transparent","white":"#fff","dark":"132144","gray":{"100":"#f9fafc","900":"#1e2022"}},"font":"Inter"}},"languageDirection":{"lang":"en"},"skipFilesFromBundle":{"dist":["assets/js/hs.theme-appearance.js","assets/js/hs.theme-appearance-charts.js","assets/js/demo.js"],"build":["assets/css/theme.css","assets/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js","assets/js/demo.js","assets/css/theme-dark.css","assets/css/docs.css","assets/vendor/icon-set/style.css","assets/js/hs.theme-appearance.js","assets/js/hs.theme-appearance-charts.js","node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js","assets/js/demo.js"]},"minifyCSSFiles":["assets/css/theme.css","assets/css/theme-dark.css"],"copyDependencies":{"dist":{"*assets/js/theme-custom.js":""},"build":{"*assets/js/theme-custom.js":"","node_modules/bootstrap-icons/font/*fonts/**":"assets/css"}},"buildFolder":"","replacePathsToCDN":{},"directoryNames":{"src":"./src","dist":"./dist","build":"./build"},"fileNames":{"dist":{"js":"theme.min.js","css":"theme.min.css"},"build":{"css":"theme.min.css","js":"theme.min.js","vendorCSS":"vendor.min.css","vendorJS":"vendor.min.js"}},"fileTypes":"jpg|png|svg|mp4|webm|ogv|json"}
+            window.hs_config.gulpRGBA = (p1) => {
+  const options = p1.split(',')
+  const hex = options[0].toString()
+  const transparent = options[1].toString()
+
+  var c;
+  if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+    c= hex.substring(1).split('');
+    if(c.length== 3){
+      c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+    }
+    c= '0x'+c.join('');
+    return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',' + transparent + ')';
+  }
+  throw new Error('Bad Hex');
+}
+            window.hs_config.gulpDarken = (p1) => {
+  const options = p1.split(',')
+
+  let col = options[0].toString()
+  let amt = -parseInt(options[1])
+  var usePound = false
+
+  if (col[0] == "#") {
+    col = col.slice(1)
+    usePound = true
+  }
+  var num = parseInt(col, 16)
+  var r = (num >> 16) + amt
+  if (r > 255) {
+    r = 255
+  } else if (r < 0) {
+    r = 0
+  }
+  var b = ((num >> 8) & 0x00FF) + amt
+  if (b > 255) {
+    b = 255
+  } else if (b < 0) {
+    b = 0
+  }
+  var g = (num & 0x0000FF) + amt
+  if (g > 255) {
+    g = 255
+  } else if (g < 0) {
+    g = 0
+  }
+  return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
+}
+            window.hs_config.gulpLighten = (p1) => {
+  const options = p1.split(',')
+
+  let col = options[0].toString()
+  let amt = parseInt(options[1])
+  var usePound = false
+
+  if (col[0] == "#") {
+    col = col.slice(1)
+    usePound = true
+  }
+  var num = parseInt(col, 16)
+  var r = (num >> 16) + amt
+  if (r > 255) {
+    r = 255
+  } else if (r < 0) {
+    r = 0
+  }
+  var b = ((num >> 8) & 0x00FF) + amt
+  if (b > 255) {
+    b = 255
+  } else if (b < 0) {
+    b = 0
+  }
+  var g = (num & 0x0000FF) + amt
+  if (g > 255) {
+    g = 255
+  } else if (g < 0) {
+    g = 0
+  }
+  return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
+}
+
+
+   </script>
+</head>
+
+<body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
+
+  <script src="{% static 'js/hs.theme-appearance.js'%}"></script>
+
+  <script src="{% static 'vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js'%}"></script>
+
+  <!-- ========== HEADER ========== -->
+
+  <header id="header" class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
+    <div class="navbar-nav-wrap">
+      <!-- Logo -->
+      <!-- <a class="navbar-brand" href="./index.html" aria-label="Front">
+        <img class="navbar-brand-logo pt-0 pt-md-5"  src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="default">
+        <img class="navbar-brand-logo pt-0 pt-md-5" src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="dark">
+        <img class="navbar-brand-logo-mini pt-0 pt-md-5" src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="default">
+        <img class="navbar-brand-logo-mini pt-0 pt-md-5" src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="dark">
+      </a> -->
+      <!-- End Logo -->
+
+      <div class="navbar-nav-wrap-content-start">
+        <!-- Navbar Vertical Toggle -->
+        <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
+          <i class="bi-arrow-bar-right navbar-toggler-short-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+          <i class="bi-arrow-bar-left navbar-toggler-full-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+        </button>
+
+        <!-- End Navbar Vertical Toggle -->
+
+        <!-- Search Form -->
+        <div class="dropdown ms-2">
+          <!-- Input Group -->
+          <div class="d-none d-lg-block">
+            <div class="input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group">
+              <div class="input-group-prepend input-group-text">
+                <i class="bi-search"></i>
+              </div>
+
+              <input id="myInputSearch" type="search" class="js-form-search form-control" placeholder="Search in front" aria-label="Search in front" data-hs-form-search-options='{
+                       "clearIcon": "#clearSearchResultsIcon",
+                       "dropMenuElement": "#searchDropdownMenu",
+                       "dropMenuOffset": 20,
+                       "toggleIconOnFocus": true,
+                       "activeClass": "focus"
+                     }'>
+              <a class="input-group-append input-group-text" href="javascript:;">
+                <i id="clearSearchResultsIcon" class="bi-x-lg" style="display: none;"></i>
+              </a>
+            </div>
+          </div>
+
+          <button class="js-form-search js-form-search-mobile-toggle btn btn-ghost-secondary btn-icon rounded-circle d-lg-none" type="button" data-hs-form-search-options='{
+                       "clearIcon": "#clearSearchResultsIcon",
+                       "dropMenuElement": "#searchDropdownMenu",
+                       "dropMenuOffset": 20,
+                       "toggleIconOnFocus": true,
+                       "activeClass": "focus"
+                     }'>
+            <i class="bi-search"></i>
+          </button>
+          <!-- End Input Group -->
+
+          <!-- Card Search Content -->
+          <div id="searchDropdownMenu" class="hs-form-search-menu-content dropdown-menu dropdown-menu-form-search navbar-dropdown-menu-borderless">
+            <!-- Body -->
+            <div class="card-body-height">
+              <div class="d-lg-none">
+                <div class="input-group input-group-merge navbar-input-group mb-5">
+                  <div class="input-group-prepend input-group-text">
+                    <i class="bi-search"></i>
+                  </div>
+
+                  <input id="myInputSearch" type="search" class="form-control" placeholder="Search in front" aria-label="Search in front">
+                  <a class="input-group-append input-group-text" href="javascript:;">
+                    <i class="bi-x-lg"></i>
+                  </a>
+                </div>
+              </div>
+
+              <span class="dropdown-header">{% trans 'نتيجة البحث'%}</span>
+
+              <div class="dropdown-item bg-transparent text-wrap" id="Search_results">
+                
+              </div>
+
+            </div>
+            <!-- End Body -->
+
+          </div>
+          <!-- End Card Search Content -->
+
+        </div>
+
+        <!-- End Search Form -->
+      </div>
+
+      <div class="navbar-nav-wrap-content-end">
+        <!-- Navbar -->
+        <ul class="navbar-nav">
+
+          <li class="nav-item d-none ">
+            <!-- Notification -->
+            <div class="dropdown">
+              <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" id="navbarNotificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+                <i class="bi-bell"></i>
+                <span class="btn-status btn-sm-status btn-status-danger"></span>
+              </button>
+
+              <div class="dropdown-menu dropdown-menu-end dropdown-card navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="navbarNotificationsDropdown" style="width: 25rem;">
+                <!-- Header -->
+                <div class="card-header card-header-content-between">
+                  <h4 class="card-title mb-0">Notifications</h4>
+
+                  <!-- Unfold -->
+                  <div class="dropdown">
+                    <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" id="navbarNotificationsDropdownSettings" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi-three-dots-vertical"></i>
+                    </button>
+
+                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="navbarNotificationsDropdownSettings">
+                      <span class="dropdown-header">Settings</span>
+                      <a class="dropdown-item" href="#">
+                        <i class="bi-archive dropdown-item-icon"></i> Archive all
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        <i class="bi-check2-all dropdown-item-icon"></i> Mark all as read
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        <i class="bi-toggle-off dropdown-item-icon"></i> Disable notifications
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        <i class="bi-gift dropdown-item-icon"></i> What's new?
+                      </a>
+                      <div class="dropdown-divider"></div>
+                      <span class="dropdown-header">Feedback</span>
+                      <a class="dropdown-item" href="#">
+                        <i class="bi-chat-left-dots dropdown-item-icon"></i> Report
+                      </a>
+                    </div>
+                  </div>
+                  <!-- End Unfold -->
+                </div>
+                <!-- End Header -->
+
+                <!-- Nav -->
+                <ul class="nav nav-tabs nav-justified" id="notificationTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#notificationNavOne" id="notificationNavOne-tab" data-bs-toggle="tab" data-bs-target="#notificationNavOne" role="tab" aria-controls="notificationNavOne" aria-selected="true">{% trans 'التنبيهات'%} (8)</a>
+                  </li>
+                </ul>
+                <!-- End Nav -->
+
+                <!-- Body -->
+                <div class="card-body-height">
+                  <!-- Tab Content -->
+                  <div class="tab-content" id="notificationTabContent">
+                    <div class="tab-pane fade show active" id="notificationNavOne" role="tabpanel" aria-labelledby="notificationNavOne-tab">
+                      <!-- List Group -->
+                      <ul class="list-group list-group-flush navbar-card-list-group">
+                        {%for n in notifsx%}
+                        <!-- Item -->
+                        <li class="list-group-item form-check-select">
+                          <div class="row">
+                            <div class="col-auto">
+                              <div class="d-flex align-items-center">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="" id="notificationCheck3" checked>
+                                  <label class="form-check-label" for="notificationCheck3"></label>
+                                  <span class="form-check-stretched-bg"></span>
+                                </div>
+                                <div class="avatar avatar-sm avatar-circle">
+                                  <i class="avatar-img bi-bell"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col ms-n2">
+                              <h5 class="mb-1">{{n}}&nbsp {{n.point.point_type}}</h5>
+                              <p class="text-body fs-5">{{n.reading.get_flow_pressure_status}}</p>
+                            </div>
+                            <!-- End Col -->
+
+                            <small class="col-auto text-muted text-cap">منذ &nbsp     {{n.created|timesince}}</small>
+                            <!-- End Col -->
+                          </div>
+                          <!-- End Row -->
+
+                          <a class="stretched-link" href="#"></a>
+                        </li>
+                        <!-- End Item -->
+                        {%endfor%}
+
+                      </ul>
+                      <!-- End List Group -->
+                    </div>
+
+                  </div>
+                  <!-- End Tab Content -->
+                </div>
+                <!-- End Body -->
+
+                <!-- Card Footer -->
+                <a class="card-footer text-center" href="#">
+                 {% trans ' أظهار كل التتنبيهات'%} <i class="bi-chevron-right"></i>
+                </a>
+                <!-- End Card Footer -->
+              </div>
+            </div>
+            <!-- End Notification -->
+          </li>
+
+
+          <li class="nav-item d-none ">
+            <!-- Language -->
+            <div class="dropdown">
+              <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" id="selectLanguageDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation>
+                {% if LANGUAGE_CODE == 'ar' %}
+                <img class="avatar avatar-xss avatar-circle" src="{% static 'vendor/flag-icon-css/flags/1x1/gb.svg'%}" alt="United States Flag">
+              
+                {% else %}
+                <img class="avatar avatar-xss avatar-circle" src="{% static 'vendor/flag-icon-css/flags/1x1/sa.svg'%}" alt="Saudi Flag">
+              
+                {% endif %}
+              </button>
+
+              <div class="dropdown-menu dropdown-menu-end dropdown-card navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="selectLanguageDropdown">
+                <span class="dropdown-header">{% trans 'أختر اللغة'%}</span>
+                <a class="dropdown-item" href="/en">
+                  <img class="avatar avatar-xss avatar-circle me-2" src="{% static 'vendor/flag-icon-css/flags/1x1/gb.svg'%}" alt="Flag">
+                  <span class="text-truncate" title="English">English (UK)</span>
+                </a>
+                <a class="dropdown-item" href="/ar">
+                  <img class="avatar avatar-xss avatar-circle me-2" src="{% static 'vendor/flag-icon-css/flags/1x1/sa.svg'%}" alt="Flag">
+                  <span class="text-truncate" title="Deutsch">العربية</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- End Language -->
+          </li>
+
+          <li class="nav-item">
+            <!-- Account -->
+            <div class="dropdown">
+              <a class="navbar-dropdown-account-wrapper" href="javascript:;" id="accountNavbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+                <div class="avatar avatar-sm avatar-circle">
+                  <img class="avatar-img" src="{% static 'img/160x160/img6.jpg'%}" alt="Image Description">
+                  <span class="avatar-status avatar-sm-status avatar-status-success"></span>
+                </div>
+              </a>
+
+              <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account" aria-labelledby="accountNavbarDropdown" style="width: 16rem;">
+                <div class="dropdown-item-text">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-sm avatar-circle">
+                      <img class="avatar-img" src="{% static 'img/160x160/img6.jpg'%}" alt="Image Description">
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mb-0">{{request.user.username}} </h5>
+                      <p class="card-text text-body">
+
+                        {%if request.user.account_type == 'admin' %}  ADMIN - Administrator {%else%}Province User{%endif%}
+                        <small>Member since {{request.user.created}}</small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href="{% url 'userApp:logout'%}">{% trans 'تسجيل الخروج'%}</a>
+              </div>
+            </div>
+            <!-- End Account -->
+          </li>
+        </ul>
+        <!-- End Navbar -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== END HEADER ========== -->
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <!-- Navbar Vertical -->
+
+  <div id="loaderHandler" class="d-none">
+    <figure id="loaderMain">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </figure>
+  </div>
+
+  <aside class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered bg-milano  ">
+    <div class="navbar-vertical-container">
+      <div class="navbar-vertical-footer-offset">
+        <!-- Logo -->
+
+        <a class="navbar-brand" href="./index.html" aria-label="Front">
+          <img class="navbar-brand-logo pt-0 pt-md-5" src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="default">
+          <img class="navbar-brand-logo pt-0 pt-md-5" src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="dark">
+          <img class="navbar-brand-logo-mini pt-0 pt-md-5" src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="default">
+          <img class="navbar-brand-logo-mini pt-0 pt-md-5" src="{% static 'dist/img/logo.webp'%}" alt="Logo" data-hs-theme-appearance="dark">
+        </a>
+
+        <!-- End Logo -->
+
+        <!-- Navbar Vertical Toggle -->
+        <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
+          <i class="bi-arrow-bar-left navbar-toggler-short-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+          <i class="bi-arrow-bar-right navbar-toggler-full-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+        </button>
+
+        <!-- End Navbar Vertical Toggle -->
+
+        <!-- Content -->
+        <div class="navbar-vertical-content">
+          <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
+            <!-- Collapse -->
+           
+            
+            <div class="nav-item">
+              <a class="nav-link active menu_item_main_get" href="{%url 'mainApp:home'%}" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuDashboards" aria-expanded="true" aria-controls="navbarVerticalMenuDashboards">
+                <i class="bi-house-door nav-icon"></i>
+                <span class="nav-link-title ">{% trans 'الصفحة الرئيسية'%}</span>
+              </a>
+            </div>
+            <!-- End Collapse -->
+
+            <span class="dropdown-header mt-4">{% trans 'قائمة التحكم'%}</span>
+            <small class="bi-three-dots nav-subtitle-replacer"></small>
+
+            <!-- Collapse -->
+            <div class="navbar-nav nav-compact">
+
+            </div>
+            <div id="navbarVerticalMenuPagesMenu">
+              <!-- Collapse -->
+              <div class="nav-item">
+                <a class="nav-link dropdown-toggle " href="#navbarVerticalMenuPagesUsersMenu" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesUsersMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesUsersMenu">
+                  <i class="bi-box-seam nav-icon"></i>
+                  <span class="nav-link-title">{% trans 'ادخال وتعديل البيانات'%}</span>
+                </a>
+
+                <div id="navbarVerticalMenuPagesUsersMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
+                  <a class="nav-link menu_item_get" href="{%url 'mainApp:show_companies'%}">{% trans 'الشركات'%}</a>
+                  <a class="nav-link menu_item_get" href="{%url 'mainApp:show_representatives'%}">{% trans 'المناديب'%} </a>
+                  <a class="nav-link menu_item_get" href="{%url 'mainApp:show_factories'%}">{% trans 'المصانع'%} </a>
+                </div>
+              </div>
+              <!-- End Collapse -->
+
+            
+            
+              <!-- Collapse -->
+              <div class="nav-item">
+                <a class="nav-link dropdown-toggle " href="#navbarVerticalMenuPagesEcommerceMenu" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesEcommerceMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesEcommerceMenu">
+                  <i class="bi-basket nav-icon"></i>
+                  <span class="nav-link-title">{% trans 'المخزن'%}</span>
+                </a>
+
+                <div id="navbarVerticalMenuPagesEcommerceMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
+                  <a class="nav-link menu_item_get" href="{%url 'mainApp:show_items'%}">{% trans 'البنود '%}</a>
+                </div>
+              </div>
+              <!-- End Collapse -->
+
+             
+
+              <!-- Collapse -->
+              <div class="nav-item">
+                <a class="nav-link dropdown-toggle " href="#navbarVerticalMenuPagesProjectMenu" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesProjectMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesProjectMenu">
+                  <i class="bi-briefcase nav-icon"></i>
+                  <span class="nav-link-title">{% trans 'المسخدمين'%}</span>
+                </a>
+
+                <div id="navbarVerticalMenuPagesProjectMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
+                  <a class="nav-link menu_item_get" href="{%url 'userApp:listOf_role'%}">{% trans 'الصلاحيات'%}</a>
+                  <a class="nav-link menu_item_get" href="{%url 'userApp:listOf_user'%}">{% trans 'المستخدمين'%}</a>
+                </div>
+              </div>
+              <!-- End Collapse -->
+
+            
+
+            
+
+             
+            </div>
+            <!-- End Collapse -->
+
+            
+          </div>
+
+        </div>
+        <!-- End Content -->
+
+       
+      </div>
+    </div>
+  </aside>
+
+  <!-- End Navbar Vertical -->
+
+  <main id="content" role="main" class="main">
+    <!-- Content -->
+    <div class="content container-fluid">
+      {% block 'content' %}
+
+      {%endblock%}
+
+    </div>
+    <!-- End Content -->
+
+  </main>
+  <!-- ========== END MAIN CONTENT ========== -->
+
+   <!-- Footer -->
+
+   <div class="footer">
+    <div class="row justify-content-between align-items-center">
+      <div class="col">
+        <p class="fs-6 mb-0"> {% trans 'allRightsReserved' %} &copy; 2022 <a href="https://orspra.com/">Orspra</a></p>
+      </div>
+      <!-- End Col -->
+
+    
+      <!-- End Col -->
+    </div>
+    <!-- End Row -->
+  </div>
+
+
+  <!-- /.container-fluid -->
+
+  <div id="containerOfTasks" class="container-fluid tasks p-3 w-50 ">
+    
+
+  </div>
+  <!-- End Footer -->
+
+  <!-- JS Global Compulsory  -->
+  <script src="{% static 'vendor/jquery/dist/jquery.min.js'%}"></script>
+  <script src="{% static 'vendor/jquery-migrate/dist/jquery-migrate.min.js'%}"></script>
+  <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
+
+  <!-- JS Implementing Plugins -->
+  <script src="{% static 'vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside.min.js'%}"></script>
+  <script src="{% static 'vendor/hs-form-search/dist/hs-form-search.min.js'%}"></script>
+
+  <script src="{% static 'vendor/chart.js/dist/Chart.min.js'%}"></script>
+  <script src="{% static 'vendor/chartjs-chart-matrix/dist/chartjs-chart-matrix.min.js'%}"></script>
+  <script src="{% static 'vendor/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js'%}"></script>
+  <script src="{% static 'vendor/daterangepicker/moment.min.js'%}"></script>
+  <script src="{% static 'vendor/daterangepicker/daterangepicker.js'%}"></script>
+  <script src="{% static 'vendor/tom-select/dist/js/tom-select.complete.min.js'%}"></script>
+  <script src="{% static 'vendor/clipboard/dist/clipboard.min.js'%}"></script>
+  <script src="{% static 'vendor/datatables/media/js/jquery.dataTables.min.js'%}"></script>
+
+
+  <script src="{% static 'vendor/datatables.net-buttons/js/dataTables.buttons.min.js'%}"></script>
+  <script src="{% static 'vendor/jszip/dist/jszip.min.js'%}"></script>
+  <script src="{% static 'vendor/pdfmake/build/pdfmake.min.js'%}"></script>
+  <script src="{% static 'vendor/pdfmake/build/vfs_fonts.js'%}"></script>
+  <script src="{% static 'vendor/datatables.net-buttons/js/buttons.html5.min.js'%}"></script>
+  <script src="{% static 'vendor/datatables.net-buttons/js/buttons.print.min.js'%}"></script>
+  <script src="{% static 'vendor/datatables.net-buttons/js/buttons.colVis.min.js'%}"></script>
+
+
+  <script src="{% static 'vendor/datatables.net.extensions/select/select.min.js'%}"></script>
+  <script src="{% static 'vendor/appear/dist/appear.min.js'%}"></script>
+  <script src="{% static 'vendor/circles.js/circles.min.js'%}"></script>
+  
+
+<script src="{%static 'plugins/select2/js/select2.full.min.js'%}"></script>
+<script src="{%static 'plugins/inputmask/jquery.inputmask.min.js'%}"></script>
+<script src="{%static 'plugins/daterangepicker/daterangepicker.js'%}"></script>
+
+
+
+<!-- bootstrap color picker -->
+<!-- <script src="../../plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script> -->
+<script src="{%static 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js'%}"></script>
+
+<!-- Tempusdominus Bootstrap 4 -->
+<!-- <script src="../../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> -->
+<script src="{%static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js'%}"></script>
+
+<!-- Bootstrap Switch -->
+<!-- <script src="../../plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script> -->
+<script src="{%static 'plugins/bootstrap-switch/js/bootstrap-switch.min.js'%}"></script>
+
+<!-- BS-Stepper -->
+<!-- <script src="../../plugins/bs-stepper/js/bs-stepper.min.js"></script> -->
+<script src="{%static 'plugins/bs-stepper/js/bs-stepper.min.js'%}"></script>
+
+<!-- dropzonejs -->
+<!-- <script src="../../plugins/dropzone/min/dropzone.min.js"></script> -->
+<script src="{%static 'plugins/dropzone/min/dropzone.min.js'%}"></script>
+
+<!-- Bootstrap4 Duallistbox -->
+<script src="{%static 'plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js'%}"></script>
+
+<!-- InputMask -->
+<script src="{%static 'plugins/moment/moment.min.js'%}"></script>
+
+<!-- AdminLTE App -->
+<script src="{%static 'dist/js/adminlte.min.js'%}"></script>
+
+<!-- AdminLTE for demo purposes -->
+<!-- <script src="../../dist/js/demo.js"></script> -->
+<!-- <script src="{%static 'dist/js/demo.js'%}"></script> -->
+
+<script src="{%static 'js/chartcdn.js'%}"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+<script src="{%static 'js/jqueryui.js'%}"></script>
+<script src="{%static 'js/theme-custom.js'%}"></script>
+
+
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script> -->
+
+<!-- Bootstrap 4 -->
+<script src="{%static 'plugins/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+
+<!-- endold -->
+
+
+
+  <!-- JS Front -->
+  <script src="{% static 'js/theme.min.js'%}"></script>
+  <script src="{% static 'js/hs.theme-appearance-charts.js'%}"></script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+
+
+
+
+  <!-- JS Plugins Init. -->
+  <script>
+    $(document).on('ready', function () {
+      // INITIALIZATION OF DATERANGEPICKER
+      // =======================================================
+      $('.js-daterangepicker').daterangepicker();
+
+      $('.js-daterangepicker-times').daterangepicker({
+        timePicker: true,
+        startDate: moment().startOf('hour'),
+        endDate: moment().startOf('hour').add(32, 'hour'),
+        locale: {
+          format: 'M/DD hh:mm A'
+        }
+      });
+
+      var start = moment();
+      var end = moment();
+
+      function cb(start, end) {
+        $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview').html(start.format('MMM D') + ' - ' + end.format('MMM D, YYYY'));
+      }
+
+      $('#js-daterangepicker-predefined').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+      }, cb);
+
+      cb(start, end);
+    });
+
+
+    
+  </script>
+
+  <!-- JS Plugins Init. -->
+  <script>
+    (function() {
+      window.onload = function () {
+        
+
+        // INITIALIZATION OF NAVBAR VERTICAL ASIDE
+        // =======================================================
+        new HSSideNav('.js-navbar-vertical-aside').init()
+
+
+        // INITIALIZATION OF FORM SEARCH
+        // =======================================================
+        const HSFormSearchInstance = new HSFormSearch('.js-form-search')
+
+        if (HSFormSearchInstance.collection.length) {
+          HSFormSearchInstance.getItem(1).on('close', function (el) {
+            el.classList.remove('top-0')
+          })
+
+          document.querySelector('.js-form-search-mobile-toggle').addEventListener('click', e => {
+            let dataOptions = JSON.parse(e.currentTarget.getAttribute('data-hs-form-search-options')),
+              $menu = document.querySelector(dataOptions.dropMenuElement)
+
+            $menu.classList.add('top-0')
+            $menu.style.left = 0
+          })
+        }
+
+
+        // INITIALIZATION OF BOOTSTRAP DROPDOWN
+        // =======================================================
+        HSBsDropdown.init()
+
+
+        // INITIALIZATION OF CHARTJS
+        // =======================================================
+        Chart.plugins.unregister(ChartDataLabels);
+        HSCore.components.HSChartJS.init('.js-chart')
+
+
+        
+        // Call when tab is clicked
+        document.querySelectorAll('[data-bs-toggle="chart-bar"]').forEach(item => {
+          item.addEventListener('click', e => {
+            let keyDataset = e.currentTarget.getAttribute('data-datasets')
+
+            const styles = HSCore.components.HSChartJS.getTheme('updatingBarChart', HSThemeAppearance.getAppearance())
+
+            if (keyDataset === 'lastWeek') {
+              updatingBarChart.data.labels = ["Apr 22", "Apr 23", "Apr 24", "Apr 25", "Apr 26", "Apr 27", "Apr 28", "Apr 29", "Apr 30", "Apr 31"];
+              updatingBarChart.data.datasets = [
+                {
+                  "data": [120, 250, 300, 200, 300, 290, 350, 100, 125, 320],
+                  "backgroundColor": styles.data.datasets[0].backgroundColor,
+                  "hoverBackgroundColor": styles.data.datasets[0].hoverBackgroundColor,
+                  "borderColor": styles.data.datasets[0].borderColor
+                },
+                {
+                  "data": [250, 130, 322, 144, 129, 300, 260, 120, 260, 245, 110],
+                  "backgroundColor": styles.data.datasets[1].backgroundColor,
+                  "borderColor": styles.data.datasets[1].borderColor
+                }
+              ];
+              updatingBarChart.update();
+            } else {
+              updatingBarChart.data.labels = ["May 1", "May 2", "May 3", "May 4", "May 5", "May 6", "May 7", "May 8", "May 9", "May 10"];
+              updatingBarChart.data.datasets = [
+                {
+                  "data": [200, 300, 290, 350, 150, 350, 300, 100, 125, 220],
+                  "backgroundColor": styles.data.datasets[0].backgroundColor,
+                  "hoverBackgroundColor": styles.data.datasets[0].hoverBackgroundColor,
+                  "borderColor": styles.data.datasets[0].borderColor
+                },
+                {
+                  "data": [150, 230, 382, 204, 169, 290, 300, 100, 300, 225, 120],
+                  "backgroundColor": styles.data.datasets[1].backgroundColor,
+                  "borderColor": styles.data.datasets[1].borderColor
+                }
+              ]
+              updatingBarChart.update();
+            }
+          })
+        })
+
+
+        // INITIALIZATION OF CHARTJS
+        // =======================================================
+        HSCore.components.HSChartJS.init('.js-chart-datalabels', {
+          plugins: [ChartDataLabels],
+          options: {
+            plugins: {
+              datalabels: {
+                anchor: function (context) {
+                  var value = context.dataset.data[context.dataIndex];
+                  return value.r < 20 ? 'end' : 'center';
+                },
+                align: function (context) {
+                  var value = context.dataset.data[context.dataIndex];
+                  return value.r < 20 ? 'end' : 'center';
+                },
+                color: function (context) {
+                  var value = context.dataset.data[context.dataIndex];
+                  return value.r < 20 ? context.dataset.backgroundColor : context.dataset.color;
+                },
+                font: function (context) {
+                  var value = context.dataset.data[context.dataIndex],
+                    fontSize = 25;
+
+                  if (value.r > 50) {
+                    fontSize = 35;
+                  }
+
+                  if (value.r > 70) {
+                    fontSize = 55;
+                  }
+
+                  return {
+                    weight: 'lighter',
+                    size: fontSize
+                  };
+                },
+                offset: 2,
+                padding: 0
+              }
+            }
+          }
+        })
+
+        // INITIALIZATION OF SELECT
+        // =======================================================
+        HSCore.components.HSTomSelect.init('.js-select')
+
+
+        // INITIALIZATION OF CIRCLES
+        // =======================================================
+        const colors = () => {
+          return [HSThemeAppearance.getAppearance() === 'dark' ? '#34383b' : '#e7eaf3', '#377dff']
+        }
+
+        setTimeout(() => {
+          document.querySelectorAll('.js-circle').forEach(item => {
+            HSCore.components.HSCircles.init(item, {
+              colors: colors()
+            })
+          })
+
+          window.addEventListener('on-hs-appearance-change', () => {
+            HSCore.components.HSCircles.getItems().forEach(circle => {
+              circle.updateColors(colors())
+            })
+          })
+        })
+
+
+
+        // INITIALIZATION OF CLIPBOARD
+        // =======================================================
+        HSCore.components.HSClipboard.init('.js-clipboard')
+      }
+    })()
+  </script>
+
+  <!-- Style Switcher JS -->
+
+  <script>
+      (function () {
+        // STYLE SWITCHER
+        // =======================================================
+        const $dropdownBtn = document.getElementById('selectThemeDropdown') // Dropdowon trigger
+        const $variants = document.querySelectorAll(`[aria-labelledby="selectThemeDropdown"] [data-icon]`) // All items of the dropdown
+
+        // Function to set active style in the dorpdown menu and set icon for dropdown trigger
+        const setActiveStyle = function () {
+          $variants.forEach($item => {
+            if ($item.getAttribute('data-value') === HSThemeAppearance.getOriginalAppearance()) {
+              $dropdownBtn.innerHTML = `<i class="${$item.getAttribute('data-icon')}" />`
+              return $item.classList.add('active')
+            }
+
+            $item.classList.remove('active')
+          })
+        }
+
+        // Add a click event to all items of the dropdown to set the style
+        $variants.forEach(function ($item) {
+          $item.addEventListener('click', function () {
+            HSThemeAppearance.setAppearance($item.getAttribute('data-value'))
+          })
+        })
+
+        // Call the setActiveStyle on load page
+        setActiveStyle()
+
+        // Add event listener on change style to call the setActiveStyle function
+        window.addEventListener('on-hs-appearance-change', function () {
+          setActiveStyle()
+        })
+        
+        
+      })()
+    </script>
+
+
+  <!-- End Style Switcher JS -->
+
+
+
+  
+<script>
+  
+  function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      var csrftoken = getCookie('csrftoken');
+  
+  
+     
+
+
+
+    ListOfAll = [];
+    
+    $('.menu_item_get').each(function(iElement, obj) {
+        
+       
+        elem = {
+            "main": $(obj).html(),
+            "link": $(obj).attr('href')
+        };
+        ListOfAll.push(elem);
+    });
+
+
+     
+    $('.menu_item_main_get').each(function(iElement, obj) {
+       elem = {
+            "main": $(obj).find('.nav-link-title').html(),
+            "link": $(obj).attr('href')
+        };
+        ListOfAll.push(elem);
+    });
+
+    
+
+    
+    $("#myInputSearch").on("keypress input",function(e) { 
+      fillList();
+
+    });
+
+
+    function fillList(){
+      $('#Search_results').empty();
+      var newArray = ListOfAll.filter(function (el) {
+    return el.main.includes( $("#myInputSearch").val());
+});
+
+  elem_total = '';
+
+  for(var i=0;i<newArray.length;i++){
+
+    element = `
+
+    <a class="btn btn-soft-dark btn-xs rounded-pill m-1" href="`+newArray[i]['link']+`">
+      `+newArray[i]['main']+` <i class="bi-search ms-1"></i>
+                </a>
+
+    `
+
+    elem_total+=element;
+  }
+  $('#Search_results').html(elem_total);
+
+
+    }
+
+
+    fillList();
+  </script>
+
+<script  defer>
+
+// window.addEventListener("load", function(){
+//   $('.js-navbar-vertical-aside-toggle-invoker').trigger("click");
+// });
+  
+  </script>
+
+
+  {% block javaNew %}
+
+
+  {% endblock %}
+</body>
+</html>
