@@ -60,9 +60,7 @@ class factory(models.Model):
     address = models.TextField(default=None,null=True)
     image = models.ForeignKey(attachmentTranscript,on_delete=models.PROTECT,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
-    updated = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
-
+    
     # ///////// new updates
     created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
     updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_factory_updated")    
@@ -81,6 +79,10 @@ class factory(models.Model):
             'id' :self.id,
             'name' :self.name,
             'name_en' :self.name_en,
+            'factory_phone' :self.factory_phone,
+            'head_phone' :self.head_phone,
+            'address' :self.address,
+            'tax_number' :self.tax_number,
             'created':self.created
             }
 
@@ -97,9 +99,7 @@ class company(models.Model):
     address = models.TextField(default=None,null=True)
     image = models.ForeignKey(attachmentTranscript,on_delete=models.PROTECT,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
-    updated = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
-
+    
     # ///////// new updates
     created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
     updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_company_updated")    
@@ -118,8 +118,166 @@ class company(models.Model):
             'id' :self.id,
             'name' :self.name,
             'name_en' :self.name_en,
+            'company_phone' :self.company_phone,
+            'head_phone' :self.head_phone,
+            'address' :self.address,
+            'tax_number' :self.tax_number,
             'created':self.created
             }
 
     def __str__(self):
         return self.name
+
+
+#قطاع
+class sector(models.Model):
+    name = models.CharField(max_length=500,default=None)
+    name_en = models.CharField(max_length=500,default=None)
+    floor = models.CharField(max_length=500,default=None)
+    image = models.ForeignKey(attachmentTranscript,on_delete=models.PROTECT,null=True,blank=True)
+    
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_sector_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_sector_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "sector"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'name' :self.name,
+            'name_en' :self.name_en,
+            'floor' :self.floor,
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.name
+
+
+class color(models.Model):
+    name = models.CharField(max_length=500,default=None)
+    name_en = models.CharField(max_length=500,default=None)
+    code = models.CharField(max_length=500,default=None)
+    
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_color_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_color_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "color"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'name' :self.name,
+            'name_en' :self.name_en,
+            'code' :self.code,
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.name
+
+
+
+class size(models.Model):
+    size = models.CharField(max_length=500,default=None)
+    code = models.CharField(max_length=500,default=None)
+    
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_size_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_size_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "size"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'size' :self.size,
+            'code' :self.code,
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.name
+
+
+
+
+#الفئة
+class category(models.Model):
+    name = models.CharField(max_length=500,default=None)
+    name_en = models.CharField(max_length=500,default=None)
+    details = models.TextField(default=None)
+    year = models.TextField(default=None)
+    color = models.ForeignKey(color,on_delete=models.PROTECT,null=True,blank=True)
+    size = models.ForeignKey(size,on_delete=models.PROTECT,null=True,blank=True)
+    serial_start = models.TextField(default=None,unique=True)
+    factory = models.ForeignKey(factory,on_delete=models.PROTECT,null=True,blank=True)
+    image = models.ForeignKey(attachmentTranscript,on_delete=models.PROTECT,null=True,blank=True)
+    
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_category_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_category_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "category"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'name' :self.name,
+            'name_en' :self.name_en,
+            'year' :self.year,
+            'color_name' :self.color.name if self.color is not None else '',
+            'color_name_en' :self.color.name_en if self.color is not None else '',
+            'factory_name' :self.factory.name if self.factory is not None else '',
+            'factory_name_en' :self.factory.name_en if self.factory is not None else '',
+            'size' :self.size.size if self.size is not None else '',
+            'size_code' :self.size.code if self.size is not None else '',
+            'serial_start' :self.serial_start,
+            'details' :self.details,
+            'image' :self.image.file.url if self.image is not None else '',
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.name
+
+
+

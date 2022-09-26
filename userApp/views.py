@@ -327,3 +327,30 @@ def delete_user(request):
         return JsonResponse(allJson, safe=False)
     
 
+
+
+
+
+
+def checkUniquenessOfUsername(request):
+    username = request.POST['username']
+    id = request.POST['id']
+    if id == '' or id == None:
+        nameExists = User.objects.filter(username=username).exists()
+
+    else:
+        nameExists = User.objects.filter(username=username).exclude(id=id).exists()
+
+
+    if nameExists:
+        nameExists = True
+    else:
+        nameExists=False
+
+
+    result = {}
+    result['nameExists'] = nameExists
+
+    return JsonResponse(result,safe=False)
+
+

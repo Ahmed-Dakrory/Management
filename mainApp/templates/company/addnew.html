@@ -1,0 +1,261 @@
+
+{% extends 'theme.html' %}
+{%load static%}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+
+{% block 'title' %}
+  {% trans 'الشركات' %}
+{% endblock %}
+
+
+{% block 'content' %}
+
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 style="float: right;"> 
+          <ol class="breadcrumb float-sm-left">
+            
+            <li  class="breadcrumb-item"><a href="{%url 'mainApp:home'%}">{%  trans 'الصفحةالرئيسية'%}</a></li>
+            <li  class="breadcrumb-item"><a href="{%url 'mainApp:listOf_company'%}">{% trans 'قائمة الشركات'%}</a></li>
+            <li class="breadcrumb-item active"> {% trans 'الشركة'%}</li>
+          </ol>
+         </h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div class="container post-listing">
+    <!-- <input type="hidden" id="dataOfrole" value="{{roleDetails.id}}"> -->
+    
+
+    <div class="row ">
+      <div class="col-md-12 col-xm-12 single-post">
+        
+       
+        <div class="box-body">
+            <div class="tab-content">
+              <div class="tab-pane form-horizontal active" id="Listed">
+                
+               
+
+
+                <!--Start of the Form-->
+                <div dir="rtl" class="card">
+                    <div class="card-header card-header-primary greenbar" style="text-align: justify;">
+                      <h4 class="card-title">{%  trans 'اضافة شركة'%}</h4>
+                      <p class="card-category">{%  trans 'برجاء ادخال بيانات الشركة'%}</p>
+                    </div>
+                    <div class="card-body" style="text-align: justify;">
+                      <form  method="POST" enctype="multipart/form-data" id="form" class="needs-validation form-horizontal" novalidate>
+                        {% csrf_token %}
+
+
+                        <div class="row">
+                          <img id="profileCoverImg" class="h-100 w-100" src='{% if companyData.image is None or companyData.image == "" %}{% static "img/1920x400/img2.jpg" %}{% else %}{{companyData.image.file.url}}{%endif%}' alt="Image Description">
+
+                          <!-- Avatar -->
+                          <label class="avatar avatar-xxl profile-cover-avatar p-0" for="image">
+                            <img id="image_object" class="avatar-img" src='{% if companyData.image is None or companyData.image == "" %}{% static "img/160x160/img2.jpg" %}{% else %}{{companyData.image.file.url}}{%endif%}' alt="Image Description">
+              
+                            <input type="file" class="js-file-attach avatar-uploader-input" name="image" id="image" data-hs-file-attach-options='{
+                                        "textTarget": "#editAvatarImgModal",
+                                        "mode": "image",
+                                        "targetAttr": "src",
+                                        "allowTypes": [".png", ".jpeg", ".jpg"]
+                                    }'>
+              
+                            <span class="avatar-uploader-trigger">
+                              <i class="bi-pencil-fill avatar-uploader-icon shadow-sm"></i>
+                            </span>
+                          </label>
+                          <!-- End Avatar -->
+                        </div>
+
+
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="name">{%  trans 'اسم الهيئة'%}</label>
+                              <input type="hidden" id="id" name="id" value="{{companyData.id}}">
+                              <input type="text" required="" class="form-control required mb-3"  name="name" value="{{companyData.name}}" id="name">
+                              <div class="invalid-feedback">
+                                {%  trans 'الرجاء التحقق من هذه الخانة'%}
+                              </div>  
+                            </div>
+                            <div id="usernameError">
+
+                            </div>
+                          </div>
+
+
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="name_en">{%  trans 'الاسم بالإنجليزية'%}</label>
+                              <input type="text" required="" class="form-control required mb-3" name="name_en" value="{{companyData.name_en}}" id="name_en">
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال هذا الحقل'%}
+                              </div>  
+                            </div>
+                          </div>
+
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="head_phone">{%  trans 'هاتف المدير'%}</label>
+                              <input type="tel" required="" class="form-control required mb-3" name="head_phone" value="{{companyData.head_phone}}" id="head_phone">
+                              <div class="invalid-feedback">
+                                {%  trans 'برجاء ادخال هذا الحقل'%}
+                              </div>  
+                            </div>
+                          </div>
+                        
+                        </div>
+
+
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="company_phone">{%  trans 'رقم هاتف الشركة'%}</label>
+                              <input type="company_phone" required=""  class="form-control required mb-3" name="company_phone" value="{{companyData.company_phone}}" id="company_phone">
+                              <div class="invalid-feedback">
+                                {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                              </div>  
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="tax_number">{%  trans 'الرقم الضريبى'%}</label>
+                              <input type="text"   class="form-control " name="tax_number" value="{{companyData.tax_number}}" id="tax_number">
+                              <div class="invalid-feedback">
+                                {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                              </div>  
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="address">{%  trans 'العنوان'%}</label>
+                              <input type="text" required=""  class="form-control required mb-3" name="address" value="{{companyData.address}}" id="address">
+                              <div class="invalid-feedback">
+                                {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                              </div>  
+                            </div>
+
+                          </div>
+                        </div>
+
+
+
+                     
+
+
+                     
+                        
+                    
+                      
+                         
+                        <br/>
+                        <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
+                        <button type="submit" class="btn btn-primary" >{% trans "Save" %}</button>
+
+                        <div class="clearfix"></div>
+                      </form>
+                    </div>
+                  </div>
+
+                <!--End of the Form-->
+
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+
+
+
+{% block javaNew %}
+
+
+<script>
+
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+    if (form.checkValidity() === false) {
+    event.preventDefault();
+    event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+    }, false);
+    });
+    }, false);
+    })();
+
+
+
+
+
+// new functionality on submit checking if the company name doesn't exist before 
+
+
+
+
+
+
+
+</script>
+                         
+   
+
+
+<script>
+
+  
+    
+  document.getElementById('image').onchange = function (evt) {
+  
+      var tgt = evt.target || window.event.srcElement,
+          files = tgt.files;
+  
+      // FileReader support
+      if (FileReader && files && files.length) {
+    
+          var fr = new FileReader();
+          fr.onload = function () {
+    
+              document.getElementById('image_object').src = fr.result;
+          }
+          fr.readAsDataURL(files[0]);
+      }
+  
+      // Not supported
+      else {
+          // fallback -- perhaps submit the input to an iframe and temporarily store
+          // them on the server until the user's session ends.
+      }
+  }
+  
+  
+  </script>
+{% endblock %}

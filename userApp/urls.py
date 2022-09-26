@@ -7,6 +7,7 @@ app_name='userApp'
 urlpatterns = [
     path('login/',views.user_login,name='login'),
     path('logout/',views.user_logout,name='logout'),
+    path('checkUniquenessOfUsername/',views.checkUniquenessOfUsername,name='checkUniquenessOfUsername'),
 
     
     path('listOf_user/',views.listOf_user,name='listOf_user'),

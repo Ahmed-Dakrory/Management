@@ -611,3 +611,9 @@ background-color: #cacaca!important;
     background: #fafafa;
 
 }
+
+.img_list{
+
+  width: 50px;
+  border-radius: 7px;
+}

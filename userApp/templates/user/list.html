@@ -267,7 +267,7 @@
   // INITIALIZATION OF DATATABLES
       // =======================================================
       $(function () {
-
+        showLoader()
       // INITIALIZATION OF DATATABLES
       // =======================================================
        HSCore.components.HSDatatables.init($('#example2'), {
@@ -333,6 +333,10 @@
                     
                 }
             },
+            "initComplete": function(settings, json) {
+    hideLoader()
+    // do whatever with info here...
+  },
         "aoColumns": [
            
               

@@ -3,12 +3,12 @@
 
 function showLoader(){
     // $('#loading').fadeIn('fast');
-    $('#loaderHandler').css({display:'block'});
+    $('#loaderHandler').removeClass('d-none');
     // console.log('Showennn');
 }
 
 function hideLoader(){
-    $('#loaderHandler').css({display:'none'});
+    $('#loaderHandler').addClass('d-none');
     // console.log('hide');
 }
 

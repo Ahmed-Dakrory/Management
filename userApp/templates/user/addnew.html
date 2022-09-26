@@ -69,7 +69,7 @@
                                 {%  trans ' برجاء ادخال اسم المستخدم '%}
                               </div>  
                             </div>
-                            <div id="usernameError">
+                            <div id="usernameError" class="rounded bg-danger p-2 mb-2 d-none">
 
                             </div>
                           </div>
@@ -210,7 +210,7 @@
 
 
 
-{% block Extrajavascripts %}
+{% block javaNew %}
 
 
 <script>
@@ -223,9 +223,60 @@
     // Loop over them and prevent submission
     var validation = Array.prototype.filter.call(forms, function(form) {
     form.addEventListener('submit', function(event) {
+
     if (form.checkValidity() === false) {
     event.preventDefault();
     event.stopPropagation();
+    }else{
+      let _this = $(this)
+      
+    event.preventDefault();
+    event.stopPropagation();
+        var username = $('#username').val()
+        var id =  $('#id').val()
+
+
+        console.log('-------------------')
+     
+      $.ajax({ 
+        type: 'POST',
+        url: '{% url "userApp:checkUniquenessOfUsername"%}',
+        dataType: 'json',
+        data: { 
+            'username':username,
+            'id':id,
+        },
+        headers:{
+            "X-CSRFToken": csrftoken
+                },
+        async: true,
+        cache: true,
+        success: function(result) {
+          // console.log(result[nameExists],"*********************************888888888888888")
+          console.log(result['nameExists'],"*********1")
+          if(result['nameExists'] == true){
+            $('#usernameError').empty()
+              $('#usernameError').removeClass('d-none')
+
+            $('#usernameError').append("{% trans 'اسم المستخدم موجود بالفعل*'%}")
+          } 
+          else{
+            console.log("not exists ")
+              $('#usernameError').addClass('d-none')
+            if ( $('form')[0].checkValidity() ) {
+              $('#usernameError').empty()
+            _this.unbind('submit').submit();
+
+                          }
+
+          }
+
+
+        },
+          
+    });
+
+
     }
     form.classList.add('was-validated');
     }, false);
@@ -243,92 +294,7 @@
 
 
 
-$(document).ready(function() {
-      
-   
-    var form = $('form')
-    $('form').submit(function (e) {
-          _this = $(this)
-          e.preventDefault();
-        var username = $('#username').val()
-        var email =  $('#email').val()
-        var phone =  $('#phone').val()
-        var id =  $('#id').val()
 
-
-        console.log('-------------------')
-     
-      $.ajax({ 
-        type: 'POST',
-        url: '/{{LANGUAGE_CODE}}/checkUniquenessOfUsername',
-        dataType: 'json',
-        data: { 
-            'username':username,
-            'email':email,
-            'phone':phone,
-            'id':id,
-        },
-        headers:{
-            "X-CSRFToken": csrftoken
-                },
-        async: true,
-        cache: true,
-        success: function(result) {
-          // console.log(result[nameExists],"*********************************888888888888888")
-          console.log(result['nameExists'],"*********1")
-          if(result['nameExists'] == "true"){
-            $('#usernameError').empty()
-            $('#emailError').empty()
-            $('#phoneError').empty()
-
-            $('#usernameError').append("اسم المستخدم موجود بالفعل*")
-          } 
-          else if(result['emailExists'] == "true"){
-            $('#usernameError').empty()
-            $('#emailError').empty()
-            $('#phoneError').empty()
-            $('#emailError').append(" الايميل موجود بالفعل*")
-
-          }
-          else if(result['phoneExists'] == "true"){
-            $('#usernameError').empty()
-            $('#emailError').empty()
-            $('#phoneError').empty()
-            $('#phoneError').append(" رقم الهاتف موجود بالفعل*")
-
-          }
-          else{
-            console.log("not exists ")
-            if ( $('form')[0].checkValidity() ) {
-              $('#usernameError').empty()
-            $('#emailError').empty()
-            $('#phoneError').empty()
-            _this.unbind('submit').submit();
-
-                          }
-
-          }
-
-
-        },
-          
-    });
-
-
-    });
-
-});
-
-
-
-
-$('#regionalBranches').val($('#regionalBranches').attr('value'));
-
-$('#sector').val($('#sector').attr('value'));
-$('#centralAdministration').val($('#centralAdministration').attr('value'));
-
-fill_sectorAndSelect(true);
-fill_centralAdminstrationAndSelect(true);
 
 
 

@@ -7,7 +7,7 @@
 
 
 {% block 'title' %}
-  {% trans 'قائمة الصلاحيات' %}
+  {% trans 'قائمة القطاعات' %}
 {% endblock %}
 
 
@@ -29,7 +29,7 @@
           <ol class="breadcrumb float-sm-left">
             
             <li  class="breadcrumb-item"><a href="{%url 'mainApp:home'%}">{%  trans 'الصفحةالرئيسية'%}</a></li>
-            <li class="breadcrumb-item active"> {% trans 'قائمة الصلاحيات'%}</li>
+            <li class="breadcrumb-item active"> {% trans 'قائمة القطاعات'%}</li>
           </ol>
          </h1>
       </div>
@@ -56,7 +56,7 @@
                     <!-- Datatable Info -->
                     <div id="datatableCounterInfo">
                       <div class="d-flex align-items-center">
-                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'userApp:addnew_role'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة صلاحية'%}</a>
+                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_sector'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة قطاع'%}</a>
                       </div>
                     </div>
                     <!-- End Datatable Info -->
@@ -70,11 +70,11 @@
                     <div class="col-md">
                       <!-- Dropdown -->
                       <div class="dropdown me-2">
-                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="usersExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="sectorsExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                           <i class="bi-download me-2"></i> Export
                         </button>
               
-                        <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="usersExportDropdown">
+                        <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="sectorsExportDropdown">
                           <span class="dropdown-header">Options</span>
                           <a id="export-copy" class="dropdown-item" href="javascript:;">
                             <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/illustrations/copy-icon.svg'%}" alt="Image Description">
@@ -134,12 +134,15 @@
                 <thead class="thead-light">
                 <tr>
 
-                  <th>{% trans 'فحص'%}</th>
-                  <th>{% trans 'رقم'%}</th>
-                  <th>{% trans 'اسم الصلاحية'%}</th>
-                  <th> {% trans 'عدد الأذونات'%}</th>
-                  <th>{% trans 'اعدادات '%}</th>
 
+                              <th>{% trans 'رقم' %} </th>
+                              <th>{% trans 'اسم بالعربية' %} </th>
+                              <th>{% trans 'الإسم بالإنجليزية' %} </th>
+                              <th>{% trans 'الدور' %} </th>
+                              <th>{% trans "التعديلات" %} </th>
+                              <th>{% trans "Delete" %} </th>
+
+               
 
                 
                 </tr>
@@ -163,8 +166,8 @@
                     <!-- Datatable Info -->
                     <div id="datatableCounterInfo">
                       <div class="d-flex align-items-center">
-                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'userApp:addnew_role'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة صلاحية'%}</a>
-                     </div>
+                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_sector'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة قطاع'%}</a>
+                      </div>
                     </div>
                     <!-- End Datatable Info -->
                   </div>
@@ -229,8 +232,22 @@
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
+
 
 
 
@@ -309,60 +326,93 @@
         "isShowPaging": false,
         "pagination": "datatablePagination",
         "ajax": {
-                "url": "{% url 'userApp:getListOf_role' %}",
+                "url": "{% url 'mainApp:getListOf_sector' %}",
                 "data": function ( d ) {
                 //  d.bodyiesOfWatertype = $('#dataOfWaterType').val();
                     
                 }
             },
-            "initComplete": function(settings, json) {
+        "initComplete": function(settings, json) {
     hideLoader()
     // do whatever with info here...
   },
-        
         "aoColumns": [
            
               
             {
-              className: "  details-control", "mData": null, "sWidth": "25%","mRender": function (item) {
+              className: "  ", "mData": null,"mRender": function (item) {
                 
-
-                
-                return '<i class="fa fa-eye"></i>';
+                   // Add event listener for opening and closing details
+ 
+                   return '<a>'+item.id+'</a>';
             }
             }, 
             {
-              className: "", "mData": null, "sWidth": "25%","mRender": function (item) {
+              className: "", "mData": null,"mRender": function (item) {
                 
-                return '<a>'+item.id+'</a>';
+               
+                
+                return '<a>'+item.name+'</a>';
+                
+
+
             }
             },
             {
-              className: "","mData": null, "sWidth": "25%","mRender": function (item) { 
+              className: "","mData": null,"mRender": function (item) { 
                   
                   
                 
                   
-                return '<a>'+item.name+'</a>';
+                return '<a>'+item.name_en+'</a>';
+                
+                
+
                 
             }
             }
             ,
             {
-              className: "", "mData": null, "sWidth": "12.5%","mRender": function (item) { 
+              className: "", "mData": null,"mRender": function (item) { 
               
-                return '<a>'+item.numberOfPermissions+'</a>';
+                return '<a>'+item.floor+'</a>';
+                
+                
+
+             
+
+                }
+            }                 
+            
+            
+                      
+                         
+            
+            
+            
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return `<a class="ml-4 bluefont" href="{% url 'mainApp:addnew_sector'%}?type=edit&id=`+item.id+`"><i class="fa fa-cog"></i></a>`;
+             
+                
+
              
 
                 }
             }                 
             ,
+            
+            
             {
-              className: "", "mData": null, "sWidth": "12.5%","mRender": function (item) { 
+              className: "", "mData": null,"mRender": function (item) { 
                 
                 
-                return `<a class="ml-4 bluefont" href="{% url 'userApp:addnew_role'%}?type=edit&id=`+item.id+`"><i class="fa fa-cog"></i></a>`;
-
+               
+                return '<a class="ml-4 bluefont"href="javascript:void(0)" nameOfItem="'+item.name+'"  idOfItem="'+item.id+'" onclick="askToDeleteItemWithId(this);"><i class="fa fa-trash"></i></a>';
+             
+                
 
                 // '  <a class="btn btn-outline-success btn-sm"  href="javascript:void(0)" nameOfItem="'+item.name+'"  idOfItem="'+item.id+'" onclick="askToDeleteItemWithId(this);"><i class="bi-trash"></i> {% trans "مسح"%}</a>'
              
@@ -371,7 +421,7 @@
             }              
              
         ]
-
+        
   
       });
   
@@ -379,29 +429,6 @@
     
   
       const datatable = HSCore.components.HSDatatables.getItem(0)
-  
-
-
-      $('#example2 tbody').on('click', 'td.details-control', function () {
-          var tr = $(this).closest('tr');
-          var row = datatable.row( tr );
-        // console.log('Ahmed')
-          if ( row.child.isShown() ) {
-              // This row is already open - close it
-              $('div.slider', row.child()).slideUp( function () {
-                  row.child.hide();
-                  tr.removeClass('shown');
-              } );
-          }
-          else {
-              // Open this row
-              row.child( format(row.data()), 'no-padding' ).show();
-              tr.addClass('shown');
-   
-              $('div.slider', row.child()).slideDown();
-          }
-      } );
-  
   
 
 
@@ -446,17 +473,25 @@
 
 
 
+</script>
+
+<script>
+
+
+
+        
+
         function askToDeleteItemWithId(element){
   Swal.fire({
-              title: '<strong>{% trans "هل تريد مسح هذا العنصر؟" %} </strong>',
+              title: '<strong>{% trans "Do you need to delete this item?" %} </strong>',
               icon: 'warning',
               html:
                 '<div class="tD-responsive table-responsive">'+
                 '<table class="tD table">'+
-                    '<thead><tr><th colspan="2">{% trans "بيانات العنصر" %}</th></tr></thead>'+
+                    '<thead><tr><th colspan="2">{% trans "Item Details" %}</th></tr></thead>'+
                     '<tbody>'+
                         '<tr>'+
-                            '<td width="20%"><strong>{% trans "عنصر" %} </strong></td>'+
+                            '<td width="20%"><strong>{% trans "Name" %} </strong></td>'+
                             '<td>'+$(element).attr('nameOfItem')+'</td>'+
                         '</tr>'+
                     '</tbody>'+
@@ -466,10 +501,10 @@
               showCancelButton: true,
               focusConfirm: false,
 
-              confirmButtonText:'<i class="bi-trash"></i> {% trans "مسح" %}',
+              confirmButtonText:'<i class="fa fa-trash"></i> {% trans "Delete" %}',
               confirmButtonColor: '#d33',
               confirmButtonAriaLabel: 'Thumbs up, great!',
-              cancelButtonText:'<i class="bi-x-circle-fill"></i> {% trans "اغلاق" %}',
+              cancelButtonText:'<i class="fa fa-times-circle-o"></i> {% trans "Close" %}',
               cancelButtonAriaLabel: 'Thumbs down'
             }).then((result) => {
               if (result.value) {
@@ -478,7 +513,7 @@
                 showLoader();
                 $.ajax({
                   type: 'POST',
-                  url: '/delete_dmz',
+                  url: "{% url 'mainApp:delete_sector'%}",
                   dataType: 'json',
                   data: { 
                       'id': $(element).attr('idOfItem')
@@ -491,8 +526,8 @@
                     hideLoader();
                       if(result.Result == "Success"){
                         Swal.fire(
-                          '{% trans "تم" %}',
-                          '{% trans "تم المسح بنجاح" %}',
+                          '{% trans "Done" %}',
+                          '{% trans "Successfully deleted" %}',
                           'success'
                         ).then((result) => {
                           if (result.value) {
@@ -501,9 +536,9 @@
                         });
                         }else{
                           Swal.fire(
-                            '{% trans "خطأ" %}',
-                            '{% trans "حدث خطأ عند المسح" %}',
-                            '{% trans "مشكلة" %}'
+                            '{% trans "Error" %}',
+                            '{% trans "Error while deleting" %}',
+                            '{% trans "Error" %}'
                           )
                         }
                   
@@ -511,9 +546,9 @@
                   error: function (xhr, ajaxOptions, thrownError) {
                   hideLoader();
                   Swal.fire(
-                    '{% trans "خطأ" %}',
-                    '{% trans "حدث خطأ عند المسح" %}',
-                    '{% trans "مشكلة" %}'
+                    '{% trans "Error" %}',
+                    '{% trans "Error while deleting" %}',
+                    '{% trans "Error" %}'
                   )
                   }
               });
@@ -524,58 +559,5 @@
 }
 
 
-
 </script>
-
-
-
-<script>
-
-
-
-  function format ( d ) {
-      // `d` is the original data object for the row
-      console.log(d);
-      statement = "";
-      for(let i=0;i<(d.allPermissions).length;i++){
-        statement += `<div class="col-md-3">
-                <div class="card border border-secondary rounded m-2" >
-                  <div class="card-body text-center">
-                    `+d.allPermissions[i]+`
-                  </div>
-                </div>
-              </div>
-              `;
-      }
-      return (`
-      
-      <div class="slider card border border-secondary rounded" style="text-align: initial;">
-        <h5 class="card-header">كل الصلاحيات </h5>
-        <div class="card-body">
-          <div class="container">
-            <div class="row">
-              
-             `
-             +statement+
-  
-  
-  
-            `
-  
-            </div>
-          </div>
-        </div>
-      </div>
-                  `);
-  
-  }
-  
-  
-  
-  
-
-  
-         
-  </script>
-  
 {% endblock %}
