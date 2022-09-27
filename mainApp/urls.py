@@ -15,6 +15,7 @@ urlpatterns = [
 
 
     path('checkUniquenessOfserial_start/',views.checkUniquenessOfserial_start,name='checkUniquenessOfserial_start'),
+    path('checkUniquenessOfpart_num/',views.checkUniquenessOfpart_num,name='checkUniquenessOfpart_num'),
     
 
     # category
@@ -23,6 +24,17 @@ urlpatterns = [
     path('addnew_category/',views.addnew_category,name='addnew_category'),
     path('delete_category/',views.delete_category,name='delete_category'),
 
+
+
+    # item
+    path('listOf_item/',views.listOf_item,name='listOf_item'),
+    path('getListOf_item/',views.getListOf_item,name='getListOf_item'),
+    path('addnew_item/',views.addnew_item,name='addnew_item'),
+    path('delete_item/',views.delete_item,name='delete_item'),
+
+
+    # path('gen_listOf_item/',views.gen_listOf_item,name='gen_listOf_item'),
+    
 
 
     # factory

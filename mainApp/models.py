@@ -238,7 +238,6 @@ class category(models.Model):
     details = models.TextField(default=None)
     year = models.TextField(default=None)
     color = models.ForeignKey(color,on_delete=models.PROTECT,null=True,blank=True)
-    size = models.ForeignKey(size,on_delete=models.PROTECT,null=True,blank=True)
     serial_start = models.TextField(default=None,unique=True)
     factory = models.ForeignKey(factory,on_delete=models.PROTECT,null=True,blank=True)
     image = models.ForeignKey(attachmentTranscript,on_delete=models.PROTECT,null=True,blank=True)
@@ -268,8 +267,6 @@ class category(models.Model):
             'color_name_en' :self.color.name_en if self.color is not None else '',
             'factory_name' :self.factory.name if self.factory is not None else '',
             'factory_name_en' :self.factory.name_en if self.factory is not None else '',
-            'size' :self.size.size if self.size is not None else '',
-            'size_code' :self.size.code if self.size is not None else '',
             'serial_start' :self.serial_start,
             'details' :self.details,
             'image' :self.image.file.url if self.image is not None else '',
@@ -279,5 +276,61 @@ class category(models.Model):
     def __str__(self):
         return self.name
 
+
+
+#البند
+class item(models.Model):
+    part_num = models.CharField(max_length=500,default=None)
+    details = models.TextField(default=None)
+    exists = models.BooleanField(default=True)
+    is_returned = models.BooleanField(default=True)
+    higher_count = models.IntegerField(default=True)
+    size = models.ForeignKey(size,on_delete=models.PROTECT,null=True,blank=True)
+    company_with = models.ForeignKey(company,on_delete=models.PROTECT,null=True,blank=True)
+    representitive_with = models.ForeignKey(User,on_delete=models.PROTECT,null=True,blank=True,related_name= "user_item_representitive")
+    category = models.ForeignKey(category,on_delete=models.PROTECT,null=True,blank=True)
+    last_out_date = models.DateTimeField(null=True,blank=True)
+    last_return_date = models.DateTimeField(null=True,blank=True)
+    
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_item_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_item_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "item"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'part_num' :self.part_num,
+            'color_name' :self.category.color.name if self.category.color is not None else '',
+            'color_name_en' :self.category.color.name_en if self.category.color is not None else '',
+            'size' :self.size.size if self.size is not None else '',
+            'size_code' :self.size.code if self.size is not None else '',
+            'factory_name' :self.category.factory.name if self.category.factory is not None else '',
+            'factory_name_en' :self.category.factory.name_en if self.category.factory is not None else '',
+            'company_with_name' :self.company_with.name if self.company_with is not None else '',
+            'company_with_name_en' :self.company_with.name_en if self.company_with is not None else '',
+            'representitive_with_name' :self.representitive_with.username if self.representitive_with is not None else '',
+            'representitive_with_phone' :self.representitive_with.phone if self.representitive_with is not None else '',
+            'last_out_date' :self.last_out_date if self.last_out_date is not None else '',
+            'last_return_date' :self.last_return_date if self.last_return_date is not None else '',
+            'details' :self.details,
+            'exists' :self.exists,
+            'is_returned':self.is_returned,
+            'image' :self.category.image.file.url if self.category.image is not None else '',
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.name
 
 

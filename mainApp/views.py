@@ -76,7 +76,8 @@ def getListOf_category(request):
             allElements = category.objects.filter( Q(deleted_date=None))
         else:
             allElements = category.objects.filter(Q(deleted_date=None) & 
-            (Q(size__size__contains=searchKey) |
+            (Q(name__contains=searchKey) |
+             Q(name_en__contains=searchKey)|
              Q(color__name__contains=searchKey)|
              Q(color__name_en__contains=searchKey)|
              Q(factory__name__contains=searchKey)|
@@ -116,14 +117,12 @@ def addnew_category(request):
     
     
     all_factory = factory.objects.filter( Q(deleted_date=None))
-    all_size = size.objects.filter( Q(deleted_date=None))
     all_color = color.objects.filter( Q(deleted_date=None))
     
     context = {
         'categoryData':dataToInsert,
         'type':typeOfEntry,
         'all_factory':all_factory,
-        'all_size':all_size,
         'all_color':all_color,
         }
 
@@ -134,7 +133,6 @@ def addnew_category(request):
         year = request.POST['year']
         serial_start = request.POST['serial_start']
         colorObject = request.POST['color']
-        sizeObject = request.POST['size']
         details = request.POST['details']
         factoryObject = request.POST['factory']
 
@@ -151,10 +149,7 @@ def addnew_category(request):
             colorObject = None
 
         
-        try:
-            sizeObject = size.objects.get(id=sizeObject)
-        except:
-            sizeObject = None
+        
 
         try:
             filedetails = request.FILES['image']
@@ -185,7 +180,7 @@ def addnew_category(request):
             except:
                 attachmentTranscriptObject = None
 
-            categorynew = category.objects.create(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, factory=factoryObject,size=sizeObject,color=colorObject,  created_by=request.user,image=attachmentTranscriptObject)
+            categorynew = category.objects.create(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, factory=factoryObject,color=colorObject,  created_by=request.user,image=attachmentTranscriptObject)
             categorynew.save()
             
             
@@ -199,7 +194,7 @@ def addnew_category(request):
                 attachmentTranscriptObject = dataToInsert.image
 
             dataToInsert = category.objects.filter(id=idOfelement)
-            dataToInsert.update(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, factory=factoryObject,size=sizeObject,color=colorObject,  updated_by=request.user,updated_date=datetime.now(),image=attachmentTranscriptObject)
+            dataToInsert.update(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, factory=factoryObject,color=colorObject,  updated_by=request.user,updated_date=datetime.now(),image=attachmentTranscriptObject)
             
 
  
@@ -235,6 +230,306 @@ def delete_category(request):
 
 
 
+
+
+
+####################  item  #################3
+@login_required
+def listOf_item(request):
+    all_company = factory.objects.filter( Q(deleted_date=None))
+    all_rep = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
+    all_category = category.objects.filter( Q(deleted_date=None))
+    all_size = size.objects.filter( Q(deleted_date=None))
+    
+
+    
+    if request.method=='POST':
+        details = request.POST['details']
+        number = request.POST['number']
+
+        try:
+            sizeObject = request.POST['size']
+            sizeObject = size.objects.get(id=sizeObject)
+        except:
+            sizeObject = None
+
+        try:
+            categoryId = request.POST['category']
+            categoryObject = category.objects.get(id=categoryId)
+        except:
+            categoryObject = None
+
+        print("-----------------------")
+        print(number)
+        for i in range(0,int(number)):
+            [part_num,higher_count] = generate_part_num(categoryObject,sizeObject)
+        
+            itemnew = item.objects.create(part_num=part_num,
+            exists=True,
+            is_returned=False,
+            details=details,
+            company_with=None,
+            representitive_with=None,
+            category=categoryObject,
+            size=sizeObject,
+            higher_count = higher_count,
+            last_out_date=None,
+            last_return_date = None,
+            created_by=request.user)
+            itemnew.save()
+            
+
+    context = {
+        'all_company':all_company,
+        'all_rep':all_rep,
+        'all_category':all_category,
+        'all_size':all_size,
+        }
+
+
+    return render(request,'item/list.html',context)
+
+
+@login_required
+def getListOf_item(request):
+    pageLength = int(request.GET['length'])
+    pageNumber = int(request.GET['start'])
+    draw = int(request.GET['draw'])
+    searchKey = request.GET['search[value]']
+    pageNumber = int(pageNumber/pageLength + 1)
+
+    
+    category = (request.GET['category'])
+    if category == '%%':
+        category_search = Q(deleted_date=None)
+    else:
+        category_search = Q(category__id=category)
+
+    company_with = (request.GET['company_with'])
+    if company_with == '%%':
+        company_with_search = Q(deleted_date=None)
+    else:
+        company_with_search = Q(company_with__id=company_with)
+
+    size = (request.GET['size'])
+    if size == '%%':
+        size_search = Q(deleted_date=None)
+    else:
+        size_search = Q(size__id=size)
+
+    representitive_with = (request.GET['representitive_with'])
+    if representitive_with == '%%':
+        representitive_with_search = Q(deleted_date=None)
+    else:
+        representitive_with_search = Q(representitive_with__id=representitive_with)
+
+
+    
+    exists = (request.GET['exists'])
+    if exists == '%%':
+        exists_search = Q(deleted_date=None)
+    else:
+        exists_search = Q(exists=exists)
+
+
+    try:
+        if searchKey == '':
+            allElements = item.objects.filter( Q(deleted_date=None)&
+             
+             category_search&
+             company_with_search&
+             size_search&
+             representitive_with_search&
+             exists_search)
+        else:
+            allElements = item.objects.filter(Q(deleted_date=None) & 
+            (Q(size__code__contains=searchKey) |
+             Q(category__color__name__contains=searchKey)|
+             Q(category__color__name_en__contains=searchKey)|
+             Q(company_with__name__contains=searchKey)|
+             Q(company_with__name_en__contains=searchKey)|
+             Q(representitive_with__username__contains=searchKey)|
+             Q(part_num__contains=searchKey)|
+             Q(id__contains=searchKey) ) &
+             
+             category_search&
+             company_with_search&
+             size_search&
+             representitive_with_search&
+             exists_search)
+
+        paginator = Paginator(allElements, pageLength)
+        
+        try:
+            response = paginator.page(pageNumber)
+        except PageNotAnInteger:
+            response = paginator.page(pageNumber)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        listResult = list(response)
+        allElementsJson = {"draw": draw,"recordsTotal": len(allElements),"recordsFiltered": len(allElements),"data":[]}
+
+        for result in listResult:
+            allElementsJson['data'].append(result.to_json())
+
+        return JsonResponse(allElementsJson)
+    except Exception as e:
+        print("Ahmed Error: "+str(e))
+        return JsonResponse({"draw": draw,"recordsTotal": 0,"recordsFiltered": 0,"data":[]})
+
+
+@login_required
+def addnew_item(request):
+    typeOfEntry = request.GET['type']
+    if typeOfEntry == 'new':
+        dataToInsert = None
+    elif typeOfEntry == 'edit':
+        idOfelement = request.GET['id']
+        dataToInsert = item.objects.get(id=idOfelement)
+    
+    
+    all_company = factory.objects.filter( Q(deleted_date=None))
+    all_rep = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
+    all_category = category.objects.filter( Q(deleted_date=None))
+    all_size = size.objects.filter( Q(deleted_date=None))
+    
+    context = {
+        'itemData':dataToInsert,
+        'type':typeOfEntry,
+        'all_company':all_company,
+        'all_rep':all_rep,
+        'all_category':all_category,
+        'all_size':all_size,
+        }
+
+
+    if request.method=='POST':
+        # part_num = request.POST['part_num']
+        exists = request.POST['exists']
+        details = request.POST['details']
+        is_returned = request.POST['is_returned']
+        company_with = request.POST['company_with']
+        representitive_with = request.POST['representitive_with']
+        last_out_date = request.POST['last_out_date']
+        last_return_date = request.POST['last_return_date']
+
+        try:
+            last_out_date = datetime.strptime(last_out_date, '%d/%m/%Y %H:%M')
+        except:
+            last_out_date = None
+
+
+        
+        try:
+            last_return_date = datetime.strptime(last_return_date, '%d/%m/%Y %H:%M')
+        except:
+            last_return_date = None
+
+        if is_returned == '1':
+            is_returned = True
+        else: 
+            is_returned = False
+
+        if exists == '1':
+            exists = True
+        else: 
+            exists = False
+
+        try:
+            companyObject = company.objects.get(id=company_with)
+        except:
+            companyObject = None
+
+
+        
+        try:
+            sizeObject = request.POST['size']
+            sizeObject = size.objects.get(id=sizeObject)
+        except:
+            sizeObject = None
+        
+        try:
+            representitive_withObject = User.objects.get(id=representitive_with)
+        except:
+            representitive_withObject = None
+
+        
+        try:
+            categoryId = request.POST['category']
+            categoryObject = category.objects.get(id=categoryId)
+        except:
+            categoryObject = None
+
+        
+        
+
+
+
+        if typeOfEntry == 'new':
+            
+            [part_num,higher_count] = generate_part_num(categoryObject,sizeObject)
+        
+            itemnew = item.objects.create(part_num=part_num,
+            exists=exists,
+            is_returned=is_returned,
+            details=details,
+            company_with=companyObject,
+            representitive_with=representitive_withObject,
+            category=categoryObject,
+            size=sizeObject,
+            higher_count = higher_count,
+            last_out_date=last_out_date,
+            last_return_date = last_return_date,
+            created_by=request.user)
+            itemnew.save()
+            
+            
+        elif typeOfEntry == 'edit':
+            
+
+            dataToInsert = item.objects.filter(id=idOfelement)
+            dataToInsert.update(
+            exists=exists,
+            is_returned=is_returned,
+            details=details,
+            company_with=companyObject,
+            representitive_with=representitive_withObject,
+            last_out_date=last_out_date,
+            last_return_date = last_return_date,
+            created_by=request.user,  updated_by=request.user,updated_date=datetime.now())
+            
+
+ 
+        urlLink = reverse("mainApp:listOf_item")
+        return redirect(urlLink)
+    elif request.method=='GET':
+        return render(request,'item/addnew.html',context)
+    
+
+
+@login_required
+def delete_item(request):
+    itemId = request.POST['id']
+
+
+    itemDetails=item.objects.filter(Q(id=itemId) & Q(deleted=None))
+    itemDetails.update(deleted_date = datetime.now())
+
+
+
+   
+    allJson = {"Result": "Fail"}
+    
+    allJson['Result'] = "Success"
+
+
+    if allJson != None:
+        return JsonResponse(allJson, safe=False)
+    else:
+        allJson['Result'] = "Fail"
+        return JsonResponse(allJson, safe=False)
+    
 
 
 
@@ -701,6 +996,30 @@ def show_items(request):
 
 
 
+
+def checkUniquenessOfpart_num(request):
+    part_num = request.POST['part_num']
+    id = request.POST['id']
+    if id == '' or id == None:
+        nameExists = item.objects.filter(part_num=part_num).exists()
+
+    else:
+        nameExists = item.objects.filter(part_num=part_num).exclude(id=id).exists()
+
+
+    if nameExists:
+        nameExists = True
+    else:
+        nameExists=False
+
+
+    result = {}
+    result['nameExists'] = nameExists
+
+    return JsonResponse(result,safe=False)
+
+
+
 def checkUniquenessOfserial_start(request):
     serial_start = request.POST['serial_start']
     id = request.POST['id']
@@ -725,3 +1044,23 @@ def checkUniquenessOfserial_start(request):
 
 
 
+def generate_part_num(categoryObject,sizeObject):
+    count_of_items_of_this_category = item.objects.filter(Q(category__id=categoryObject.id)
+    & Q(size__id=sizeObject.id)).order_by('-higher_count') 
+    try:
+        count_of_items_of_this_category = count_of_items_of_this_category[0].higher_count
+    except:
+        count_of_items_of_this_category = 0
+        
+
+    count_of_items_of_this_category = count_of_items_of_this_category+1
+
+
+    part_num = str(f"{int(categoryObject.serial_start):04}")
+    part_num = part_num + str(f"{int(sizeObject.code):02}")
+    part_num = part_num + str(f"{count_of_items_of_this_category:04}")
+    
+
+    
+
+    return [part_num,count_of_items_of_this_category]

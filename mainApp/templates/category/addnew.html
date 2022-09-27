@@ -128,10 +128,7 @@
                             </div>
                           </div>
                         
-                        </div>
-
-
-                        <div class="row">
+                        
                           <div class="col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="year">{%  trans 'عام'%}</label>
@@ -158,20 +155,7 @@
                           </div>
 
 
-                          <div class="col-md-4">
-                            <div class="form-group bmd-form-group">
-                              <label  class="pb-1" for="size">{%  trans 'المقاس'%}</label>
-                              <select required="" class="form-control required mb-3" name="size" value="{{categoryData.size.id}}" id="size">
-                                <option value="">{%  trans 'اختر احد الأنواع'%}</option>
-                                {% for item in all_size %}
-                                <option value="{{item.id}}"  {% if item.id == categoryData.size.id %} selected {% endif %}>{{item.size}}</option>
-                                {% endfor %}
-                            </select>
-                              <div class="invalid-feedback">
-                                {%  trans 'الرجاء التحقق من هذه الخانة'%} 
-                              </div>  
-                            </div>
-                          </div>
+                          
 
 
 

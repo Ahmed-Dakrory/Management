@@ -177,6 +177,7 @@
 
   <script src="{% static 'vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js'%}"></script>
 
+
   <!-- ========== HEADER ========== -->
 
   <header id="header" class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
@@ -543,8 +544,9 @@
                 </a>
 
                 <div id="navbarVerticalMenuPagesEcommerceMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link menu_item_get" href="{%url 'mainApp:show_items'%}">{% trans 'البنود '%}</a>
+                  <a class="nav-link menu_item_get" href="{%url 'mainApp:listOf_item'%}">{% trans 'القطع '%}</a>
                 </div>
+
               </div>
               <!-- End Collapse -->
 
@@ -1066,6 +1068,9 @@
 // });
   
   </script>
+
+
+
 
 
   {% block javaNew %}

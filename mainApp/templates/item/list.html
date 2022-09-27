@@ -7,7 +7,7 @@
 
 
 {% block 'title' %}
-  {% trans 'قائمة الموديلات' %}
+  {% trans 'قائمة القطع' %}
 {% endblock %}
 
 
@@ -29,7 +29,7 @@
           <ol class="breadcrumb float-sm-left">
             
             <li  class="breadcrumb-item"><a href="{%url 'mainApp:home'%}">{%  trans 'الصفحةالرئيسية'%}</a></li>
-            <li class="breadcrumb-item active"> {% trans 'قائمة الموديلات'%}</li>
+            <li class="breadcrumb-item active"> {% trans 'قائمة القطع'%}</li>
           </ol>
          </h1>
       </div>
@@ -51,14 +51,17 @@
             <div class="card-header">
               <div class="row justify-content-between align-items-center flex-grow-1">
                 <div class="col-md">
-                  <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex justify-content-start align-items-center">
                  
                     <!-- Datatable Info -->
-                    <div id="datatableCounterInfo">
                       <div class="d-flex align-items-center">
-                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_category'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة موديل'%}</a>
+                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_item'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة قطعة'%}</a>
                       </div>
-                    </div>
+                      <div class="d-flex align-items-center ms-2 me-2">
+                      <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        {% trans 'إضافة مجموعة قطع'%}
+                      </button>
+                      </div>
                     <!-- End Datatable Info -->
                   </div>
                 </div>
@@ -70,11 +73,11 @@
                     <div class="col-md">
                       <!-- Dropdown -->
                       <div class="dropdown me-2">
-                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="categorysExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="itemsExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                           <i class="bi-download me-2"></i> Export
                         </button>
               
-                        <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="categorysExportDropdown">
+                        <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="itemsExportDropdown">
                           <span class="dropdown-header">Options</span>
                           <a id="export-copy" class="dropdown-item" href="javascript:;">
                             <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/illustrations/copy-icon.svg'%}" alt="Image Description">
@@ -125,6 +128,84 @@
                 <!-- End Col -->
               </div>
               <!-- End Row -->
+
+
+
+
+
+              <div class="row mt-3  align-items-center flex-grow-1">
+                <div class="col-3">
+                  <label  class="pb-1" for="category">{%  trans 'موديل'%}</label>
+                  <select  class="required js-select form-select"  data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد الموديلات'%}..." }' name="category"  id="category">
+                                 
+                    <option value="%%">{%  trans 'الكل'%}</option>
+                    {% for item in all_category %}
+                    <option value="{{item.id}}"  data-option-template='<div class="d-flex align-items-start"><div class="flex-shrink-0"><img class="img_list2" src="{% if item.image is None or item.image == "" %}{% static "img/160x160/img2.jpg" %}{% else %}{{item.image.file.url}}{%endif%}"/></div><div class="flex-grow-1 ms-2"><span class="d-block fw-semi-bold">{{item.serial_start}} ({{item.name}} {{item.color.name}} )</span></div></div>'>{{item.serial_start}} ({{item.name}} {{item.color.name}})</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <!-- End Col -->
+
+                <div class="col-3">
+                  <label  class="pb-1" for="size">{%  trans 'المقاس'%}</label>
+                  <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد المقاسات'%}..." }' name="size"  id="size">
+                    <option value="%%">{%  trans 'الكل'%}</option>
+                      {% for item in all_size %}
+                      <option value="{{item.id}}"  >{{item.size}}</option>
+                      {% endfor %}
+                  </select>
+              <!-- End Col -->
+              </div>
+
+
+              <div class="col-3">
+                <label  class="pb-1" for="exists">{%  trans 'الحالة'%}</label>
+                <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'حالة وجوده'%}..." }' name="exists"  id="exists">
+                  <option value="%%">{%  trans 'الكل'%}</option>
+                    <option value="">{%  trans 'حالة وجوده'%}</option>
+                    <option value="1" >{% trans 'يوجد'%}</option>
+                    <option value="0" >{% trans 'لايوجد'%}</option>
+                </select>
+            <!-- End Col -->
+            </div>
+
+            <div class="col-3">
+              <label  class="pb-1" for="representitive_with">{%  trans 'اسم المندوب'%}</label>
+              <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد المناديب'%}..." }' name="representitive_with"  id="representitive_with">
+                <option value="%%">{%  trans 'الكل'%}</option>
+                <option value="">{%  trans 'اختر احد المناديب'%}</option>
+                  {% for item in all_rep %}
+                    <option value="{{item.id}}" >{{item.username}}</option>
+                    {% endfor %}
+              </select>
+          <!-- End Col -->
+          </div>
+
+          
+              <!-- End Row -->
+
+
+
+            </div>
+
+            <div class="row mt-3  align-items-center flex-grow-1">
+              <div class="col-3">
+                <label  class="pb-1" for="company_with">{%  trans 'اسم الشركة'%}</label>
+                <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد الشركات'%}..." }' name="company_with"  id="company_with">
+                  <option value="%%">{%  trans 'الكل'%}</option>
+                  <option value="">{%  trans 'اختر احد الشركات'%}</option>
+                    {% for item in all_company %}
+                      <option value="{{item.id}}" >{{item.name}}</option>
+                      {% endfor %}
+                </select>
+            <!-- End Col -->
+            </div>
+
+            <div class="col-5">
+              <div class=" mt-4">
+                <button class="btn btn-success btn-sm w-100" onclick="refresh_table()" type="button">  <i class="tio-delete-outlined"></i> {% trans 'بحث'%}</a>
+              </div>
+            </div>
             </div>
             <!-- End Header -->
 
@@ -137,10 +218,13 @@
 
                               <th>{% trans 'رقم' %} </th>
                               <th>{% trans 'صورة' %} </th>
-                              <th>{% trans 'اسم الموديل' %} </th>
                               <th>{% trans 'كود' %} </th>
                               <th>{% trans 'اللون' %} </th>
-                              <th>{% trans 'المصنع' %} </th>
+                              <th>{% trans 'المقاس' %} </th>
+                              <th>{% trans 'الشركة' %} </th>
+                              <th>{% trans 'مندوب' %} </th>
+                              <th>{% trans 'حالة' %} </th>
+                              <th>{% trans 'هل مرتجع' %} </th>
                               <th>{% trans "التعديلات" %} </th>
                               <th>{% trans "Delete" %} </th>
 
@@ -168,7 +252,7 @@
                     <!-- Datatable Info -->
                     <div id="datatableCounterInfo">
                       <div class="d-flex align-items-center">
-                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_category'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة موديل'%}</a>
+                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_item'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة موديل'%}</a>
                       </div>
                     </div>
                     <!-- End Datatable Info -->
@@ -237,6 +321,123 @@
 
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{% trans 'إضافة مجموعة قطع'%}</h5>
+        <button type="button" class="btn-close m-0 p-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form  method="POST" enctype="multipart/form-data" id="form" class="needs-validation form-horizontal " novalidate>
+       
+        {% csrf_token %}
+      <div class="modal-body container-fluid">
+
+         
+
+
+          <div class="row">
+           
+
+
+            <div class="col-6">
+              <div class="form-group bmd-form-group">
+                <label  class="pb-1" for="category">{%  trans 'موديل'%}</label>
+
+
+                <div class="tom-select-custom">
+                  <select required=""  class="required js-select form-select" name="category"  id="category">
+                   
+                    {% for item in all_category %}
+                    <option value="{{item.id}}"  data-option-template='<div class="d-flex align-items-start"><div class="flex-shrink-0"><img class="img_list2" src="{% if item.image is None or item.image == "" %}{% static "img/160x160/img2.jpg" %}{% else %}{{item.image.file.url}}{%endif%}"/></div><div class="flex-grow-1 ms-2"><span class="d-block fw-semi-bold">{{item.serial_start}} ({{item.color.name}})</span></div></div>'>{{item.serial_start}} ({{item.color.name}})</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+
+                <div class="invalid-feedback">
+                  {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                </div>  
+              </div>
+            </div>
+
+
+
+            
+
+            <div class="col-6">
+              <div class="form-group bmd-form-group">
+                <label  class="pb-1" for="size">{%  trans 'المقاس'%}</label>
+                <select required=""  class="form-control required mb-3" name="size" id="size">
+                  <option value="">{%  trans 'اختر احد الأنواع'%}</option>
+                  {% for item in all_size %}
+                  <option value="{{item.id}}"  >{{item.size}}</option>
+                  {% endfor %}
+              </select>
+                <div class="invalid-feedback">
+                  {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                </div>  
+              </div>
+            </div>
+
+
+            <div class="col-12">
+              <div class="form-group bmd-form-group">
+                <label  class="pb-1" for="details">{%  trans 'التفاصيل'%}</label>
+                <input type="text"  class="form-control  mb-3" name="details"  id="details">
+                <div class="invalid-feedback">
+                  {%  trans 'الرجاء التحقق من هذه الخانة'%}
+                </div>  
+              </div>
+            </div>
+
+
+            <div class="col-12">
+              <div class="form-group bmd-form-group">
+                <label  class="pb-1" for="number">{%  trans 'العدد'%}</label>
+                <input type="number" required class="form-control required  mb-3" name="number"  id="number">
+                <div class="invalid-feedback">
+                  {%  trans 'الرجاء التحقق من هذه الخانة'%}
+                </div>  
+              </div>
+            </div>
+
+            
+            
+          
+          </div>
+
+
+         
+
+
+
+       
+
+
+       
+          
+      
+        
+           
+          <br/>
+          <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
+          
+          <div class="clearfix"></div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-bs-dismiss="modal">{% trans 'إغلاق'%}</button>
+        <button type="submit" class="btn btn-primary" >{% trans "إصدار" %}</button>
+
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
 
 
 
@@ -328,9 +529,13 @@
         "isShowPaging": false,
         "pagination": "datatablePagination",
         "ajax": {
-                "url": "{% url 'mainApp:getListOf_category' %}",
+                "url": "{% url 'mainApp:getListOf_item' %}",
                 "data": function ( d ) {
-                //  d.bodyiesOfWatertype = $('#dataOfWaterType').val();
+                 d.category = $('#category').val();
+                 d.company_with = $('#company_with').val();
+                 d.representitive_with = $('#representitive_with').val();
+                 d.size = $('#size').val();
+                 d.exists = $('#exists').val();
                     
                 }
             },
@@ -365,22 +570,8 @@
                   
                   
                 
-                return '<a>'+item.name+'</a>';
                   
-                
-                
-
-                
-            }
-            }
-            ,
-            {
-              className: "","mData": null,"mRender": function (item) { 
-                  
-                  
-                
-                  
-                return '<a>'+item.serial_start+'</a>';
+                return '<a>'+item.part_num+'</a>';
                 
                 
 
@@ -399,17 +590,72 @@
 
                 }
             }                 
-           
+            
+            
+            
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return '<a>'+item.size+'</a>'; 
+                
+                
+                }
+            }                 
+            
 
             ,
             {
               className: "", "mData": null,"mRender": function (item) { 
               
-                return '<a>'+item.factory_name+'</a>'; 
+                return '<a>'+item.company_with_name+'</a>'; 
                 
                 
                 }
-            }                 
+            }        
+            
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return '<a>'+item.representitive_with_name+'</a>'; 
+                
+                
+                }
+            }        
+
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              if(item.exists){ 
+                exists = "{% trans 'يوجد'%}"
+              }else{
+                
+                exists = "{% trans 'لا يوجد'%}"
+              }
+                return '<a>'+exists+'</a>'; 
+                
+                
+                }
+            }        
+            
+
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                if(item.is_returned){ 
+                  is_returned = "{% trans 'مرتجع'%}"
+              }else{
+                
+                is_returned = "{% trans 'ليس مرتجع'%}"
+              }
+                return '<a>'+is_returned+'</a>'; 
+
+                
+                
+                }
+            }        
             
                   
             
@@ -419,7 +665,7 @@
             {
               className: "", "mData": null,"mRender": function (item) { 
               
-                return `<a class="ml-4 bluefont" href="{% url 'mainApp:addnew_category'%}?type=edit&id=`+item.id+`"><i class="fa fa-cog"></i></a>`;
+                return `<a class="ml-4 bluefont" href="{% url 'mainApp:addnew_item'%}?type=edit&id=`+item.id+`"><i class="fa fa-cog"></i></a>`;
              
                 
 
@@ -538,7 +784,7 @@
                 showLoader();
                 $.ajax({
                   type: 'POST',
-                  url: "{% url 'mainApp:delete_category'%}",
+                  url: "{% url 'mainApp:delete_item'%}",
                   dataType: 'json',
                   data: { 
                       'id': $(element).attr('idOfItem')
@@ -585,4 +831,41 @@
 
 
 </script>
+
+
+<script>
+  function refresh_table(){
+    HSCore.components.HSDatatables.getItem(0).ajax.reload();
+  }
+</script>
+
+<script>
+
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    window.history.replaceState({}, document.title, "/" + "listOf_item/");
+
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+    if (form.checkValidity() === false) {
+    event.preventDefault();
+    event.stopPropagation();
+    }else{
+      showLoader()
+      return false; // Prevent page refresh
+  
+    }
+    form.classList.add('was-validated');
+    }, false);
+    });
+    }, false);
+    })();
+
+
+</script>
+
 {% endblock %}
