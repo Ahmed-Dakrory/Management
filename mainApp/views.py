@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.shortcuts import HttpResponseRedirect
+from django.http import HttpResponse 
+from django.db import connection
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
@@ -296,87 +298,239 @@ def getListOf_item(request):
     pageNumber = int(request.GET['start'])
     draw = int(request.GET['draw'])
     searchKey = request.GET['search[value]']
-    pageNumber = int(pageNumber/pageLength + 1)
+    # pageNumber = int(pageNumber/pageLength)
 
     
     category = (request.GET['category'])
     if category == '%%':
-        category_search = Q(deleted_date=None)
+        category_search = ' item.deleted_date is null '
     else:
-        category_search = Q(category__id=category)
+        category_search = ' category.id='+str(category)+' '
 
     company_with = (request.GET['company_with'])
     if company_with == '%%':
-        company_with_search = Q(deleted_date=None)
+        company_with_search = ' item.deleted_date is null '
     else:
-        company_with_search = Q(company_with__id=company_with)
+        company_with_search = ' company.id='+str(company_with)+' '
 
     size = (request.GET['size'])
     if size == '%%':
-        size_search = Q(deleted_date=None)
+        size_search = ' item.deleted_date is null '
     else:
-        size_search = Q(size__id=size)
+        size_search = ' size.id='+str(size)+' '
 
     representitive_with = (request.GET['representitive_with'])
     if representitive_with == '%%':
-        representitive_with_search = Q(deleted_date=None)
+        representitive_with_search = ' item.deleted_date is null '
     else:
-        representitive_with_search = Q(representitive_with__id=representitive_with)
+        representitive_with_search = ' userapp_user.id='+str(representitive_with)+' '
 
 
     
     exists = (request.GET['exists'])
     if exists == '%%':
-        exists_search = Q(deleted_date=None)
+        exists_search = ' item.deleted_date is null '
     else:
-        exists_search = Q(exists=exists)
+        exists_search = ' item.exists='+str(exists)+' '
 
-
-    try:
-        if searchKey == '':
-            allElements = item.objects.filter( Q(deleted_date=None)&
-             
-             category_search&
-             company_with_search&
-             size_search&
-             representitive_with_search&
-             exists_search)
-        else:
-            allElements = item.objects.filter(Q(deleted_date=None) & 
-            (Q(size__code__contains=searchKey) |
-             Q(category__color__name__contains=searchKey)|
-             Q(category__color__name_en__contains=searchKey)|
-             Q(company_with__name__contains=searchKey)|
-             Q(company_with__name_en__contains=searchKey)|
-             Q(representitive_with__username__contains=searchKey)|
-             Q(part_num__contains=searchKey)|
-             Q(id__contains=searchKey) ) &
-             
-             category_search&
-             company_with_search&
-             size_search&
-             representitive_with_search&
-             exists_search)
-
-        paginator = Paginator(allElements, pageLength)
-        
+    with connection.cursor() as cursorLast:
         try:
-            response = paginator.page(pageNumber)
-        except PageNotAnInteger:
-            response = paginator.page(pageNumber)
-        except EmptyPage:
-            response = paginator.page(paginator.num_pages)
+            if searchKey == '':
+                sql_query = """
 
-        listResult = list(response)
-        allElementsJson = {"draw": draw,"recordsTotal": len(allElements),"recordsFiltered": len(allElements),"data":[]}
 
-        for result in listResult:
-            allElementsJson['data'].append(result.to_json())
 
-        return JsonResponse(allElementsJson)
-    except Exception as e:
-        print("Ahmed Error: "+str(e))
-        return JsonResponse({"draw": draw,"recordsTotal": 0,"recordsFiltered": 0,"data":[]})
+                        select concat('{"draw":\""""+str(draw)+"""\","recordsFiltered":',(select count(*) from item
+                        left join category on item.category_id=category.id
+                        left join size on item.size_id=size.id
+                        left join color on category.color_id=color.id
+                        left join company on item.company_with_id=company.id
+                        left join attachmenttranscript on category.image_id=attachmenttranscript.id
+                        left join factory on category.factory_id=factory.id
+                        left join userapp_user on item.representitive_with_id=userapp_user.id
+                        where item.deleted_date is null
+                        and """+exists_search+"""
+                        and """+representitive_with_search+"""
+                        and """+company_with_search+"""
+                        and """+size_search+"""
+                        and """+category_search+"""
+                        ),',
+                        "recordsTotal":',count(*),',
+                        "data":[',group_concat(concat('
+                        {"id":',x.id,'
+                        ,"part_num":"',x.part_num,'"
+                        ,"color_name":"',x.color_name,'"
+                        ,"color_name_en":"',x.color_name_en,'"
+                        ,"size":"',x.size,'"
+                        ,"size_code":"',x.size_code,'"
+                        ,"factory_name":"',x.factory_name,'"
+                        ,"factory_name_en":"',x.factory_name_en,'"
+                        ,"company_with_name":"',x.company_with_name,'"
+                        ,"company_with_name_en":"',x.company_with_name_en,'"
+                        ,"representitive_with_name":"',x.representitive_with_name,'"
+                        ,"representitive_with_phone":"',x.representitive_with_phone,'"
+                        ,"last_out_date":"',x.last_out_date,'"
+                        ,"last_return_date":"',x.last_return_date,'"
+                        ,"details":"',x.details,'"
+                        ,"exists":"',x.isexists,'"
+                        ,"is_returned":"',x.is_returned,'"
+                        ,"image":"',x.image,'"
+                        ,"created":"',x.created,'"}
+                        ')),']}')
+                        as output
+                        from (
+                        SELECT  item.id as id,
+                        IFNULL(part_num,"") as part_num,
+                        IFNULL(color.name,"") as color_name,IFNULL(color.name_en,"") as color_name_en,
+                        IFNULL(size.size,"") as size,IFNULL(size.code,"") as size_code,
+                        IFNULL(factory.name,"") as factory_name,IFNULL(factory.name_en,"") as factory_name_en,
+                        IFNULL(company.name,"") as company_with_name,IFNULL(company.name_en,"") as company_with_name_en,
+                        IFNULL(userapp_user.username,"") as representitive_with_name,IFNULL(userapp_user.phone,"") as representitive_with_phone,
+                        IFNULL(item.last_out_date,"") as last_out_date,IFNULL(item.last_return_date,"") as last_return_date,IFNULL(item.details,"") as details,IFNULL(item.exists,"") as isexists,IFNULL(item.is_returned,"") as is_returned,
+                        IFNULL(attachmenttranscript.file,"") as image,
+                        IFNULL(item.created,"") as created
+                        FROM item
+                        left join category on item.category_id=category.id
+                        left join size on item.size_id=size.id
+                        left join color on category.color_id=color.id
+                        left join company on item.company_with_id=company.id
+                        left join attachmenttranscript on category.image_id=attachmenttranscript.id
+                        left join factory on category.factory_id=factory.id
+                        left join userapp_user on item.representitive_with_id=userapp_user.id
+                        where item.deleted_date is null
+                        and """+exists_search+"""
+                        and """+representitive_with_search+"""
+                        and """+company_with_search+"""
+                        and """+size_search+"""
+                        and """+category_search+"""
+                        order by item.created desc
+                        LIMIT """+str(pageLength)+""" OFFSET """+str(pageNumber)+"""
+                        ) x;
+
+                """
+            else:
+
+                add_size_code = 'size.code like "%'+str(searchKey)+'%"'
+                add_color__name = 'color.name like "%'+str(searchKey)+'%"'
+                add_color__name_en = 'color.name_en like "%'+str(searchKey)+'%"'
+                add_company_with__name = 'company.name like "%'+str(searchKey)+'%"'
+                add_company_with__name_en = 'company.name_en like "%'+str(searchKey)+'%"'
+                add_representitive_with__username = 'userapp_user.username like "%'+str(searchKey)+'%"'
+                add_part_num = 'item.part_num like "%'+str(searchKey)+'%"'
+                add_id = 'item.id like "%'+str(searchKey)+'%"'
+
+                sql_query = """
+
+
+
+                        select concat('{"draw":\""""+str(draw)+"""\","recordsFiltered":',(select count(*) from item
+                        left join category on item.category_id=category.id
+                        left join size on item.size_id=size.id
+                        left join color on category.color_id=color.id
+                        left join company on item.company_with_id=company.id
+                        left join attachmenttranscript on category.image_id=attachmenttranscript.id
+                        left join factory on category.factory_id=factory.id
+                        left join userapp_user on item.representitive_with_id=userapp_user.id
+                        where item.deleted_date is null
+                        and """+exists_search+"""
+                        and """+representitive_with_search+"""
+                        and """+company_with_search+"""
+                        and """+size_search+"""
+                        and """+category_search+"""
+
+                        and (
+                            """+add_size_code+""" or 
+                            """+add_color__name+""" or 
+                            """+add_color__name_en+""" or 
+                            """+add_company_with__name+""" or 
+                            """+add_company_with__name_en+""" or 
+                            """+add_representitive_with__username+""" or 
+                            """+add_part_num+""" or 
+                            """+add_id+""" 
+
+                        )
+                        ),',
+                        "recordsTotal":',count(*),',
+                        "data":[',group_concat(concat('
+                        {"id":',x.id,'
+                        ,"part_num":"',x.part_num,'"
+                        ,"color_name":"',x.color_name,'"
+                        ,"color_name_en":"',x.color_name_en,'"
+                        ,"size":"',x.size,'"
+                        ,"size_code":"',x.size_code,'"
+                        ,"factory_name":"',x.factory_name,'"
+                        ,"factory_name_en":"',x.factory_name_en,'"
+                        ,"company_with_name":"',x.company_with_name,'"
+                        ,"company_with_name_en":"',x.company_with_name_en,'"
+                        ,"representitive_with_name":"',x.representitive_with_name,'"
+                        ,"representitive_with_phone":"',x.representitive_with_phone,'"
+                        ,"last_out_date":"',x.last_out_date,'"
+                        ,"last_return_date":"',x.last_return_date,'"
+                        ,"details":"',x.details,'"
+                        ,"exists":"',x.isexists,'"
+                        ,"is_returned":"',x.is_returned,'"
+                        ,"image":"',x.image,'"
+                        ,"created":"',x.created,'"}
+                        ')),']}')
+                        as output
+                        from (
+                        SELECT  item.id as id,
+                        IFNULL(part_num,"") as part_num,
+                        IFNULL(color.name,"") as color_name,IFNULL(color.name_en,"") as color_name_en,
+                        IFNULL(size.size,"") as size,IFNULL(size.code,"") as size_code,
+                        IFNULL(factory.name,"") as factory_name,IFNULL(factory.name_en,"") as factory_name_en,
+                        IFNULL(company.name,"") as company_with_name,IFNULL(company.name_en,"") as company_with_name_en,
+                        IFNULL(userapp_user.username,"") as representitive_with_name,IFNULL(userapp_user.phone,"") as representitive_with_phone,
+                        IFNULL(item.last_out_date,"") as last_out_date,IFNULL(item.last_return_date,"") as last_return_date,IFNULL(item.details,"") as details,IFNULL(item.exists,"") as isexists,IFNULL(item.is_returned,"") as is_returned,
+                        IFNULL(attachmenttranscript.file,"") as image,
+                        IFNULL(item.created,"") as created
+                        FROM item
+                        left join category on item.category_id=category.id
+                        left join size on item.size_id=size.id
+                        left join color on category.color_id=color.id
+                        left join company on item.company_with_id=company.id
+                        left join attachmenttranscript on category.image_id=attachmenttranscript.id
+                        left join factory on category.factory_id=factory.id
+                        left join userapp_user on item.representitive_with_id=userapp_user.id
+                        where item.deleted_date is null
+                        and """+exists_search+"""
+                        and """+representitive_with_search+"""
+                        and """+company_with_search+"""
+                        and """+size_search+"""
+                        and """+category_search+"""
+
+                        and (
+                            """+add_size_code+""" or 
+                            """+add_color__name+""" or 
+                            """+add_color__name_en+""" or 
+                            """+add_company_with__name+""" or 
+                            """+add_company_with__name_en+""" or 
+                            """+add_representitive_with__username+""" or 
+                            """+add_part_num+""" or 
+                            """+add_id+""" 
+
+                        )
+                        order by item.created desc
+                        LIMIT """+str(pageLength)+""" OFFSET """+str(pageNumber)+"""
+                        ) x;
+
+                """
+
+                
+
+
+               
+            print(sql_query)
+            cursorLast.execute(sql_query)
+            cursorAllData = cursorLast.fetchone()
+            y=cursorAllData[0].replace('\r\n','')
+            # print(y)
+            return HttpResponse(y,content_type='application/json')
+
+            
+        except Exception as e:
+            print("Ahmed Error: "+str(e))
+            return JsonResponse({"draw": draw,"recordsTotal": 0,"recordsFiltered": 0,"data":[]})
 
 
 @login_required
