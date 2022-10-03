@@ -2,6 +2,7 @@
 {% extends 'theme.html' %}
 {%load static%}
 {% load i18n %}
+{% load helpers %}
 {% get_current_language as LANGUAGE_CODE %}
 
 
@@ -177,6 +178,28 @@
                 
                         </div>
 
+
+                        <div class="row card">
+                          <div class="card-title bg-success pb-2 pt-2"><h2 class="text-center">{% trans 'الحد الأدنى للمقاسات'%}</h2></div>
+                          <div class="card-body container-fluid">
+                            <div class="row">
+                              
+                              {% for item in all_size %}
+
+                              <div class="col-3">
+                                <div class="form-group bmd-form-group">
+                                  <label  class="pb-1" for="size_{{item.code}}">{%  trans 'مقاس'%} {{item.code}}</label>
+                                  <input type="number"  class="form-control mb-3 required" required name="size_{{item.code}}" value="{{categoryData|get_size_number:item.code}}" id="size_{{item.code}}">
+                                  <div class="invalid-feedback">
+                                    {%  trans 'الرجاء التحقق من هذه الخانة'%}
+                                  </div>  
+                                </div>
+                              </div>
+                              {%endfor%}
+
+                            </div>
+                          </div>
+                        </div>
 
 
                      

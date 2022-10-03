@@ -145,7 +145,7 @@
                           <div class="col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="exists">{%  trans 'الحالة'%}</label>
-                              <select required="" class="form-control required mb-3" name="exists" value="{{itemData.exists}}" id="exists">
+                              <select required="" {% if type == 'edit' %}disabled{%endif%} class="form-control required mb-3" name="exists" value="{{itemData.exists}}" id="exists">
                                 <option value="">{%  trans 'اختر احد الأنواع'%}</option>
                                 <option value="1"  {% if itemData.exists %} selected {% endif %}>{% trans 'يوجد'%}</option>
                                 <option value="0"  {% if not itemData.exists %} selected {% endif %}>{% trans 'لايوجد'%}</option>
@@ -159,7 +159,7 @@
                           <div class="col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="is_returned">{%  trans 'هل هى مرتجع؟'%}</label>
-                              <select required="" class="form-control required mb-3" name="is_returned" value="{{itemData.is_returned}}" id="is_returned">
+                              <select required="" {% if type == 'edit' %}disabled{%endif%} class="form-control required mb-3" name="is_returned" value="{{itemData.is_returned}}" id="is_returned">
                                 <option value="">{%  trans 'اختر احد الأنواع'%}</option>
                                 <option value="1"  {% if itemData.is_returned %} selected {% endif %}>{% trans 'مرتجع'%}</option>
                                 <option value="0"  {% if not itemData.is_returned %} selected {% endif %}>{% trans 'ليس مرتجع'%}</option>
@@ -175,7 +175,7 @@
                           <div class="col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="representitive_with">{%  trans 'اسم المندوب'%}</label>
-                              <select  class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر المندوب'%}..." }' name="representitive_with" value="{{itemData.representitive_with.id}}" id="representitive_with">
+                              <select {% if type == 'edit' %}disabled{%endif%} class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر المندوب'%}..." }' name="representitive_with" value="{{itemData.representitive_with.id}}" id="representitive_with">
                                 <option value="">{%  trans 'اختر احد الأنواع'%}</option>
                                 {% for item in all_rep %}
                                 <option value="{{item.id}}"  {% if item.id == itemData.representitive_with.id %} selected {% endif %}>{{item.username}}</option>
@@ -192,10 +192,26 @@
                           <div class="col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="company_with">{%  trans 'اسم الشركة'%}</label>
-                              <select class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر الشركة'%}..." }' name="company_with" value="{{itemData.company_with.id}}" id="company_with">
+                              <select {% if type == 'edit' %}disabled{%endif%} class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر الشركة'%}..." }' name="company_with" value="{{itemData.company_with.id}}" id="company_with">
                                 <option value="">{%  trans 'اختر احد الأنواع'%}</option>
                                 {% for item in all_company %}
                                 <option value="{{item.id}}"  {% if item.id == itemData.company_with.id %} selected {% endif %}>{{item.name}}</option>
+                                {% endfor %}
+                            </select>
+                              <div class="invalid-feedback">
+                                {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                              </div>  
+                            </div>
+                          </div>
+
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="sector">{%  trans 'اسم القطاع'%}</label>
+                              <select class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر القطاع'%}..." }' name="sector" value="{{itemData.sector.id}}" id="sector">
+                                <option value="">{%  trans 'اختر احد الأنواع'%}</option>
+                                {% for item in all_sector %}
+                                <option value="{{item.id}}"  {% if item.id == itemData.sector.id %} selected {% endif %}>{{item.name}}</option>
                                 {% endfor %}
                             </select>
                               <div class="invalid-feedback">
@@ -209,7 +225,7 @@
                           <div class="col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="last_out_date">{%  trans 'أخر وقت خروج'%}</label>
-                              <input type="text"  data-hs-flatpickr-options='{
+                              <input {% if type == 'edit' %}disabled{%endif%} type="text"  data-hs-flatpickr-options='{
                                 "dateFormat": "d/m/Y H:i",
                                 "enableTime": true
                               }' class="js-flatpickr form-control flatpickr-custom"  name="last_out_date" value='{{itemData.last_out_date|date:"d/m/Y H:M"}}' id="last_out_date">
@@ -223,7 +239,7 @@
                           <div class="col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="last_return_date">{%  trans 'أخر وقت مرتجع'%}</label>
-                              <input type="text"  data-hs-flatpickr-options='{
+                              <input {% if type == 'edit' %}disabled{%endif%} type="text"  data-hs-flatpickr-options='{
                                 "dateFormat": "d/m/Y H:i",
                                 "enableTime": true
                               }' class="js-flatpickr form-control flatpickr-custom"  name="last_return_date" value='{{itemData.last_return_date|date:"d/m/Y H:M"}}' id="last_return_date">

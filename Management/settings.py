@@ -15,6 +15,11 @@ from pathlib import Path
 home = str(Path.home())
 print(home)
 
+
+
+ID_ADD_TYPE_OF_TRANSACTION = 1
+ID_OUT_TYPE_OF_TRANSACTION = 2
+ID_RETURN_TYPE_OF_TRANSACTION = 3
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

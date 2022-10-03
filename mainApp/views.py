@@ -47,11 +47,111 @@ def show_companies(request):
     return render (request, 'elements/show_companies.html', context)
 
 @login_required
-def show_representatives(request):
-    context = {
+def out_stock_item(request):
+    all_color = color.objects.filter( Q(deleted_date=None))
+    all_size = size.objects.filter( Q(deleted_date=None))
+    all_company = company.objects.filter( Q(deleted_date=None))
+    all_rep = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
+    
+
+    if request.method=='POST':
+        part_num = request.POST['part_num']
+        note = request.POST['note']
+
+        try:
+            company_withObject = request.POST['company_with']
+            company_withObject = company.objects.get(id=company_withObject)
+        except:
+            company_withObject = None
         
-    }
-    return render (request, 'elements/show_representatives.html', context)
+
+        try:
+            representitive_withObject = request.POST['representitive_with']
+            representitive_withObject = User.objects.get(id=representitive_withObject)
+        except:
+            representitive_withObject = None
+
+        itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True))
+        if itemObject is not None and len(itemObject)>0:
+            print("create")
+            itemObject.update(last_out_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=False,is_returned=False)
+            itemnew = item.objects.get(part_num=part_num)
+            
+
+            print("create")
+            type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_OUT_TYPE_OF_TRANSACTION)
+                
+            print("create")
+            transactionObject = transaction.objects.create(
+                item = itemnew,
+                type_of_transaction = type_of_transaction_object,
+                company = company_withObject,
+                representitive = representitive_withObject,
+                note = note
+            )
+            transactionObject.save()
+            print("create")
+    context = {
+        'all_company':all_company,
+        'all_color':all_color,
+        'all_size':all_size,
+        'all_rep':all_rep
+        }
+
+    return render (request, 'operations/out_stock_item.html', context)
+
+
+
+
+@login_required
+def return_stock_item(request):
+    all_color = color.objects.filter( Q(deleted_date=None))
+    all_size = size.objects.filter( Q(deleted_date=None))
+    all_company = company.objects.filter( Q(deleted_date=None))
+    all_rep = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
+    
+
+    if request.method=='POST':
+        part_num = request.POST['part_num']
+        note = request.POST['note']
+
+        try:
+            company_withObject = request.POST['company_with']
+            company_withObject = company.objects.get(id=company_withObject)
+        except:
+            company_withObject = None
+        
+
+        try:
+            representitive_withObject = request.POST['representitive_with']
+            representitive_withObject = User.objects.get(id=representitive_withObject)
+        except:
+            representitive_withObject = None
+
+        itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=False))
+        if itemObject is not None and len(itemObject)>0:
+            itemObject.update(last_return_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=True,is_returned=True)
+            itemnew = item.objects.get(part_num=part_num)
+            
+
+            type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_RETURN_TYPE_OF_TRANSACTION)
+                
+            transactionObject = transaction.objects.create(
+                item = itemnew,
+                type_of_transaction = type_of_transaction_object,
+                company = company_withObject,
+                representitive = representitive_withObject,
+                note = note
+            )
+            transactionObject.save()
+    context = {
+        'all_company':all_company,
+        'all_color':all_color,
+        'all_size':all_size,
+        'all_rep':all_rep
+        }
+
+    return render (request, 'operations/return_stock_item.html', context)
 
 
 
@@ -113,19 +213,26 @@ def addnew_category(request):
     typeOfEntry = request.GET['type']
     if typeOfEntry == 'new':
         dataToInsert = None
+        recommended_numberObject_all = None
     elif typeOfEntry == 'edit':
         idOfelement = request.GET['id']
         dataToInsert = category.objects.get(id=idOfelement)
+        recommended_numberObject_all = recommended_number.objects.filter( Q(category__id=idOfelement))
+        
     
     
     all_factory = factory.objects.filter( Q(deleted_date=None))
     all_color = color.objects.filter( Q(deleted_date=None))
+    all_size = size.objects.filter( Q(deleted_date=None))
+    
     
     context = {
         'categoryData':dataToInsert,
         'type':typeOfEntry,
+        'recommended_numberObject_all':recommended_numberObject_all,
         'all_factory':all_factory,
         'all_color':all_color,
+        'all_size':all_size
         }
 
 
@@ -198,7 +305,27 @@ def addnew_category(request):
             dataToInsert = category.objects.filter(id=idOfelement)
             dataToInsert.update(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, factory=factoryObject,color=colorObject,  updated_by=request.user,updated_date=datetime.now(),image=attachmentTranscriptObject)
             
+            categorynew = category.objects.get(id=idOfelement)
 
+        
+        for key in request.POST:
+            if 'size_' in key :
+                size_code = key.split('_')[1]
+                number = request.POST[key]
+                size_object = size.objects.get(code = size_code)
+                recommended_numberObject = recommended_number.objects.filter(Q(size__id=size_object.id)& Q(category__id=categorynew.id))
+                if recommended_numberObject is not None and len(recommended_numberObject)>0:
+                    recommended_numberObject.update(
+                        number=number,
+                    )
+                else:
+                    recommended_numberObject = recommended_number.objects.create(
+                        number=number,
+                        category=categorynew,
+                        size = size_object
+                    )
+                    recommended_numberObject.save()
+                
  
         urlLink = reverse("mainApp:listOf_category")
         return redirect(urlLink)
@@ -238,10 +365,11 @@ def delete_category(request):
 ####################  item  #################3
 @login_required
 def listOf_item(request):
-    all_company = factory.objects.filter( Q(deleted_date=None))
+    all_company = company.objects.filter( Q(deleted_date=None))
     all_rep = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
     all_category = category.objects.filter( Q(deleted_date=None))
     all_size = size.objects.filter( Q(deleted_date=None))
+    all_sector = sector.objects.filter( Q(deleted_date=None))
     
 
     
@@ -254,6 +382,12 @@ def listOf_item(request):
             sizeObject = size.objects.get(id=sizeObject)
         except:
             sizeObject = None
+
+        try:
+            sectorObject = request.POST['sector_object']
+            sectorObject = sector.objects.get(id=sectorObject)
+        except:
+            sectorObject = None
 
         try:
             categoryId = request.POST['category']
@@ -270,6 +404,7 @@ def listOf_item(request):
             exists=True,
             is_returned=False,
             details=details,
+            sector = sectorObject,
             company_with=None,
             representitive_with=None,
             category=categoryObject,
@@ -279,6 +414,14 @@ def listOf_item(request):
             last_return_date = None,
             created_by=request.user)
             itemnew.save()
+
+            type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_ADD_TYPE_OF_TRANSACTION)
+            
+            transactionObject = transaction.objects.create(
+                item = itemnew,
+                type_of_transaction = type_of_transaction_object,
+            )
+            transactionObject.save()
             
 
     context = {
@@ -286,6 +429,7 @@ def listOf_item(request):
         'all_rep':all_rep,
         'all_category':all_category,
         'all_size':all_size,
+        'all_sector':all_sector
         }
 
 
@@ -301,11 +445,37 @@ def getListOf_item(request):
     # pageNumber = int(pageNumber/pageLength)
 
     
+    start_added_date = (request.GET['start_added_date'])
+    end_added_date = (request.GET['end_added_date'])
+    try:
+        start_added_date = datetime.strptime(start_added_date, '%d/%m/%Y %H:%M')
+        end_added_date = datetime.strptime(end_added_date, '%d/%m/%Y %H:%M')
+
+        start_added_date = start_added_date.strftime("%Y-%m-%d %H:%M:%S")
+        end_added_date = end_added_date.strftime("%Y-%m-%d %H:%M:%S")
+        created_search = " and item.created>='"+start_added_date+"' and item.created<='"+end_added_date+"' "
+    except:
+        created_search = "  "
+
+    print("-----------------------------------------")
+    print(start_added_date)
+    print(end_added_date)
+    
     category = (request.GET['category'])
     if category == '%%':
         category_search = ' item.deleted_date is null '
     else:
         category_search = ' category.id='+str(category)+' '
+
+
+    sector = (request.GET['sector'])
+    if sector == '%%':
+        sector_search = ' item.deleted_date is null '
+    else:
+        sector_search = ' sector.id='+str(sector)+' '
+
+
+    
 
     company_with = (request.GET['company_with'])
     if company_with == '%%':
@@ -354,6 +524,9 @@ def getListOf_item(request):
                         and """+company_with_search+"""
                         and """+size_search+"""
                         and """+category_search+"""
+                        and """+sector_search+"""
+                            """+created_search+"""
+                        
                         ),',
                         "recordsTotal":',count(*),',
                         "data":[',group_concat(concat('
@@ -403,6 +576,8 @@ def getListOf_item(request):
                         and """+company_with_search+"""
                         and """+size_search+"""
                         and """+category_search+"""
+                        and """+sector_search+"""
+                            """+created_search+"""
                         order by item.created desc
                         LIMIT """+str(pageLength)+""" OFFSET """+str(pageNumber)+"""
                         ) x;
@@ -437,6 +612,8 @@ def getListOf_item(request):
                         and """+company_with_search+"""
                         and """+size_search+"""
                         and """+category_search+"""
+                        and """+sector_search+"""
+                            """+created_search+"""
 
                         and (
                             """+add_size_code+""" or 
@@ -498,6 +675,8 @@ def getListOf_item(request):
                         and """+company_with_search+"""
                         and """+size_search+"""
                         and """+category_search+"""
+                        and """+sector_search+"""
+                         """+created_search+"""
 
                         and (
                             """+add_size_code+""" or 
@@ -543,11 +722,12 @@ def addnew_item(request):
         dataToInsert = item.objects.get(id=idOfelement)
     
     
-    all_company = factory.objects.filter( Q(deleted_date=None))
+    all_company = company.objects.filter( Q(deleted_date=None))
     all_rep = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
     all_category = category.objects.filter( Q(deleted_date=None))
     all_size = size.objects.filter( Q(deleted_date=None))
-    
+    all_sector = sector.objects.filter( Q(deleted_date=None))
+
     context = {
         'itemData':dataToInsert,
         'type':typeOfEntry,
@@ -555,6 +735,7 @@ def addnew_item(request):
         'all_rep':all_rep,
         'all_category':all_category,
         'all_size':all_size,
+        'all_sector':all_sector
         }
 
 
@@ -564,6 +745,7 @@ def addnew_item(request):
         details = request.POST['details']
         is_returned = request.POST['is_returned']
         company_with = request.POST['company_with']
+        sectorId = request.POST['sector']
         representitive_with = request.POST['representitive_with']
         last_out_date = request.POST['last_out_date']
         last_return_date = request.POST['last_return_date']
@@ -596,6 +778,13 @@ def addnew_item(request):
             companyObject = None
 
 
+        try:
+            sectorObject = sector.objects.get(id=sectorId)
+        except:
+            sectorObject = None
+
+        
+
         
         try:
             sizeObject = request.POST['size']
@@ -621,6 +810,7 @@ def addnew_item(request):
 
 
         if typeOfEntry == 'new':
+            type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_ADD_TYPE_OF_TRANSACTION)
             
             [part_num,higher_count] = generate_part_num(categoryObject,sizeObject)
         
@@ -629,6 +819,7 @@ def addnew_item(request):
             is_returned=is_returned,
             details=details,
             company_with=companyObject,
+            sector = sectorObject,
             representitive_with=representitive_withObject,
             category=categoryObject,
             size=sizeObject,
@@ -637,6 +828,14 @@ def addnew_item(request):
             last_return_date = last_return_date,
             created_by=request.user)
             itemnew.save()
+
+
+            
+            transactionObject = transaction.objects.create(
+                item = itemnew,
+                type_of_transaction = type_of_transaction_object,
+            )
+            transactionObject.save()
             
             
         elif typeOfEntry == 'edit':
@@ -648,6 +847,7 @@ def addnew_item(request):
             is_returned=is_returned,
             details=details,
             company_with=companyObject,
+            sector = sectorObject,
             representitive_with=representitive_withObject,
             last_out_date=last_out_date,
             last_return_date = last_return_date,
@@ -659,6 +859,40 @@ def addnew_item(request):
         return redirect(urlLink)
     elif request.method=='GET':
         return render(request,'item/addnew.html',context)
+    
+
+
+@login_required
+def show_item(request):
+    typeOfEntry = request.GET['type']
+    if typeOfEntry == 'new':
+        dataToInsert = None
+    elif typeOfEntry == 'edit':
+        idOfelement = request.GET['id']
+        dataToInsert = item.objects.get(id=idOfelement)
+    
+    
+    transactionObject = transaction.objects.filter(Q(item = dataToInsert))
+
+    all_company = company.objects.filter( Q(deleted_date=None))
+    all_rep = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
+    all_category = category.objects.filter( Q(deleted_date=None))
+    all_size = size.objects.filter( Q(deleted_date=None))
+    all_sector = sector.objects.filter( Q(deleted_date=None))
+
+    context = {
+        'itemData':dataToInsert,
+        'type':typeOfEntry,
+        'all_company':all_company,
+        'all_rep':all_rep,
+        'all_category':all_category,
+        'all_size':all_size,
+        'all_sector':all_sector,
+        'transactionObject':transactionObject
+        }
+
+
+    return render(request,'item/view.html',context)
     
 
 

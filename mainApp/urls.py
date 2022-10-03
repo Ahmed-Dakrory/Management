@@ -7,7 +7,6 @@ app_name='mainApp'
 urlpatterns = [
     path('',views.home,name='home'),
     path('show_companies/',views.show_companies,name='show_companies'),
-    path('show_representatives/',views.show_representatives,name='show_representatives'),
     path('show_items/',views.show_items,name='show_items'),
 
 
@@ -30,8 +29,14 @@ urlpatterns = [
     path('listOf_item/',views.listOf_item,name='listOf_item'),
     path('getListOf_item/',views.getListOf_item,name='getListOf_item'),
     path('addnew_item/',views.addnew_item,name='addnew_item'),
+    path('show_item/',views.show_item,name='show_item'),
     path('delete_item/',views.delete_item,name='delete_item'),
 
+
+
+
+    path('out_stock_item/',views.out_stock_item,name='out_stock_item'),
+    path('return_stock_item/',views.return_stock_item,name='return_stock_item'),
 
     # path('gen_listOf_item/',views.gen_listOf_item,name='gen_listOf_item'),
     

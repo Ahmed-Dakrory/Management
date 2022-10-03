@@ -17,6 +17,7 @@
 
 
 
+<link rel="stylesheet" href="{% static 'vendor/flatpickr/dist/flatpickr.min.css'%}">
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
 
@@ -58,10 +59,22 @@
                         <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_item'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة قطعة'%}</a>
                       </div>
                       <div class="d-flex align-items-center ms-2 me-2">
-                      <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        {% trans 'إضافة مجموعة قطع'%}
-                      </button>
-                      </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                          {% trans 'إضافة مجموعة قطع'%}
+                        </button>
+                        </div>
+
+                        <div class="d-flex align-items-center ms-2 me-2">
+                          <a type="button" class="btn btn-outline-primary btn-sm" href="{% url 'mainApp:out_stock_item'%}">
+                            {% trans 'خروج قطع'%}
+                          </a>
+                        </div>
+
+                        <div class="d-flex align-items-center ms-2 me-2">
+                          <a type="button" class="btn btn-outline-primary btn-sm" href="{% url 'mainApp:return_stock_item'%}">
+                            {% trans 'مرتجع قطع'%}
+                          </a>
+                        </div>
                     <!-- End Datatable Info -->
                   </div>
                 </div>
@@ -181,7 +194,59 @@
           <!-- End Col -->
           </div>
 
+
+          <div class="col-3">
+            <label  class="pb-1" for="sector">{%  trans 'اسم القطاع'%}</label>
+            <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر قطاع'%}..." }' name="sector"  id="sector">
+              <option value="%%">{%  trans 'الكل'%}</option>
+              <option value="">{%  trans 'اختر قطاع'%}</option>
+                {% for item in all_sector %}
+                  <option value="{{item.id}}" >{{item.name}}</option>
+                  {% endfor %}
+            </select>
+        <!-- End Col -->
+        </div>
+
+        <div class="col-3">
+          <label  class="pb-1" for="company_with">{%  trans 'اسم الشركة'%}</label>
+          <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد الشركات'%}..." }' name="company_with"  id="company_with">
+            <option value="%%">{%  trans 'الكل'%}</option>
+            <option value="">{%  trans 'اختر احد الشركات'%}</option>
+              {% for item in all_company %}
+                <option value="{{item.id}}" >{{item.name}}</option>
+                {% endfor %}
+          </select>
+      <!-- End Col -->
+      </div>
           
+
+
+              <div class="col-3">
+                <div class="form-group bmd-form-group">
+                  <label  class="pb-1" for="start_added_date">{%  trans 'بداية وقت الإضافة'%}</label>
+                  <input type="text"  data-hs-flatpickr-options='{
+                    "dateFormat": "d/m/Y H:i",
+                    "enableTime": true
+                  }' class="js-flatpickr form-control flatpickr-custom"  name="start_added_date"  id="start_added_date">
+                  <div class="invalid-feedback">
+                    {%  trans 'الرجاء التحقق من هذه الخانة'%}
+                  </div>  
+                </div>
+              </div>
+
+
+              <div class="col-3">
+                <div class="form-group bmd-form-group">
+                  <label  class="pb-1" for="end_added_date">{%  trans 'نهاية وقت الإضافة'%}</label>
+                  <input type="text"  data-hs-flatpickr-options='{
+                    "dateFormat": "d/m/Y H:i",
+                    "enableTime": true
+                  }' class="js-flatpickr form-control flatpickr-custom"  name="end_added_date"  id="end_added_date">
+                  <div class="invalid-feedback">
+                    {%  trans 'الرجاء التحقق من هذه الخانة'%}
+                  </div>  
+                </div>
+              </div>
               <!-- End Row -->
 
 
@@ -189,17 +254,7 @@
             </div>
 
             <div class="row mt-3  align-items-center flex-grow-1">
-              <div class="col-3">
-                <label  class="pb-1" for="company_with">{%  trans 'اسم الشركة'%}</label>
-                <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد الشركات'%}..." }' name="company_with"  id="company_with">
-                  <option value="%%">{%  trans 'الكل'%}</option>
-                  <option value="">{%  trans 'اختر احد الشركات'%}</option>
-                    {% for item in all_company %}
-                      <option value="{{item.id}}" >{{item.name}}</option>
-                      {% endfor %}
-                </select>
-            <!-- End Col -->
-            </div>
+             
 
             <div class="col-5">
               <div class=" mt-4">
@@ -396,6 +451,21 @@
 
             <div class="col-12">
               <div class="form-group bmd-form-group">
+                <label  class="pb-1" for="sector_object">{%  trans 'اسم القطاع'%}</label>
+                <select class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر القطاع'%}..." }' name="sector_object"  id="sector_object">
+                  <option value="">{%  trans 'اختر احد الأنواع'%}</option>
+                  {% for item in all_sector %}
+                  <option value="{{item.id}}">{{item.name}}</option>
+                  {% endfor %}
+              </select>
+                <div class="invalid-feedback">
+                  {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                </div>  
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group bmd-form-group">
                 <label  class="pb-1" for="number">{%  trans 'العدد'%}</label>
                 <input type="number" required class="form-control required  mb-3" name="number"  id="number">
                 <div class="invalid-feedback">
@@ -535,7 +605,10 @@
                  d.company_with = $('#company_with').val();
                  d.representitive_with = $('#representitive_with').val();
                  d.size = $('#size').val();
+                 d.sector = $('#sector').val();
                  d.exists = $('#exists').val();
+                 d.start_added_date = $('#start_added_date').val();
+                 d.end_added_date = $('#end_added_date').val();
                     
                 }
             },
@@ -551,7 +624,7 @@
                 
                    // Add event listener for opening and closing details
  
-                   return '<a>'+item.id+'</a>';
+                   return `<a class="ml-4 bluefont" href="{% url 'mainApp:show_item'%}?type=edit&id=`+item.id+`">`+item.id+`</a>`;
             }
             }, 
             {
@@ -627,9 +700,9 @@
             ,
             {
               className: "", "mData": null,"mRender": function (item) { 
-              if(item.exists){ 
+              if(item.exists == "1"){ 
                 exists = "{% trans 'يوجد'%}"
-              }else{
+              }else if(item.exists == "0"){
                 
                 exists = "{% trans 'لا يوجد'%}"
               }
@@ -643,10 +716,10 @@
             ,
             {
               className: "", "mData": null,"mRender": function (item) { 
-              
-                if(item.is_returned){ 
+                is_returned = ""
+                if(item.is_returned == "1"){ 
                   is_returned = "{% trans 'مرتجع'%}"
-              }else{
+              }else if(item.is_returned == "0"){
                 
                 is_returned = "{% trans 'ليس مرتجع'%}"
               }
@@ -868,4 +941,14 @@
 
 </script>
 
+
+
+<script src="{% static 'vendor/flatpickr/dist/flatpickr.min.js'%}"></script>
+<script>
+
+    // INITIALIZATION OF FLATPICKR
+    // =======================================================
+    HSCore.components.HSFlatpickr.init('.js-flatpickr')
+ 
+</script>
 {% endblock %}

@@ -278,6 +278,41 @@ class category(models.Model):
 
 
 
+
+
+class recommended_number(models.Model):
+    size = models.ForeignKey(size,on_delete=models.PROTECT,null=True,blank=True)
+    category = models.ForeignKey(category,on_delete=models.PROTECT,null=True,blank=True)
+    number = models.IntegerField(blank=True,default=None)
+    
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_recommended_numbers_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_recommended_numbers_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "recommended_number"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'number' :self.number,
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.id
+
+
+
+
 #البند
 class item(models.Model):
     part_num = models.CharField(max_length=500,default=None)
@@ -285,6 +320,7 @@ class item(models.Model):
     exists = models.BooleanField(default=True)
     is_returned = models.BooleanField(default=True)
     higher_count = models.IntegerField(default=True)
+    sector = models.ForeignKey(sector,on_delete=models.PROTECT,null=True,blank=True)
     size = models.ForeignKey(size,on_delete=models.PROTECT,null=True,blank=True)
     company_with = models.ForeignKey(company,on_delete=models.PROTECT,null=True,blank=True)
     representitive_with = models.ForeignKey(User,on_delete=models.PROTECT,null=True,blank=True,related_name= "user_item_representitive")
@@ -333,4 +369,68 @@ class item(models.Model):
     def __str__(self):
         return self.name
 
+
+
+
+class type_of_transaction(models.Model):
+    name = models.CharField(max_length=500,default=None)
+    name_en = models.CharField(max_length=500,default=None)
+    code = models.CharField(max_length=500,default=None)
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_type_of_transaction_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_type_of_transaction_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "type_of_transaction"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'name' :self.name,
+            'name_en' :self.name_en,
+            'code':self.type_of_transaction,
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.name
+
+
+class transaction(models.Model):
+    item = models.ForeignKey(item,on_delete=models.PROTECT,null=True,blank=True)
+    company = models.ForeignKey(company,on_delete=models.PROTECT,null=True,blank=True)
+    representitive = models.ForeignKey(User,on_delete=models.PROTECT,null=True,blank=True,related_name="user_transaction_rep")
+    type_of_transaction = models.ForeignKey(type_of_transaction,on_delete=models.PROTECT,null=True,blank=True)
+    note = models.TextField(default=None,blank=True)
+    created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    
+    # ///////// new updates
+    created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)
+    updated_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name= "user_transaction_updated")    
+    deleted_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True,related_name="user_transaction_delete")    
+    updated_date = models.DateTimeField(auto_now=True,null=True,blank=True)
+    deleted_date = models.DateTimeField(null=True,blank=True)
+
+
+
+    class Meta:
+        db_table = "transaction"
+
+
+    def to_json(self):
+        return {
+            'id' :self.id,
+            'created':self.created
+            }
+
+    def __str__(self):
+        return self.id
 
