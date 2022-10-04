@@ -1,0 +1,238 @@
+
+{% extends 'theme.html' %}
+{%load static%}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+
+{% block 'title' %}
+  {% trans 'اصدار التقارير اليومية' %}
+{% endblock %}
+
+
+{% block 'content' %}
+<link rel="stylesheet" href="{% static 'vendor/flatpickr/dist/flatpickr.min.css'%}">
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 style="float: right;"> 
+          <ol class="breadcrumb float-sm-left">
+            
+            <li  class="breadcrumb-item"><a href="{%url 'mainApp:home'%}">{%  trans 'الصفحةالرئيسية'%}</a></li>
+            <li class="breadcrumb-item active"> {% trans 'التقاير اليومية'%}</li>
+          </ol>
+         </h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div class="container post-listing">
+    
+
+    <div class="row ">
+      <div class="col-md-12 col-xm-12 single-post">
+        
+       
+        <div class="box-body">
+            <div class="tab-content">
+              <div class="tab-pane form-horizontal active" id="Listed">
+                
+               
+
+
+                <!--Start of the Form-->
+                <div dir="rtl" class="card">
+                    <div class="card-header card-header-primary greenbar" style="text-align: justify;">
+                      <h4 class="card-title">{%  trans 'التقارير اليومية'%}</h4>
+                      <p class="card-category">{%  trans 'برجاء ادخال تاريخ اليوم المراد' %}</p>
+                    </div>
+                    <div class="card-body" style="text-align: justify;">
+                      <form  method="POST" enctype="multipart/form-data" id="form" class="needs-validation form-horizontal" novalidate>
+                        {% csrf_token %}
+
+                    
+
+                        <div class="row">
+
+                          <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="day_to_generate">{%  trans 'تاريخ اليوم المراد'%}</label>
+                              <input type="text"  data-hs-flatpickr-options='{
+                                "dateFormat": "d/m/Y",
+                                "enableTime": false
+                              }' class="js-flatpickr form-control flatpickr-custom"  name="day_to_generate"  id="day_to_generate">
+                              <div class="invalid-feedback">
+                                {%  trans 'الرجاء التحقق من هذه الخانة' %}
+                              </div>  
+                              
+                              
+                            </div>
+                          </div>
+
+                         
+
+                         
+
+
+                          
+
+                         
+
+                         
+
+                        
+                        </div>
+
+
+                       
+
+
+
+                     
+
+
+                     
+                        
+                    
+                      
+                         
+                        <br/>
+                        <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
+                        <button type="submit" class="btn btn-primary" >{% trans "إصدار" %}</button>
+
+                        <div class="clearfix"></div>
+                      </form>
+                    </div>
+                  </div>
+
+                <!--End of the Form-->
+
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+
+
+
+{% block javaNew %}
+
+
+<script>
+
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+    event.stopPropagation();
+      if (form.checkValidity() === false) {
+    
+    }else{
+      var dataString = $(this).serialize();
+    
+    // alert(dataString); return false;
+   
+
+
+
+    $.ajax({
+    type: "POST",
+    url: "{% url 'report:export_daily_report'%}",
+    data: dataString,
+    xhrFields: {
+        responseType: 'blob' // to avoid binary data being mangled on charset conversion
+    },
+    success: function(blob, status, xhr) {
+        // check for a filename
+        var filename = "";
+        var disposition = xhr.getResponseHeader('Content-Disposition');
+        if (disposition && disposition.indexOf('attachment') !== -1) {
+            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            var matches = filenameRegex.exec(disposition);
+            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+        }
+
+        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+            window.navigator.msSaveBlob(blob, filename);
+        } else {
+            var URL = window.URL || window.webkitURL;
+            var downloadUrl = URL.createObjectURL(blob);
+
+            if (filename) {
+                // use HTML5 a[download] attribute to specify filename
+                var a = document.createElement("a");
+                // safari doesn't support this yet
+                if (typeof a.download === 'undefined') {
+                    window.location.href = downloadUrl;
+                } else {
+                    a.href = downloadUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                }
+            } else {
+                window.location.href = downloadUrl;
+            }
+
+            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+        }
+    }
+});
+
+
+   
+   
+  
+    }
+    form.classList.add('was-validated');
+    }, false);
+    });
+    }, false);
+    })();
+
+
+
+
+
+// new functionality on submit checking if the item name doesn't exist before 
+
+
+
+
+
+
+
+</script>
+ 
+
+
+
+
+<script src="{% static 'vendor/flatpickr/dist/flatpickr.min.js'%}"></script>
+<script>
+
+    // INITIALIZATION OF FLATPICKR
+    // =======================================================
+    HSCore.components.HSFlatpickr.init('.js-flatpickr')
+ 
+</script>
+
+{% endblock %}

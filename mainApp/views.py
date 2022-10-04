@@ -26,6 +26,11 @@ from datetime import datetime, timedelta,date
 
 from mainApp.models import *
 
+from io import StringIO
+import xlsxwriter
+from django.http import HttpResponse
+
+
 @login_required
 def home(request):
 
@@ -152,6 +157,8 @@ def return_stock_item(request):
         }
 
     return render (request, 'operations/return_stock_item.html', context)
+
+
 
 
 
