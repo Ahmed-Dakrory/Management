@@ -59,9 +59,8 @@ def export_daily_report(request):
     day_to_generate = datetime.strptime(day_to_generate, '%d/%m/%Y')
     # print(day_to_generate)
 
-    day_to_generate_start = date(day_to_generate.year, day_to_generate.month, day_to_generate.day-1)
-    day_to_generate_end = date(day_to_generate.year, day_to_generate.month, day_to_generate.day+1)
-    # create our spreadsheet.  I will create it in memory with a StringIO
+    
+     # create our spreadsheet.  I will create it in memory with a StringIO
     # output = StringIO()
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output)
@@ -169,8 +168,53 @@ def export_daily_report(request):
             # 2 ==> 7
             # i ==> 3*i+1
             
-            in_items = transaction.objects.filter( Q(created__lt=day_to_generate_end) & Q(created__gt=day_to_generate_start) & Q(item__category__id=row.id) & Q(item__size__id=col.id) & (Q(type_of_transaction__id=settings.ID_ADD_TYPE_OF_TRANSACTION) | Q(type_of_transaction__id=settings.ID_RETURN_TYPE_OF_TRANSACTION))).count()
-            out_items = transaction.objects.filter(Q(created__lt=day_to_generate_end) & Q(created__gt=day_to_generate_start) & Q(created__year=day_to_generate.year) & Q(item__category__id=row.id) & Q(item__size__id=col.id) & (Q(type_of_transaction__id=settings.ID_OUT_TYPE_OF_TRANSACTION))).count()
+
+            
+            with connection.cursor() as cursorLast:
+                try:
+                    sql_query = """
+                        SELECT count(distinct(item.id)) FROM management.transaction 
+                        left join item on transaction.item_id=item.id
+                        left join size on item.size_id=size.id
+                        left join category on item.category_id=category.id
+                        where category.id="""+str(row.id)+""" and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_ADD_TYPE_OF_TRANSACTION)+"""  or type_of_transaction_id="""+str(settings.ID_RETURN_TYPE_OF_TRANSACTION)+""")
+                        and DATE_FORMAT(STR_TO_DATE(`item`.`created`, '%Y-%m-%d'), '%d-%m') = DATE_FORMAT(STR_TO_DATE('"""+str(day_to_generate.year)+"""-"""+str(day_to_generate.month)+"""-"""+str(day_to_generate.day)+"""','%Y-%m-%d'), '%d-%m')
+
+                    """
+                    # print(sql_query)
+                    cursorLast.execute(sql_query)
+                    cursorAllData = cursorLast.fetchone()
+                    in_items=cursorAllData[0]
+                except:
+                    in_items = 0
+                # print(in_items)
+                try:
+                    sql_query = """
+                        SELECT count(distinct(item.id)) FROM management.transaction 
+                        left join item on transaction.item_id=item.id
+                        left join size on item.size_id=size.id
+                        left join category on item.category_id=category.id
+                        where category.id="""+str(row.id)+""" and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_OUT_TYPE_OF_TRANSACTION)+""")
+                        and DATE_FORMAT(STR_TO_DATE(`item`.`created`, '%Y-%m-%d'), '%d-%m') = DATE_FORMAT(STR_TO_DATE('"""+str(day_to_generate.year)+"""-"""+str(day_to_generate.month)+"""-"""+str(day_to_generate.day)+"""','%Y-%m-%d'), '%d-%m')
+
+                    """
+                    # print(sql_query)
+                    cursorLast.execute(sql_query)
+                    cursorAllData = cursorLast.fetchone()
+                    out_items=cursorAllData[0]
+                except:
+                    out_items = 0
+
+            
+                # except:
+                #     pass
+            # print("---------------------")
+            # print(in_items)
+            # for ii in in_items:
+            #     print(ii.total)
+            # print(out_items.total)
+            # 16	3	13
+
             worksheet.write(6+i_row,(3*j_col+1), str(in_items),in_v_format)
             worksheet.write(6+i_row,(3*j_col+2), str(out_items),out_v_format)
             worksheet.write(6+i_row,(3*j_col+3), str(in_items-out_items),totalValue_format)

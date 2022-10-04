@@ -35,11 +35,9 @@ from django.http import HttpResponse
 def home(request):
 
 
-
-    context = {
-        
-    }
-    return render (request, 'index.html', context)
+    urlLink = reverse("mainApp:listOf_item")
+    return redirect(urlLink)
+    
 
 
 
@@ -427,6 +425,7 @@ def listOf_item(request):
             transactionObject = transaction.objects.create(
                 item = itemnew,
                 type_of_transaction = type_of_transaction_object,
+                note = ''
             )
             transactionObject.save()
             
@@ -841,6 +840,7 @@ def addnew_item(request):
             transactionObject = transaction.objects.create(
                 item = itemnew,
                 type_of_transaction = type_of_transaction_object,
+                note = ''
             )
             transactionObject.save()
             
