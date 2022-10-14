@@ -83,7 +83,7 @@
 
 
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="name">{%  trans 'اسم الهيئة'%}</label>
                               <input type="hidden" id="id" name="id" value="{{companyData.id}}">
@@ -99,7 +99,7 @@
 
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="name_en">{%  trans 'الاسم بالإنجليزية'%}</label>
                               <input type="text" required="" class="form-control required mb-3" name="name_en" value="{{companyData.name_en}}" id="name_en">
@@ -110,7 +110,7 @@
                           </div>
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="head_phone">{%  trans 'هاتف المدير'%}</label>
                               <input type="tel" required="" class="form-control required mb-3" name="head_phone" value="{{companyData.head_phone}}" id="head_phone">
@@ -124,7 +124,7 @@
 
 
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="company_phone">{%  trans 'رقم هاتف الشركة'%}</label>
                               <input type="company_phone" required=""  class="form-control required mb-3" name="company_phone" value="{{companyData.company_phone}}" id="company_phone">
@@ -133,7 +133,7 @@
                               </div>  
                             </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="tax_number">{%  trans 'الرقم الضريبى'%}</label>
                               <input type="text"   class="form-control " name="tax_number" value="{{companyData.tax_number}}" id="tax_number">
@@ -143,7 +143,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="address">{%  trans 'العنوان'%}</label>
                               <input type="text" required=""  class="form-control required mb-3" name="address" value="{{companyData.address}}" id="address">
@@ -258,4 +258,12 @@
   
   
   </script>
+
+  
+<script>
+  $('#navbar_enter_data_main').removeClass('collapsed')
+  $('#navbar_enter_data').addClass('show')
+  $('#navbar_enter_data_main').attr('aria-expanded','true')
+  $('#listOf_company').addClass('active')
+</script>
 {% endblock %}

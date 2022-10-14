@@ -79,7 +79,7 @@
                          
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="category">{%  trans 'موديل'%}</label>
 
@@ -102,7 +102,7 @@
 
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="part_num">{%  trans 'كود القطعة'%}</label>
                               <input type="hidden" id="id" name="id" value="{{itemData.id}}">
@@ -116,7 +116,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="size">{%  trans 'المقاس'%}</label>
                               <select required="" {% if type == 'edit' %}disabled{%endif%} class="form-control required mb-3" name="size" value="{{itemData.size.id}}" id="size">
@@ -132,7 +132,7 @@
                           </div>
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="details">{%  trans 'التفاصيل'%}</label>
                               <input type="text"  class="form-control  mb-3" name="details" value="{{itemData.details}}" id="details">
@@ -142,7 +142,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="exists">{%  trans 'الحالة'%}</label>
                               <select required="" {% if type == 'edit' %}disabled{%endif%} class="form-control required mb-3" name="exists" value="{{itemData.exists}}" id="exists">
@@ -156,7 +156,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="is_returned">{%  trans 'هل هى مرتجع؟'%}</label>
                               <select required="" {% if type == 'edit' %}disabled{%endif%} class="form-control required mb-3" name="is_returned" value="{{itemData.is_returned}}" id="is_returned">
@@ -172,7 +172,7 @@
 
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="representitive_with">{%  trans 'اسم المندوب'%}</label>
                               <select {% if type == 'edit' %}disabled{%endif%} class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر المندوب'%}..." }' name="representitive_with" value="{{itemData.representitive_with.id}}" id="representitive_with">
@@ -189,7 +189,7 @@
 
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="company_with">{%  trans 'اسم الشركة'%}</label>
                               <select {% if type == 'edit' %}disabled{%endif%} class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر الشركة'%}..." }' name="company_with" value="{{itemData.company_with.id}}" id="company_with">
@@ -205,7 +205,7 @@
                           </div>
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="sector">{%  trans 'اسم القطاع'%}</label>
                               <select class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر القطاع'%}..." }' name="sector" value="{{itemData.sector.id}}" id="sector">
@@ -222,7 +222,7 @@
 
                          
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="last_out_date">{%  trans 'أخر وقت خروج'%}</label>
                               <input {% if type == 'edit' %}disabled{%endif%} type="text"  data-hs-flatpickr-options='{
@@ -236,7 +236,7 @@
                           </div>
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="last_return_date">{%  trans 'أخر وقت مرتجع'%}</label>
                               <input {% if type == 'edit' %}disabled{%endif%} type="text"  data-hs-flatpickr-options='{
@@ -385,5 +385,13 @@
     // =======================================================
     HSCore.components.HSFlatpickr.init('.js-flatpickr')
  
+</script>
+
+
+<script>
+  $('#navbar_item_main').removeClass('collapsed')
+  $('#navbar_item').addClass('show')
+  $('#navbar_item_main').attr('aria-expanded','true')
+  $('#listOf_item').addClass('active')
 </script>
 {% endblock %}

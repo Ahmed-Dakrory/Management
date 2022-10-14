@@ -56,8 +56,29 @@
                       <p class="card-category">{%  trans 'برجاء ادخال بيانات المستخدم'%}</p>
                     </div>
                     <div class="card-body" style="text-align: justify;">
-                      <form  method="POST" id="form" class="needs-validation form-horizontal" novalidate>
+                      <form  method="POST" enctype="multipart/form-data" id="form" class="needs-validation form-horizontal" novalidate>
                         {% csrf_token %}
+
+                        <div class="row">
+                         
+                          <!-- Avatar -->
+                          <label class="avatar avatar-xxl profile-cover-avatar p-0" for="image">
+                            <img id="image_object" class="avatar-img" src='{% if UserData.image is None or UserData.image == "" %}{% static "img/160x160/img1.jpg" %}{% else %}{{UserData.image.file.url}}{%endif%}' alt="Image Description">
+              
+                            <input type="file" class="js-file-attach avatar-uploader-input" name="image" id="image" data-hs-file-attach-options='{
+                                        "textTarget": "#editAvatarImgModal",
+                                        "mode": "image",
+                                        "targetAttr": "src",
+                                        "allowTypes": [".png", ".jpeg", ".jpg"]
+                                    }'>
+              
+                            <span class="avatar-uploader-trigger">
+                              <i class="bi-pencil-fill avatar-uploader-icon shadow-sm"></i>
+                            </span>
+                          </label>
+                          <!-- End Avatar -->
+                        </div>
+
 
                         <div class="row">
                           <div class="col-md-4">
@@ -299,6 +320,39 @@
 
 
 </script>
-                         
-   
+          
+
+<script>
+
+  
+    
+  document.getElementById('image').onchange = function (evt) {
+  
+      var tgt = evt.target || window.event.srcElement,
+          files = tgt.files;
+  
+      // FileReader support
+      if (FileReader && files && files.length) {
+          var fr = new FileReader();
+          fr.onload = function () {
+              document.getElementById('image_object').src = fr.result;
+          }
+          fr.readAsDataURL(files[0]);
+      }
+  
+      // Not supported
+      else {
+          // fallback -- perhaps submit the input to an iframe and temporarily store
+          // them on the server until the user's session ends.
+      }
+  }
+  
+  
+  </script>
+   <script>
+    $('#navbar_users_main').removeClass('collapsed')
+    $('#navbar_users').addClass('show')
+    $('#navbar_users_main').attr('aria-expanded','true')
+    $('#listOf_user').addClass('active')
+  </script>
 {% endblock %}

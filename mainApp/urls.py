@@ -19,6 +19,7 @@ urlpatterns = [
 
     # category
     path('listOf_category/',views.listOf_category,name='listOf_category'),
+    path('get_all_categories_by_name/',views.get_all_categories_by_name,name='get_all_categories_by_name'),
     path('getListOf_category/',views.getListOf_category,name='getListOf_category'),
     path('addnew_category/',views.addnew_category,name='addnew_category'),
     path('delete_category/',views.delete_category,name='delete_category'),
@@ -26,6 +27,7 @@ urlpatterns = [
 
 
     # item
+    path('item_by_part_num/',views.item_by_part_num,name='item_by_part_num'),
     path('listOf_item/',views.listOf_item,name='listOf_item'),
     path('getListOf_item/',views.getListOf_item,name='getListOf_item'),
     path('addnew_item/',views.addnew_item,name='addnew_item'),

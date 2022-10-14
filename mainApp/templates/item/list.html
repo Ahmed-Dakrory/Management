@@ -52,7 +52,7 @@
             <div class="card-header">
               <div class="row justify-content-between align-items-center flex-grow-1">
                 <div class="col-md">
-                  <div class="d-flex justify-content-start align-items-center">
+                  <div class="d-flex justify-content-start align-items-center d-none d-md-flex">
                  
                     <!-- Datatable Info -->
                       <div class="d-flex align-items-center">
@@ -86,7 +86,7 @@
                     <div class="col-md">
                       <!-- Dropdown -->
                       <div class="dropdown me-2">
-                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="itemsExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-white btn-sm dropdown-toggle w-md-auto w-100" id="itemsExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                           <i class="bi-download me-2"></i> Export
                         </button>
               
@@ -147,7 +147,7 @@
 
 
               <div class="row mt-3  align-items-center flex-grow-1">
-                <div class="col-3">
+                <div class="col-12 col-md-3">
                   <label  class="pb-1" for="category">{%  trans 'موديل'%}</label>
                   <select  class="required js-select form-select"  data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد الموديلات'%}..." }' name="category"  id="category">
                                  
@@ -157,9 +157,8 @@
                     {% endfor %}
                   </select>
                 </div>
-                <!-- End Col -->
 
-                <div class="col-3">
+                <div class="col-12 col-md-3">
                   <label  class="pb-1" for="size">{%  trans 'المقاس'%}</label>
                   <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد المقاسات'%}..." }' name="size"  id="size">
                     <option value="%%">{%  trans 'الكل'%}</option>
@@ -171,7 +170,7 @@
               </div>
 
 
-              <div class="col-3">
+              <div class="col-12 col-md-3">
                 <label  class="pb-1" for="exists">{%  trans 'الحالة'%}</label>
                 <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'حالة وجوده'%}..." }' name="exists"  id="exists">
                   <option value="%%">{%  trans 'الكل'%}</option>
@@ -182,7 +181,7 @@
             <!-- End Col -->
             </div>
 
-            <div class="col-3">
+            <div class="col-12 col-md-3">
               <label  class="pb-1" for="representitive_with">{%  trans 'اسم المندوب'%}</label>
               <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد المناديب'%}..." }' name="representitive_with"  id="representitive_with">
                 <option value="%%">{%  trans 'الكل'%}</option>
@@ -195,7 +194,7 @@
           </div>
 
 
-          <div class="col-3">
+          <div class="col-12 col-md-3">
             <label  class="pb-1" for="sector">{%  trans 'اسم القطاع'%}</label>
             <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر قطاع'%}..." }' name="sector"  id="sector">
               <option value="%%">{%  trans 'الكل'%}</option>
@@ -207,7 +206,7 @@
         <!-- End Col -->
         </div>
 
-        <div class="col-3">
+        <div class="col-12 col-md-3">
           <label  class="pb-1" for="company_with">{%  trans 'اسم الشركة'%}</label>
           <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'اختر احد الشركات'%}..." }' name="company_with"  id="company_with">
             <option value="%%">{%  trans 'الكل'%}</option>
@@ -221,7 +220,7 @@
           
 
 
-              <div class="col-3">
+              <div class="col-12 col-md-3">
                 <div class="form-group bmd-form-group">
                   <label  class="pb-1" for="start_added_date">{%  trans 'بداية وقت الإضافة'%}</label>
                   <input type="text"  data-hs-flatpickr-options='{
@@ -235,7 +234,7 @@
               </div>
 
 
-              <div class="col-3">
+              <div class="col-12 col-md-3">
                 <div class="form-group bmd-form-group">
                   <label  class="pb-1" for="end_added_date">{%  trans 'نهاية وقت الإضافة'%}</label>
                   <input type="text"  data-hs-flatpickr-options='{
@@ -256,7 +255,7 @@
             <div class="row mt-3  align-items-center flex-grow-1">
              
 
-            <div class="col-5">
+            <div class="col-12 col-md-5">
               <div class=" mt-4">
                 <button class="btn btn-success btn-sm w-100" onclick="refresh_table()" type="button">  <i class="tio-delete-outlined"></i> {% trans 'بحث'%}</a>
               </div>
@@ -396,17 +395,17 @@
           <div class="row">
            
 
-
-            <div class="col-6">
+            <div class="col-12">
               <div class="form-group bmd-form-group">
-                <label  class="pb-1" for="category">{%  trans 'موديل'%}</label>
+                
+                <label  class="pb-1" for="name_category">{%  trans 'اسم الموديل'%}</label>
 
 
                 <div class="tom-select-custom">
-                  <select required=""  class="required js-select form-select" name="category"  id="category">
+                  <select required=""  class="required js-select form-select" name="name_category"  id="name_category">
                    
-                    {% for item in all_category %}
-                    <option value="{{item.id}}"  data-option-template='<div class="d-flex align-items-start"><div class="flex-shrink-0"><img class="img_list2" src="{% if item.image is None or item.image == "" %}{% static "img/160x160/img2.jpg" %}{% else %}{{item.image.file.url}}{%endif%}"/></div><div class="flex-grow-1 ms-2"><span class="d-block fw-semi-bold">{{item.serial_start}} ({{item.color.name}})</span></div></div>'>{{item.serial_start}} ({{item.color.name}})</option>
+                    {% for item in all_category_group %}
+                    <option value="{{item.name}}" >{{item.name}}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -419,24 +418,41 @@
             </div>
 
 
-
-            
-
-            <div class="col-6">
+            <div class="col-12 mb-3">
               <div class="form-group bmd-form-group">
-                <label  class="pb-1" for="size">{%  trans 'المقاس'%}</label>
-                <select required=""  class="form-control required mb-3" name="size" id="size">
-                  <option value="">{%  trans 'اختر احد الأنواع'%}</option>
-                  {% for item in all_size %}
-                  <option value="{{item.id}}"  >{{item.size}}</option>
-                  {% endfor %}
-              </select>
+                
+                <label  class="pb-1" for="category_add">{%  trans 'موديل'%}</label>
+
+
+                <div class="tom-select-custom">
+                  <select required=""  class="required  form-select" name="category_add"  id="category_add">
+                   
+                    
+                  </select>
+                </div>
+
+
                 <div class="invalid-feedback">
                   {%  trans 'الرجاء التحقق من هذه الخانة'%} 
                 </div>  
               </div>
             </div>
 
+
+
+            {% for item in all_size %}
+
+            <div class="col-3 ">
+              <div class="form-group bmd-form-group">
+                <label  class="pb-1" for="size_{{item.id}}">{%  trans 'مقاس'%} {{item.size}}</label>
+                <input type="text" value="0" class="form-control  mb-3" name="size_{{item.id}}"  id="size_{{item.id}}">
+                <div class="invalid-feedback">
+                  {%  trans 'الرجاء التحقق من هذه الخانة'%}
+                </div>  
+              </div>
+            </div>
+
+            {% endfor %}
 
             <div class="col-12">
               <div class="form-group bmd-form-group">
@@ -464,15 +480,7 @@
               </div>
             </div>
 
-            <div class="col-12">
-              <div class="form-group bmd-form-group">
-                <label  class="pb-1" for="number">{%  trans 'العدد'%}</label>
-                <input type="number" required class="form-control required  mb-3" name="number"  id="number">
-                <div class="invalid-feedback">
-                  {%  trans 'الرجاء التحقق من هذه الخانة'%}
-                </div>  
-              </div>
-            </div>
+           
 
             
             
@@ -950,5 +958,66 @@
     // =======================================================
     HSCore.components.HSFlatpickr.init('.js-flatpickr')
  
+</script>
+
+
+<script>
+
+  
+$('#name_category').on('change', function() {
+  showLoader();
+                $.ajax({
+                  type: 'POST',
+                  url: "{% url 'mainApp:get_all_categories_by_name'%}",
+                  dataType: 'json',
+                  data: { 
+                      'name': $('#name_category').val()
+                  },
+                  headers:{
+                      "X-CSRFToken": csrftoken
+                          },
+                  cache: false,
+                  success: function(result) {
+                    hideLoader();
+                      if(result.Result == "Success"){
+                          console.log(result.Data)
+                          all_data = result.Data
+                          for(var i=0;i<all_data.length;i++){
+                            data = all_data[i]
+                            element = `
+
+                            <option value="`+data.id+`"  data-option-template='<div class="d-flex align-items-start"><div class="flex-shrink-0"><img class="img_list2" src="`+data.image+`"/></div><div class="flex-grow-1 ms-2"><span class="d-block fw-semi-bold">`+data.serial_start+` (`+data.color_name+`)</span></div></div>'>`+data.serial_start+` (`+data.color_name+`)</option>
+                   
+                            `
+                            $('#category_add').append(element)
+                          }
+                        }else{
+                          Swal.fire(
+                            '{% trans "مشكلة" %}',
+                            '{% trans "مشكلة فى تحميل البيانات" %}',
+                            '{% trans "Error" %}'
+                          )
+                        }
+                  
+                  },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                  hideLoader();
+                  Swal.fire(
+                    '{% trans "مشكلة" %}',
+                    '{% trans "مشكلة فى تحميل البيانات" %}',
+                    '{% trans "Error" %}'
+                  )
+                  }
+              });
+
+                
+});
+</script>
+
+<script>
+  $('#navbar_item_main').removeClass('collapsed')
+  $('#navbar_item').addClass('show')
+  $('#navbar_item_main').attr('aria-expanded','true')
+  $('#listOf_item').addClass('active')
 </script>
 {% endblock %}

@@ -411,6 +411,7 @@ class transaction(models.Model):
     type_of_transaction = models.ForeignKey(type_of_transaction,on_delete=models.PROTECT,null=True,blank=True)
     note = models.TextField(default=None,blank=True)
     created = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    image = models.ForeignKey(attachmentTranscript,on_delete=models.PROTECT,null=True,blank=True)
     
     # ///////// new updates
     created_by = models.ForeignKey('userApp.User',on_delete=models.PROTECT,null=True,blank=True)

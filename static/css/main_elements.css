@@ -622,3 +622,16 @@ background-color: #cacaca!important;
   width: 30px;
   border-radius: 7px;
 }
+
+.img-step{
+  
+max-width: 88px;
+  
+max-height: 62px;
+  
+border: solid 1px #f2f2f2;
+  
+border-radius: 13px;
+  
+padding: 7px;
+}

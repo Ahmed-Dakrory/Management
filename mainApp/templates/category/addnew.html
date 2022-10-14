@@ -82,7 +82,7 @@
 
 
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="serial_start">{%  trans 'كود الموديل'%}</label>
                               <input type="hidden" id="id" name="id" value="{{categoryData.id}}">
@@ -98,7 +98,7 @@
 
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="name">{%  trans 'الاسم بالعربية'%}</label>
                               <input type="text" required="" class="form-control required mb-3" name="name" value="{{categoryData.name}}" id="name">
@@ -108,7 +108,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="name_en">{%  trans 'الاسم بالإنجليزية'%}</label>
                               <input type="text" required="" class="form-control required mb-3" name="name_en" value="{{categoryData.name_en}}" id="name_en">
@@ -119,7 +119,7 @@
                           </div>
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="details">{%  trans 'تفاصيل'%}</label>
                               <input type="text"  class="form-control mb-3" name="details" value="{{categoryData.details}}" id="details">
@@ -130,7 +130,7 @@
                           </div>
                         
                         
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="year">{%  trans 'عام'%}</label>
                               <input type="year" required=""  class="form-control required mb-3" name="year" value="{{categoryData.year}}" id="year">
@@ -140,7 +140,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="color">{%  trans 'اللون'%}</label>
                               <select required="" class="form-control required mb-3" name="color" value="{{categoryData.color.id}}" id="color">
@@ -160,7 +160,7 @@
 
 
 
-                          <div class="col-md-4">
+                          <div class="col-12 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="factory">{%  trans 'المصنع'%}</label>
                               <select required="" class="form-control required mb-3" name="factory" value="{{categoryData.factory.id}}" id="factory">
@@ -356,5 +356,14 @@ document.getElementById('image').onchange = function (evt) {
   
   
   
+</script>
+
+
+
+<script>
+  $('#navbar_enter_data_main').removeClass('collapsed')
+  $('#navbar_enter_data').addClass('show')
+  $('#navbar_enter_data_main').attr('aria-expanded','true')
+  $('#listOf_category').addClass('active')
 </script>
 {% endblock %}

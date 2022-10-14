@@ -161,8 +161,16 @@ def addnew_role(request):
 
         permissionGeneralCheckBox = request.POST.getlist('permissionGeneralCheckBox')
 
+
+
+        
+
+
         
         if typeOfEntry == 'new':
+
+            
+
             dataToInsert = role.objects.create(name=nameData,name_en=name_enData)
             dataToInsert.save()
             for item in permissionGeneralCheckBox:
@@ -267,7 +275,21 @@ def addnew_user(request):
 
       
         
+        try:
+            filedetails = request.FILES['image']
 
+        except Exception as err:
+            print("----------------------")
+            print(err)
+            if typeOfEntry == 'edit':
+                filedetails = dataToInsert.image.file
+            else:
+                filedetails = None
+        if filedetails is None or filedetails == "":
+            try:
+                filedetails = dataToInsert.image.file
+            except:
+                filedetails = None
 
  
 
@@ -277,12 +299,29 @@ def addnew_user(request):
             role_Data = None
 
         if typeOfEntry == 'new':
+            try:
+                attachmentTranscriptObject = attachmentTranscript.objects.create(file = filedetails,content_type=filedetails.content_type,name=filedetails.name,table_name="user")
+                attachmentTranscriptObject.save()
+            except:
+                attachmentTranscriptObject = None
+
+
+
             usernameData = request.POST['username']
-            usernew = User.objects.create_user(username=usernameData,last_name=last_name,first_name=first_name, approved=True,is_staff=True,is_active=True,  password=passwordData,email=emailData,address=addressData,phone=phoneData,role=role_Data,id_number=id_number)
+            usernew = User.objects.create_user(username=usernameData,last_name=last_name,first_name=first_name, approved=True,is_staff=True,is_active=True,  password=passwordData,email=emailData,address=addressData,phone=phoneData,role=role_Data,id_number=id_number,image=attachmentTranscriptObject)
             usernew.save()
 
             
         elif typeOfEntry == 'edit':
+            try:
+                attachmentTranscriptObject = attachmentTranscript.objects.create(file = filedetails,content_type=filedetails.content_type,name=filedetails.name,table_name="user")
+                attachmentTranscriptObject.save()
+            except Exception as err:
+                print(err)
+                print("----------------------")
+                attachmentTranscriptObject = dataToInsert.image
+
+
             dataToInsert = User.objects.filter(id=idOfelement)
             userData = User.objects.get(pk = idOfelement)
             if passwordData!='':
@@ -290,7 +329,7 @@ def addnew_user(request):
                 userData.save()
             
             User.objects.filter(id=userData.id).update(email=emailData)
-            dataToInsert.update(address=addressData,last_name=last_name,first_name=first_name, approved=True,is_staff=True,is_active=True, id_number=id_number,phone=phoneData,role=role_Data)
+            dataToInsert.update(address=addressData,last_name=last_name,first_name=first_name, approved=True,is_staff=True,is_active=True, id_number=id_number,phone=phoneData,role=role_Data,image=attachmentTranscriptObject)
             
 
  

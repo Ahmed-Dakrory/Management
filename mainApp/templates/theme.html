@@ -22,7 +22,7 @@
 
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="./favicon.ico">
+  <link rel="shortcut icon" href="{%static 'dist/img/logo.webp'%}">
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -209,7 +209,7 @@
                 <i class="bi-search"></i>
               </div>
 
-              <input id="myInputSearch" type="search" class="js-form-search form-control" placeholder="Search in front" aria-label="Search in front" data-hs-form-search-options='{
+              <input id="myInputSearch" type="search" class="js-form-search form-control" placeholder="{% trans 'إبحث'%}" aria-label="{% trans 'إبحث'%}" data-hs-form-search-options='{
                        "clearIcon": "#clearSearchResultsIcon",
                        "dropMenuElement": "#searchDropdownMenu",
                        "dropMenuOffset": 20,
@@ -243,7 +243,7 @@
                     <i class="bi-search"></i>
                   </div>
 
-                  <input id="myInputSearch" type="search" class="form-control" placeholder="Search in front" aria-label="Search in front">
+                  <input id="myInputSearch" type="search" class="form-control" placeholder="{% trans 'إبحث'%}" aria-label="{% trans 'إبحث'%}">
                   <a class="input-group-append input-group-text" href="javascript:;">
                     <i class="bi-x-lg"></i>
                   </a>
@@ -418,7 +418,7 @@
             <div class="dropdown">
               <a class="navbar-dropdown-account-wrapper" href="javascript:;" id="accountNavbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
                 <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="{% static 'img/160x160/img6.jpg'%}" alt="Image Description">
+                  <img class="avatar-img" src='{% if request.user.image is None or request.user.image == "" %}{% static "img/160x160/img1.jpg" %}{% else %}{{request.user.image.file.url}}{%endif%}' alt="Image Description">
                   <span class="avatar-status avatar-sm-status avatar-status-success"></span>
                 </div>
               </a>
@@ -427,11 +427,11 @@
                 <div class="dropdown-item-text">
                   <div class="d-flex align-items-center">
                     <div class="avatar avatar-sm avatar-circle">
-                      <img class="avatar-img" src="{% static 'img/160x160/img6.jpg'%}" alt="Image Description">
+                      <img class="avatar-img" src='{% if request.user.image is None or request.user.image == "" %}{% static "img/160x160/img1.jpg" %}{% else %}{{request.user.image.file.url}}{%endif%}' alt="Image Description">
                     </div>
                     <div class="flex-grow-1 ms-3">
                       <h5 class="mb-0">{{request.user.username}} </h5>
-                      <p class="card-text text-body">
+                      <p class="card-text text-body d-none">
 
                         {%if request.user.account_type == 'admin' %}  ADMIN - Administrator {%else%}Province User{%endif%}
                         <small>Member since {{request.user.created}}</small>
@@ -502,7 +502,7 @@
            
             
             <div class="nav-item">
-              <a class="nav-link active menu_item_main_get" href="{%url 'mainApp:home'%}" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuDashboards" aria-expanded="true" aria-controls="navbarVerticalMenuDashboards">
+              <a class="nav-link active menu_item_main_get" href="{%url 'mainApp:home'%}" role="button"   aria-controls="navbarVerticalMenuDashboards">
                 <i class="bi-house-door nav-icon"></i>
                 <span class="nav-link-title ">{% trans 'الصفحة الرئيسية'%}</span>
               </a>
@@ -519,16 +519,16 @@
             <div id="navbarVerticalMenuPagesMenu">
               <!-- Collapse -->
               <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="#navbarVerticalMenuPagesUsersMenu" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesUsersMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesUsersMenu">
+                <a class="nav-link dropdown-toggle " id="navbar_enter_data_main" href="#navbar_enter_data" role="button" data-bs-toggle="collapse" data-bs-target="#navbar_enter_data" aria-expanded="false" aria-controls="navbar_enter_data">
                   <i class="bi-box-seam nav-icon"></i>
                   <span class="nav-link-title">{% trans 'ادخال وتعديل البيانات'%}</span>
                 </a>
 
-                <div id="navbarVerticalMenuPagesUsersMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link menu_item_get" href="{%url 'mainApp:listOf_company'%}">{% trans 'الشركات'%}</a>
-                  <a class="nav-link menu_item_get" href="{%url 'mainApp:listOf_factory'%}">{% trans 'المصانع'%} </a>
-                  <a class="nav-link menu_item_get" href="{%url 'mainApp:listOf_sector'%}">{% trans 'القطاعات'%} </a>
-                  <a class="nav-link menu_item_get" href="{%url 'mainApp:listOf_category'%}">{% trans 'الموديلات'%} </a>
+                <div id="navbar_enter_data" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
+                  <a class="nav-link menu_item_get" id="listOf_company" href="{%url 'mainApp:listOf_company'%}">{% trans 'الشركات'%}</a>
+                  <a class="nav-link menu_item_get" id="listOf_factory" href="{%url 'mainApp:listOf_factory'%}">{% trans 'المصانع'%} </a>
+                  <a class="nav-link menu_item_get" id="listOf_sector" href="{%url 'mainApp:listOf_sector'%}">{% trans 'القطاعات'%} </a>
+                  <a class="nav-link menu_item_get" id="listOf_category" href="{%url 'mainApp:listOf_category'%}">{% trans 'الموديلات'%} </a>
                 </div>
               </div>
               <!-- End Collapse -->
@@ -537,13 +537,13 @@
             
               <!-- Collapse -->
               <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="#navbarVerticalMenuPagesEcommerceMenu" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesEcommerceMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesEcommerceMenu">
+                <a class="nav-link dropdown-toggle " id="navbar_item_main" href="#navbar_item" role="button" data-bs-toggle="collapse" data-bs-target="#navbar_item" aria-expanded="false" aria-controls="navbar_item">
                   <i class="bi-basket nav-icon"></i>
                   <span class="nav-link-title">{% trans 'المخزن'%}</span>
                 </a>
 
-                <div id="navbarVerticalMenuPagesEcommerceMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link menu_item_get" href="{%url 'mainApp:listOf_item'%}">{% trans 'القطع '%}</a>
+                <div id="navbar_item" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
+                  <a class="nav-link menu_item_get" id="listOf_item"  href="{%url 'mainApp:listOf_item'%}">{% trans 'القطع '%}</a>
                 </div>
 
               </div>
@@ -551,16 +551,16 @@
 
                <!-- Collapse -->
                <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="#nav_reports" role="button" data-bs-toggle="collapse" data-bs-target="#nav_reports" aria-expanded="false" aria-controls="nav_reports">
+                <a class="nav-link dropdown-toggle " id="navbar_reports_main" href="#navbar_reports" role="button" data-bs-toggle="collapse" data-bs-target="#navbar_reports" aria-expanded="false" aria-controls="navbar_reports">
                   <i class="bi-basket nav-icon"></i>
                   <span class="nav-link-title">{% trans 'التقارير'%}</span>
                 </a>
 
-                <div id="nav_reports" class="nav-collapse collapse " data-bs-parent="#navbar_daily_report">
-                  <a class="nav-link menu_item_get" href="{%url 'report:daily_report'%}">{% trans 'التقاير اليومية'%}</a>
+                <div id="navbar_reports" class="nav-collapse collapse " data-bs-parent="#navbar_daily_report">
+                  <a class="nav-link menu_item_get" id="daily_report"  href="{%url 'report:daily_report'%}">{% trans 'التقاير اليومية'%}</a>
                   
-                  <a class="nav-link menu_item_get" href="{%url 'report:export_total_report'%}">{% trans 'رصيد المخزن الفعلى'%}</a>
-                  <a class="nav-link menu_item_get" href="{%url 'report:factory_needed_report'%}">{% trans 'طلبية المصنع'%}</a>
+                  <a class="nav-link menu_item_get" id="export_total_report"  href="{%url 'report:export_total_report'%}">{% trans 'رصيد المخزن الفعلى'%}</a>
+                  <a class="nav-link menu_item_get" id="factory_needed_report"  href="{%url 'report:factory_needed_report'%}">{% trans 'طلبية المصنع'%}</a>
                 </div>
 
 
@@ -572,14 +572,14 @@
 
               <!-- Collapse -->
               <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="#navbarVerticalMenuPagesProjectMenu" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesProjectMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesProjectMenu">
+                <a class="nav-link dropdown-toggle " id="navbar_users_main" href="#navbar_users" role="button" data-bs-toggle="collapse" data-bs-target="#navbar_users" aria-expanded="false" aria-controls="navbar_users">
                   <i class="bi-briefcase nav-icon"></i>
                   <span class="nav-link-title">{% trans 'المسخدمين'%}</span>
                 </a>
 
-                <div id="navbarVerticalMenuPagesProjectMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link menu_item_get" href="{%url 'userApp:listOf_role'%}">{% trans 'الصلاحيات'%}</a>
-                  <a class="nav-link menu_item_get" href="{%url 'userApp:listOf_user'%}">{% trans 'المستخدمين'%}</a>
+                <div id="navbar_users" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
+                  <a class="nav-link menu_item_get" id="listOf_role"  href="{%url 'userApp:listOf_role'%}">{% trans 'الصلاحيات'%}</a>
+                  <a class="nav-link menu_item_get" id="listOf_user"  href="{%url 'userApp:listOf_user'%}">{% trans 'المستخدمين'%}</a>
                 </div>
               </div>
               <!-- End Collapse -->

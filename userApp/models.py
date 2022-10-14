@@ -105,6 +105,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=100,null=True,blank=True)
     last_name = models.CharField(max_length=100,null=True,blank=True)
 
+    image = models.ForeignKey('mainApp.attachmentTranscript',on_delete=models.PROTECT,null=True,blank=True)
     email = models.EmailField(verbose_name='email address',max_length=255)
     approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

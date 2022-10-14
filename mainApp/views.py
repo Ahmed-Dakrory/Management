@@ -58,9 +58,7 @@ def out_stock_item(request):
     
 
     if request.method=='POST':
-        part_num = request.POST['part_num']
-        note = request.POST['note']
-
+        
         try:
             company_withObject = request.POST['company_with']
             company_withObject = company.objects.get(id=company_withObject)
@@ -74,26 +72,50 @@ def out_stock_item(request):
         except:
             representitive_withObject = None
 
-        itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True))
-        if itemObject is not None and len(itemObject)>0:
-            print("create")
-            itemObject.update(last_out_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=False,is_returned=False)
-            itemnew = item.objects.get(part_num=part_num)
-            
 
-            print("create")
-            type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_OUT_TYPE_OF_TRANSACTION)
+        jsonArray_part_num = request.POST['jsonArray_part_num']
+        
+        all_parts = json.loads(jsonArray_part_num)
+        for part_num in all_parts:
+            # print(part_num)
+            try:
+                filedetails = request.FILES['file_'+str(part_num)]
+                attachmentTranscriptObject = attachmentTranscript.objects.create(file = filedetails,content_type=filedetails.content_type,name=filedetails.name,table_name="transaction")
+                attachmentTranscriptObject.save()
+            except:
+                attachmentTranscriptObject = None
+            
+            try:
+                note = request.POST['note_'+str(part_num)]
+            except:
+                note = None
+            
+            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True))
+            if itemObject is not None and len(itemObject)>0:
+                # print("create")
+                itemObject.update(last_out_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=False,is_returned=False)
+                itemnew = item.objects.get(part_num=part_num)
                 
-            print("create")
-            transactionObject = transaction.objects.create(
-                item = itemnew,
-                type_of_transaction = type_of_transaction_object,
-                company = company_withObject,
-                representitive = representitive_withObject,
-                note = note
-            )
-            transactionObject.save()
-            print("create")
+
+                # print("create")
+                type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_OUT_TYPE_OF_TRANSACTION)
+                    
+                # print("create")
+                transactionObject = transaction.objects.create(
+                    item = itemnew,
+                    type_of_transaction = type_of_transaction_object,
+                    image = attachmentTranscriptObject,
+                    company = company_withObject,
+                    representitive = representitive_withObject,
+                    note = note
+                )
+                transactionObject.save()
+                # print("create")
+
+            
+        
+        
+
     context = {
         'all_company':all_company,
         'all_color':all_color,
@@ -108,6 +130,7 @@ def out_stock_item(request):
 
 @login_required
 def return_stock_item(request):
+
     all_color = color.objects.filter( Q(deleted_date=None))
     all_size = size.objects.filter( Q(deleted_date=None))
     all_company = company.objects.filter( Q(deleted_date=None))
@@ -115,9 +138,7 @@ def return_stock_item(request):
     
 
     if request.method=='POST':
-        part_num = request.POST['part_num']
-        note = request.POST['note']
-
+        
         try:
             company_withObject = request.POST['company_with']
             company_withObject = company.objects.get(id=company_withObject)
@@ -131,22 +152,46 @@ def return_stock_item(request):
         except:
             representitive_withObject = None
 
-        itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=False))
-        if itemObject is not None and len(itemObject)>0:
-            itemObject.update(last_return_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=True,is_returned=True)
-            itemnew = item.objects.get(part_num=part_num)
-            
 
-            type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_RETURN_TYPE_OF_TRANSACTION)
+        jsonArray_part_num = request.POST['jsonArray_part_num']
+        
+        all_parts = json.loads(jsonArray_part_num)
+        for part_num in all_parts:
+            # print(part_num)
+            try:
+                filedetails = request.FILES['file_'+str(part_num)]
+                attachmentTranscriptObject = attachmentTranscript.objects.create(file = filedetails,content_type=filedetails.content_type,name=filedetails.name,table_name="transaction")
+                attachmentTranscriptObject.save()
+            except:
+                attachmentTranscriptObject = None
+            
+            try:
+                note = request.POST['note_'+str(part_num)]
+            except:
+                note = None
+            
+            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=False))
+            if itemObject is not None and len(itemObject)>0:
+                # print("create")
+                itemObject.update(last_return_date=datetime.now(),exists=True,is_returned=True)
+                itemnew = item.objects.get(part_num=part_num)
                 
-            transactionObject = transaction.objects.create(
-                item = itemnew,
-                type_of_transaction = type_of_transaction_object,
-                company = company_withObject,
-                representitive = representitive_withObject,
-                note = note
-            )
-            transactionObject.save()
+
+                # print("create")
+                type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_RETURN_TYPE_OF_TRANSACTION)
+                    
+                # print("create")
+                transactionObject = transaction.objects.create(
+                    item = itemnew,
+                    type_of_transaction = type_of_transaction_object,
+                    image = attachmentTranscriptObject,
+                    company = None,
+                    representitive = None,
+                    note = note
+                )
+                transactionObject.save()
+                
+
     context = {
         'all_company':all_company,
         'all_color':all_color,
@@ -281,8 +326,8 @@ def addnew_category(request):
             except:
                 filedetails = None
 
-        print("----------------------------------")
-        print(filedetails)
+        # print("----------------------------------")
+        # print(filedetails)
 
 
 
@@ -364,7 +409,22 @@ def delete_category(request):
 
 
 
+def get_all_categories_by_name(request):
+    try:
+        name = request.POST['name']
+        all_category = category.objects.filter(Q(name=name) & Q(deleted_date=None))
 
+        all_category = list(all_category)
+        all_category_json = []
+        for item in all_category:
+            all_category_json.append(item.to_json())
+
+        data = {"Result": "Success",'Data':all_category_json}
+        # print(data)
+        return JsonResponse(data)
+
+    except:
+        return JsonResponse({"Result": "Fail"})
 
 
 ####################  item  #################3
@@ -375,71 +435,185 @@ def listOf_item(request):
     all_category = category.objects.filter( Q(deleted_date=None))
     all_size = size.objects.filter( Q(deleted_date=None))
     all_sector = sector.objects.filter( Q(deleted_date=None))
+
+    all_category_group = category.objects.values('name').annotate(dcount=Count('name'))
+    # for item in all_category_group:
+    #     print(item)
     
 
     
     if request.method=='POST':
-        details = request.POST['details']
-        number = request.POST['number']
+        for item_size in all_size:
+            details = request.POST['details']
 
-        try:
-            sizeObject = request.POST['size']
-            sizeObject = size.objects.get(id=sizeObject)
-        except:
-            sizeObject = None
+            try:
+                number = request.POST['size_'+str(item_size.id)]
+                sizeObject = size.objects.get(id=item_size.id)
+            except Exception as err:
+                # print(err)
+                number = 0
+                sizeObject = None
 
-        try:
-            sectorObject = request.POST['sector_object']
-            sectorObject = sector.objects.get(id=sectorObject)
-        except:
-            sectorObject = None
+            if number != 0:
+                try:
+                    sectorObject = request.POST['sector_object']
+                    sectorObject = sector.objects.get(id=sectorObject)
+                except:
+                    sectorObject = None
 
-        try:
-            categoryId = request.POST['category']
-            categoryObject = category.objects.get(id=categoryId)
-        except:
-            categoryObject = None
+                try:
+                    categoryId = request.POST['category_add']
+                    categoryObject = category.objects.get(id=categoryId)
+                except:
+                    categoryObject = None
 
-        print("-----------------------")
-        print(number)
-        for i in range(0,int(number)):
-            [part_num,higher_count] = generate_part_num(categoryObject,sizeObject)
-        
-            itemnew = item.objects.create(part_num=part_num,
-            exists=True,
-            is_returned=False,
-            details=details,
-            sector = sectorObject,
-            company_with=None,
-            representitive_with=None,
-            category=categoryObject,
-            size=sizeObject,
-            higher_count = higher_count,
-            last_out_date=None,
-            last_return_date = None,
-            created_by=request.user)
-            itemnew.save()
+                # print("-----------------------")
+                # print(number)
+                for i in range(0,int(number)):
+                    [part_num,higher_count] = generate_part_num(categoryObject,sizeObject)
+                
+                    itemnew = item.objects.create(part_num=part_num,
+                    exists=True,
+                    is_returned=False,
+                    details=details,
+                    sector = sectorObject,
+                    company_with=None,
+                    representitive_with=None,
+                    category=categoryObject,
+                    size=sizeObject,
+                    higher_count = higher_count,
+                    last_out_date=None,
+                    last_return_date = None,
+                    created_by=request.user)
+                    itemnew.save()
 
-            type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_ADD_TYPE_OF_TRANSACTION)
-            
-            transactionObject = transaction.objects.create(
-                item = itemnew,
-                type_of_transaction = type_of_transaction_object,
-                note = ''
-            )
-            transactionObject.save()
-            
+                    type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_ADD_TYPE_OF_TRANSACTION)
+                    
+                    transactionObject = transaction.objects.create(
+                        item = itemnew,
+                        type_of_transaction = type_of_transaction_object,
+                        note = ''
+                    )
+                    transactionObject.save()
+                    
 
     context = {
         'all_company':all_company,
         'all_rep':all_rep,
         'all_category':all_category,
         'all_size':all_size,
-        'all_sector':all_sector
+        'all_sector':all_sector,
+        'all_category_group':all_category_group
         }
 
 
     return render(request,'item/list.html',context)
+
+@login_required
+def item_by_part_num(request):
+    pageLength = int(1)
+    pageNumber = int(0)
+    part_num = request.GET['part_num']
+    draw = int(1)
+    searchKey = ''
+    # pageNumber = int(pageNumber/pageLength)
+
+  
+    
+    with connection.cursor() as cursorLast:
+        try:
+            
+           
+            add_part_num = 'item.part_num = "'+str(part_num)+'"'
+
+            sql_query = """
+
+
+
+                    select concat('{"draw":\""""+str(draw)+"""\","recordsFiltered":',(select count(*) from item
+                    left join category on item.category_id=category.id
+                    left join size on item.size_id=size.id
+                    left join color on category.color_id=color.id
+                    left join company on item.company_with_id=company.id
+                    left join attachmenttranscript on category.image_id=attachmenttranscript.id
+                    left join factory on category.factory_id=factory.id
+                    left join userapp_user on item.representitive_with_id=userapp_user.id
+                    where item.deleted_date is null and
+                    
+                        """+add_part_num+""" 
+
+                    
+                    ),',
+                    "recordsTotal":',count(*),',
+                    "data":[',group_concat(concat('
+                    {"id":',x.id,'
+                    ,"part_num":"',x.part_num,'"
+                    ,"color_name":"',x.color_name,'"
+                    ,"color_name_en":"',x.color_name_en,'"
+                    ,"size":"',x.size,'"
+                    ,"size_code":"',x.size_code,'"
+                    ,"factory_name":"',x.factory_name,'"
+                    ,"factory_name_en":"',x.factory_name_en,'"
+                    ,"company_with_name":"',x.company_with_name,'"
+                    ,"company_with_name_en":"',x.company_with_name_en,'"
+                    ,"representitive_with_name":"',x.representitive_with_name,'"
+                    ,"representitive_with_phone":"',x.representitive_with_phone,'"
+                    ,"last_out_date":"',x.last_out_date,'"
+                    ,"last_return_date":"',x.last_return_date,'"
+                    ,"details":"',x.details,'"
+                    ,"exists":"',x.isexists,'"
+                    ,"is_returned":"',x.is_returned,'"
+                    ,"image":"',x.image,'"
+                    ,"created":"',x.created,'"}
+                    ')),']}')
+                    as output
+                    from (
+                    SELECT  item.id as id,
+                    IFNULL(part_num,"") as part_num,
+                    IFNULL(color.name,"") as color_name,IFNULL(color.name_en,"") as color_name_en,
+                    IFNULL(size.size,"") as size,IFNULL(size.code,"") as size_code,
+                    IFNULL(factory.name,"") as factory_name,IFNULL(factory.name_en,"") as factory_name_en,
+                    IFNULL(company.name,"") as company_with_name,IFNULL(company.name_en,"") as company_with_name_en,
+                    IFNULL(userapp_user.username,"") as representitive_with_name,IFNULL(userapp_user.phone,"") as representitive_with_phone,
+                    IFNULL(item.last_out_date,"") as last_out_date,IFNULL(item.last_return_date,"") as last_return_date,IFNULL(item.details,"") as details,IFNULL(item.exists,"") as isexists,IFNULL(item.is_returned,"") as is_returned,
+                    IFNULL(attachmenttranscript.file,"") as image,
+                    IFNULL(item.created,"") as created
+                    FROM item
+                    left join category on item.category_id=category.id
+                    left join size on item.size_id=size.id
+                    left join color on category.color_id=color.id
+                    left join company on item.company_with_id=company.id
+                    left join attachmenttranscript on category.image_id=attachmenttranscript.id
+                    left join factory on category.factory_id=factory.id
+                    left join userapp_user on item.representitive_with_id=userapp_user.id
+                    where item.deleted_date is null
+                    and (
+                        """+add_part_num+""" 
+
+                    )
+                    order by item.created desc
+                    LIMIT """+str(pageLength)+""" OFFSET """+str(pageNumber)+"""
+                    ) x;
+
+            """
+
+                
+
+
+               
+            # print(sql_query)
+            cursorLast.execute(sql_query)
+            cursorAllData = cursorLast.fetchone()
+            y=cursorAllData[0].replace('\r\n','')
+            # print(y)
+            return HttpResponse(y,content_type='application/json')
+
+            
+        except Exception as e:
+            print("Ahmed Error: "+str(e))
+            return JsonResponse({"draw": draw,"recordsTotal": 0,"recordsFiltered": 0,"data":[]})
+
+
 
 
 @login_required
@@ -463,9 +637,9 @@ def getListOf_item(request):
     except:
         created_search = "  "
 
-    print("-----------------------------------------")
-    print(start_added_date)
-    print(end_added_date)
+    # print("-----------------------------------------")
+    # print(start_added_date)
+    # print(end_added_date)
     
     category = (request.GET['category'])
     if category == '%%':
@@ -705,7 +879,7 @@ def getListOf_item(request):
 
 
                
-            print(sql_query)
+            # print(sql_query)
             cursorLast.execute(sql_query)
             cursorAllData = cursorLast.fetchone()
             y=cursorAllData[0].replace('\r\n','')

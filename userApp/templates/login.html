@@ -12,7 +12,7 @@
   <title>{% trans 'تسجيل الدخول'%}</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="./favicon.ico">
+  <link rel="shortcut icon" href="{%static 'dist/img/logo.webp'%}">
 
   <!-- Font -->
   {% if LANGUAGE_CODE == 'ar' %}
@@ -251,7 +251,7 @@ return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
             <form class="js-validate needs-validation" id="loginForm" action="{%url 'userApp:login'%}" method="post" novalidate>
                 {%csrf_token%}
                 {%if flag%}
-                    <p class="text-center bg-danger p-2 text-white border rounded"> Username or Password not correct</p>
+                    <p class="text-center bg-danger p-2 text-white border rounded"> {% trans 'الرجاء التحقق من بيانات الدخول'%}</p>
                 {%endif%}
                 <div class="text-center">
                 <div class="mb-5">

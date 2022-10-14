@@ -263,16 +263,24 @@
                                     <!-- Step Item -->
                                     <li class="step-item">
                                       <div class="step-content-wrapper">
-                                        <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
+                                        <span class="step-icon step-icon-soft-dark step-icon-pseudo">
+                                        </span>
                     
-                                        <div class="step-content">
+                                        <div class="step-content row">
+                                          <div class="col-4">
+                                            
                                           <h5 class="mb-1">
                                             <a class="text-dark" href="#">{{step.type_of_transaction.name}} {% if step.company is not None %} {% trans 'مع'%} {{ step.company.name }} {%elif step.representitive is not None%}  {% trans 'مع'%}  {{ step.representitive.username }} {%endif%}</a>
                                           </h5>
                     
                                           <a href="#">{{step.note}}</a>
                                           <p class="fs-6 mb-0">{{step.created|date:"d/m/Y H:M"}}</p>
-                                        </div>
+ 
+                                          </div>
+                                          <div class="col-6">
+                                            <img class="img-step" src='{% if step.image is None or step.image == "" %}{% if itemData.category.image is None or itemData.category.image == "" %}{% static "img/1920x400/img2.jpg" %}{% else %}{{itemData.category.image.file.url}}{%endif%}{% else %}{{step.image.file.url}}{%endif%}'/>
+                                          </div>
+                                       </div>
                                       </div>
                                     </li>
                                     <!-- End Step Item -->
@@ -422,5 +430,13 @@
     // =======================================================
     HSCore.components.HSFlatpickr.init('.js-flatpickr')
  
+</script>
+
+
+<script>
+  $('#navbar_item_main').removeClass('collapsed')
+  $('#navbar_item').addClass('show')
+  $('#navbar_item_main').attr('aria-expanded','true')
+  $('#listOf_item').addClass('active')
 </script>
 {% endblock %}

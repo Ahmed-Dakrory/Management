@@ -58,11 +58,14 @@
                       <form  method="POST" enctype="multipart/form-data" id="form" class="needs-validation form-horizontal" novalidate>
                         {% csrf_token %}
 
-                    
+                        <input type="hidden" value="[]" name="jsonArray_part_num" id="jsonArray_part_num"/>
 
                         <div class="row">
+                          <h1>{%trans "عدد القطع"%} : <span id="number_of_items">0</span></h1>
+                        </div>
+                        <div class="row">
 
-                          <div class="col-6">
+                          <div class="col-12 col-md-6">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="comp_or_rep">{%  trans 'شركة أم مندوب'%}</label>
                               <select  class="form-control mb-3 js-select required" required data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر '%}..." }' name="comp_or_rep"  id="comp_or_rep">
@@ -76,7 +79,7 @@
                             </div>
                           </div>
 
-                          <div class="col-6 rep_holder">
+                          <div class="col-12 col-md-6 rep_holder">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="representitive_with">{%  trans 'اسم المندوب'%}</label>
                               <select  class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر المندوب'%}..." }' name="representitive_with" value="{{itemData.representitive_with.id}}" id="representitive_with">
@@ -93,7 +96,7 @@
 
 
 
-                          <div class="col-6 company_holder">
+                          <div class="col-12 col-md-6 company_holder">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="company_with">{%  trans 'اسم الشركة'%}</label>
                               <select class="form-control mb-3 js-select " data-hs-tom-select-options='{ "placeholder": "{% trans 'أختر الشركة'%}..." }' name="company_with"  id="company_with">
@@ -110,10 +113,10 @@
 
 
                          
-                          <div class="col-12">
+                          <div class="col-6">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="part_num">{%  trans 'كود القطعة'%}</label>
-                              <input type="text"  class="form-control  mb-3 required"  required name="part_num" value="{{itemData.part_num}}" id="part_num">
+                              <input type="text"  class="form-control  mb-3 "   name="part_num" oninput="onInputType(this)" id="part_num">
                               <div class="invalid-feedback">
                                 {%  trans 'الرجاء التحقق من هذه الخانة'%}
                               </div>  
@@ -125,17 +128,172 @@
 
                          
 
-                          <div class="col-12">
-                            <div class="form-group bmd-form-group">
-                              <label  class="pb-1" for="note">{%  trans 'ملاحظة'%}</label>
-                              <textarea type="text" rows="5" class="form-control  mb-3" name="note" id="note"></textarea>
-                              <div class="invalid-feedback">
-                                {%  trans 'الرجاء التحقق من هذه الخانة'%}
-                              </div>  
-                            </div>
-                          </div>
+                         
 
-                          
+                          <div class="col-12">
+
+                            <div class="card-header">
+                              <div class="row justify-content-between align-items-center flex-grow-1">
+                                <div class="col-md">
+                                  <div class="d-flex justify-content-start align-items-center d-none d-md-flex">
+                                 
+                                    <!-- Datatable Info -->
+                                      <div class="d-flex align-items-center">
+                                     
+                                      </div>
+                                     
+                                    <!-- End Datatable Info -->
+                                  </div>
+                                </div>
+                                <!-- End Col -->
+                
+                                <div class="col-auto">
+                                  <!-- Filter -->
+                                  <div class="row align-items-sm-center">
+                                    <div class="col-md">
+                                      <!-- Dropdown -->
+                                      <div class="dropdown me-2">
+                                        <button type="button" class="btn btn-white btn-sm dropdown-toggle w-md-auto w-100" id="itemsExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                          <i class="bi-download me-2"></i> Export
+                                        </button>
+                              
+                                        <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="itemsExportDropdown">
+                                          <span class="dropdown-header">Options</span>
+                                          <a id="export-copy" class="dropdown-item" href="javascript:;">
+                                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/illustrations/copy-icon.svg'%}" alt="Image Description">
+                                            Copy
+                                          </a>
+                                          <a id="export-print" class="dropdown-item" href="javascript:;">
+                                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/illustrations/print-icon.svg'%}" alt="Image Description">
+                                            Print
+                                          </a>
+                                          <div class="dropdown-divider"></div>
+                                          <span class="dropdown-header">Download options</span>
+                                          <a id="export-excel" class="dropdown-item" href="javascript:;">
+                                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/brands/excel-icon.svg'%}" alt="Image Description">
+                                            Excel
+                                          </a>
+                                          <a id="export-csv" class="dropdown-item" href="javascript:;">
+                                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/components/placeholder-csv-format.svg'%}" alt="Image Description">
+                                            .CSV
+                                          </a>
+                                          <a id="export-pdf" class="dropdown-item" href="javascript:;">
+                                            <img class="avatar avatar-xss avatar-4x3 me-2" src="{% static 'svg/brands/pdf-icon.svg'%}" alt="Image Description">
+                                            PDF
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <!-- End Dropdown -->
+                                    </div>
+                
+                
+                
+                
+                                    <div class="col-md">
+                                       <!-- Search -->
+                                        <div class="input-group input-group-merge input-group-flush">
+                                          <div class="input-group-prepend input-group-text">
+                                            <i class="bi-search"></i>
+                                          </div>
+                                          <input id="datatableSearch" type="search" class="form-control" placeholder="{% trans 'البحث' %}" aria-label="{% trans 'البحث' %}">
+                                        </div>
+                                        <!-- End Search -->
+                                    </div>
+                                    <!-- End Col -->
+                                  </div>
+                                  <!-- End Filter -->
+                                </div>
+                                <!-- End Col -->
+                              </div>
+
+                              </div>
+
+
+
+                            <div class="card-body table-responsive datatable-custom">
+                              <table id="example2" class="table table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer table-striped">
+                                <thead class="thead-light">
+                                <tr>
+                
+                
+                                              <th>{% trans 'كود' %} </th>
+                                              <th>{% trans 'صورة' %} </th>
+                                              <th>{% trans 'اللون' %} </th>
+                                              <th>{% trans 'المقاس' %} </th>
+                                              <th>{% trans 'الشركة' %} </th>
+                                              <th>{% trans 'مندوب' %} </th>
+                                              <th>{% trans 'حالة' %} </th>
+                                              <th>{% trans 'هل مرتجع' %} </th>
+                                              <th style="width: 30%;">{% trans 'ملاحظة' %} </th>
+                                              <th>{% trans 'صورة للحالة' %} </th>
+                                              <th>{% trans "Delete" %} </th>
+                
+                               
+                
+                                
+                                </tr>
+                                </thead>
+                  
+                              </table>
+                            </div>
+
+                            <div class="card-footer">
+                              <!-- Pagination -->
+                              <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+                                <div class="col-auto">
+                                  <div class="row align-items-sm-center">
+                                <div class="col-auto">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <!-- <h4 class="card-header-title">{% trans 'المناطق المنفذه علي مستوى الجمهورية'%}</h4> -->
+                
+                                    <!-- Datatable Info -->
+                                 
+                                    <!-- End Datatable Info -->
+                                  </div>
+                                  </div>
+                                
+                                <div class="col-auto">
+                                  <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
+                                    <span class="me-2">{% trans 'يظهر' %}:</span>
+                
+                                    <!-- Select -->
+                                    <div class="tom-select-custom">
+                                      <select id="datatableEntries" class="js-select form-select form-select-borderless w-auto" autocomplete="off" data-hs-tom-select-options='{
+                                                "searchInDropdown": false,
+                                                "hideSearch": true
+                                              }'>
+                                        <option value="4">4</option>
+                                        <option value="10">10</option>
+                                        <option value="20" selected>20</option>
+                                        <option value="100">100</option>
+                                      </select>
+                                    </div>
+                                    <!-- End Select -->
+                
+                                    <span class="text-secondary me-2">{% trans 'من' %}</span>
+                
+                                    <!-- Pagination Quantity -->
+                                    <span id="datatableWithPaginationInfoTotalQty"></span>
+                                  </div>
+                                </div>
+                                <!-- End Col -->
+                
+                                </div>
+                                </div>
+                
+                                <div class="col-sm-auto">
+                                  <div class="d-flex justify-content-center justify-content-sm-end">
+                                    <!-- Pagination -->
+                                    <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+                                  </div>
+                                </div>
+                                <!-- End Col -->
+                              </div>
+                              <!-- End Pagination -->
+                            </div>
+
+
+                          </div>
                          
 
 
@@ -198,28 +356,22 @@
     // Loop over them and prevent submission
     var validation = Array.prototype.filter.call(forms, function(form) {
     form.addEventListener('submit', function(event) {
-      event.preventDefault();
-    event.stopPropagation();
+      
       if (form.checkValidity() === false) {
-    
+        event.preventDefault();
+    event.stopPropagation();
     }else{
-      var dataString = $(this).serialize();
-    
-    // alert(dataString); return false;
-   
-    $.ajax({
-      type: "POST",
-      url: "{% url 'mainApp:out_stock_item'%}",
-      data: dataString,
-      success: function () {
-       Swal.fire({
-         title: 'تم',
-         text:      'تم الخروج',
-         type:         'success',
-         timer: 500}
-                           )
+      if(jsonArray_part_num.length==0 ){
+        event.preventDefault();
+    event.stopPropagation();
+    Swal.fire('{% trans "انتبه"%}',
+         '{% trans "الرجاء مراجعة محتوى القائمة"%}',
+         'warning' )
       }
-    });
+    
+      
+    
+      
    
   
     }
@@ -290,4 +442,415 @@ $('.company_holder :input').removeAttr('required')
     $('.rep_holder').addClass('d-none')
 
 </script>
+
+
+<script>
+  $('#navbar_item_main').removeClass('collapsed')
+  $('#navbar_item').addClass('show')
+  $('#navbar_item_main').attr('aria-expanded','true')
+  $('#listOf_item').addClass('active')
+</script>
+<script>
+
+  function onInputType(elem){
+    part_num = elem.value
+    $.ajax({
+      type: "GET",
+      url: "{% url 'mainApp:item_by_part_num'%}",
+      data: {
+        part_num:part_num
+      },
+      success: function (data) {
+        if(jsonArray_part_num.includes(data.data[0].part_num)){
+          Swal.fire(
+         '{% trans "انتبه"%}',
+         '{% trans "تم إضافته بالفعل للقائمة"%}',
+         'warning'
+                           );
+
+        }else if (data.data[0].exists=='0'){
+          Swal.fire(
+         '{% trans "انتبه"%}',
+         '{% trans "هذه القطعة غير موجودة حاليا"%}',
+         'warning',
+                           );
+        }else{
+
+          jsonArray.push(data.data[0])
+          jsonArray_part_num.push(data.data[0].part_num)
+
+          HSCore.components.HSDatatables.getItem(0).row.add( data.data[0] ).draw();
+    
+          refresh_table()
+        }
+      }
+    });
+  }
+
+
+  function refresh_table(){
+    
+    // HSCore.components.HSDatatables.getItem(0).rows().remove().draw()
+    // for(var i =0;i<jsonArray.length;i++){
+    // }
+
+    $('#jsonArray_part_num').val(JSON.stringify(jsonArray_part_num))
+    $('#jsonArray_part_num').attr('value',JSON.stringify(jsonArray_part_num))
+
+    
+    $('#number_of_items').html(jsonArray_part_num.length)
+
+    $('#part_num').val("")
+    $('#part_num').attr("value","")
+    $('#part_num').focus()
+  }
+</script>
+
+
+<script>
+  let jsonArray_part_num =[];
+ let jsonArray =[];
+//   [
+//   {
+//     "id":1
+//     ,"part_num":"123123"
+//     ,"color_name":"sdfsdfsdf"
+//     ,"color_name_en":"wefwefwef"
+//     ,"size":"32"
+//     ,"size_code":"32"
+//     ,"factory_name":"sdsdf"
+//     ,"factory_name_en":"sdfsdf"
+//     ,"company_with_name":"sdfwe"
+//     ,"company_with_name_en":"sdfsdf"
+//     ,"representitive_with_name":"wesdfwef"
+//     ,"representitive_with_phone":"wewecwecwec"
+//     ,"last_out_date":"32"
+//     ,"last_return_date":"32"
+//     ,"details":"sdfsdf"
+//     ,"exists":"1"
+//     ,"is_returned":"1"
+//     ,"image":""
+//     ,"created":"12"
+//   }
+//  ]
+</script>
+
+
+<script>
+  // INITIALIZATION OF DATATABLES
+      // =======================================================
+      $(function () {
+        showLoader()
+      // INITIALIZATION OF DATATABLES
+      // =======================================================
+       HSCore.components.HSDatatables.init($('#example2'), {
+        "processing": true,
+        "serverSide": false,
+        "select": {
+          style: 'multi',
+          selector: 'td:first-child input[type="checkbox"]',
+          classMap: {
+            checkAll: '#datatableCheckAll',
+            counter: '#datatableCounter',
+            counterInfo: '#datatableCounterInfo'
+          }
+        },
+        "language": {
+          zeroRecords: `<div class="text-center p-4">
+                <img class="mb-3" src="{% static 'svg/illustrations/oc-error.svg'%}" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+                <img class="mb-3" src="{% static 'svg/illustrations-light/oc-error.svg'%}" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
+              <p class="mb-0">No data to show</p>
+              </div>`
+        },
+        "columnDefs": [{
+                        "targets": [0, 1, 4],
+                        "orderable": false
+                      }],
+        "order": [],
+        "info": {
+          "totalQty": "#datatableWithPaginationInfoTotalQty"
+        },
+        "search": "#datatableSearch",
+        "entries": "#datatableEntries",
+        "pageLength": 20,
+        "isResponsive": false,
+        "dom": "Bfrtip",
+        "buttons": [
+          {
+            "extend": "copy",
+            "className": "d-none"
+          },
+          {
+            "extend": "excel",
+            "className": "d-none"
+          },
+          {
+            "extend": "csv",
+            "className": "d-none"
+          },
+          {
+            "extend": "pdf",
+            "className": "d-none"
+          },
+          {
+            "extend": "print",
+            "className": "d-none"
+          }
+        ],
+        "isShowPaging": false,
+        "pagination": "datatablePagination",
+        "aaData" : jsonArray,
+        "initComplete": function(settings, json) {
+    hideLoader()
+    // do whatever with info here...
+
+
+  },
+        "aoColumns": [
+           
+        {
+              className: "","mData": null,"mRender": function (item) { 
+                  
+                  
+                
+                  
+                return '<a>'+item.part_num+'</a>';
+                
+                
+
+                
+            }
+            }
+            ,
+           
+            {
+              className: "", "mData": null,"mRender": function (item) {
+                
+               
+                
+                return '<img class="img_list" src="/media/'+item.image+'"/>';
+                
+
+
+            }
+            },
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return '<a>'+item.color_name+'</a>';
+                
+                
+
+             
+
+                }
+            }                 
+            
+            
+            
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return '<a>'+item.size+'</a>'; 
+                
+                
+                }
+            }                 
+            
+
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return '<a>'+item.company_with_name+'</a>'; 
+                
+                
+                }
+            }        
+            
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return '<a>'+item.representitive_with_name+'</a>'; 
+                
+                
+                }
+            }        
+
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              if(item.exists == "1"){ 
+                exists = "{% trans 'يوجد'%}"
+              }else if(item.exists == "0"){
+                
+                exists = "{% trans 'لا يوجد'%}"
+              }
+                return '<a>'+exists+'</a>'; 
+                
+                
+                }
+            }        
+            
+
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+                is_returned = ""
+                if(item.is_returned == "1"){ 
+                  is_returned = "{% trans 'مرتجع'%}"
+              }else if(item.is_returned == "0"){
+                
+                is_returned = "{% trans 'ليس مرتجع'%}"
+              }
+                return '<a>'+is_returned+'</a>'; 
+
+                
+                
+                }
+            }        
+            
+                  
+            
+            
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item, type, row, meta) { 
+                
+                index = meta.row + meta.settings._iDisplayStart + 1
+               
+                return `
+                                                 <input type="text"  class="form-control  mb-3 "   name="note_`+item.part_num+`" id="note_`+item.part_num+`">
+                                                 
+
+                `;
+             
+                
+
+
+                }
+            }  
+            
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item, type, row, meta) { 
+                
+               
+                return '<input type="file" name="file_'+item.part_num+'" id="file_'+item.part_num+'"/>';
+             
+                
+
+                // '  <a class="btn btn-outline-success btn-sm"  href="javascript:void(0)" nameOfItem="'+item.name+'"  idOfItem="'+item.id+'" onclick="askToDeleteItemWithId(this);"><i class="bi-trash"></i> {% trans "مسح"%}</a>'
+             
+
+                }
+            }  
+            
+            ,
+            
+            
+            {
+              className: "", "mData": null,"mRender": function (item, type, row, meta) { 
+                
+                index = meta.row + meta.settings._iDisplayStart + 1
+               
+                return '<a class="ml-4 bluefont"href="javascript:void(0)" nameOfItem="'+item.name+'"  idOfItem="'+item.id+'" onclick="deleteRow(\''+item.part_num+'\');"><i class="fa fa-trash"></i></a>';
+             
+                
+
+                // '  <a class="btn btn-outline-success btn-sm"  href="javascript:void(0)" nameOfItem="'+item.name+'"  idOfItem="'+item.id+'" onclick="askToDeleteItemWithId(this);"><i class="bi-trash"></i> {% trans "مسح"%}</a>'
+             
+
+                }
+            }              
+             
+        ]
+        
+  
+      });
+  
+  
+    
+  
+      const datatable = HSCore.components.HSDatatables.getItem(0)
+  
+
+
+
+      document.getElementById('export-copy').addEventListener('click', function () {
+        datatable.button('.buttons-copy').trigger()
+      })
+  
+      document.getElementById('export-excel').addEventListener('click', function () {
+        datatable.button('.buttons-excel').trigger()
+      })
+  
+      document.getElementById('export-csv').addEventListener('click', function () {
+        datatable.button('.buttons-csv').trigger()
+      })
+  
+      document.getElementById('export-pdf').addEventListener('click', function () {
+        datatable.button('.buttons-pdf').trigger()
+      })
+  
+      document.getElementById('export-print').addEventListener('click', function () {
+        datatable.button('.buttons-print').trigger()
+      })
+  
+      
+  
+      document.querySelectorAll('.js-datatable-filter').forEach(function (item) {
+        item.addEventListener('change',function(e) {
+          const elVal = e.target.value,
+      targetColumnIndex = e.target.getAttribute('data-target-column-index'),
+      targetTable = e.target.getAttribute('data-target-table');
+  
+      HSCore.components.HSDatatables.getItem(targetTable).column(targetColumnIndex).search(elVal !== 'null' ? elVal : '').draw()
+        })
+      })
+  
+      
+    });
+  
+   
+
+function deleteRow(part_num){
+  
+  for(var i=0;i<jsonArray_part_num.length;i++){
+      console.log(part_num.toString())
+    if (jsonArray_part_num[i]==part_num.toString()){
+      console.log("Yes")
+      index = i;
+      jsonArray.splice(index,1);
+      jsonArray_part_num.splice(index,1);
+      
+      HSCore.components.HSDatatables.getItem(0).row(index).remove().draw()
+     
+    }
+  }
+
+  all_data = HSCore.components.HSDatatables.getItem(0).column(1).data()
+  for(var i=0;i<all_data.length;i++){
+    if (all_data[i]['part_num']==part_num.toString()){
+      console.log("Yes")
+      index = i;
+     
+      
+      HSCore.components.HSDatatables.getItem(0).row(index).remove().draw()
+      
+    }
+  }
+
+  
+  refresh_table()
+  
+}
+
+
+</script>
+
+
+
 {% endblock %}
