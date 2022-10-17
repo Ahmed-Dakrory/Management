@@ -143,3 +143,17 @@ def get_total_by_data(category,size,day_to_generate):
         #     pass
             
     return in_items - out_items
+
+
+@register.simple_tag
+def get_remain_data(category,size):
+    total_items = item.objects.filter( Q(category__id=category.id) & Q(size__id=size.id) & Q(exists=True)).count()
+    return total_items
+
+@register.simple_tag
+def get_total_remain_data(category):
+    total_items = item.objects.filter( Q(category__id=category.id) & Q(exists=True)).count()
+    return total_items
+
+
+

@@ -267,6 +267,36 @@ def export_daily_report(request):
     # return the response
     return response
 
+@login_required
+def total_report(request):
+    
+    show = False
+    context = None
+    if request.method=='GET':
+        try:
+            show = True
+            
+            all_category = category.objects.filter( Q(deleted_date=None))
+            all_size = size.objects.filter( Q(deleted_date=None))
+            
+
+
+            context = {
+                'all_category':all_category,
+                'all_size':all_size,
+                'show':show,
+            }
+          
+
+        except Exception as ee:
+            print(ee)
+            show = False
+            context = None
+            
+            
+
+    return render (request, 'reports/total_report.html', context)
+
 
 
 
@@ -532,6 +562,7 @@ def factory_needed_report(request):
         worksheet.write(5+i_row,3, str(row.serial_start),model_format)
 
         j_col = 0
+        needed_comulitve = 0
         for col in all_size:
             
             # Merge 3 cells.
@@ -543,16 +574,25 @@ def factory_needed_report(request):
             # 2 ==> 7
             # i ==> 3*i+1
             
-            total_items = item.objects.filter( Q(category__id=row.id) & Q(size__id=col.id) ).count()
+            total_items = item.objects.filter( Q(category__id=row.id) & Q(size__id=col.id) & Q(exists=True) ).count()
             recommended_number_count = recommended_number.objects.filter(Q(category__id=row.id) & Q(size__id=col.id))[0].number
             
-            worksheet.write(5+i_row,(j_col+4), str(total_items)+"/"+str(recommended_number_count),total_v_format)
+
+            needed =recommended_number_count-total_items
+            if needed < 0:
+                needed = 0
+            
+            needed_comulitve+=needed
+            worksheet.write(5+i_row,(j_col+4), str(needed),total_v_format)
             j_col = j_col + 1
 
-        total_items = item.objects.filter( Q(category__id=row.id)).count()
-        recommended_number_count = recommended_number.objects.filter(Q(category__id=row.id)).aggregate(Sum('number'))['number__sum']
+        # total_items = item.objects.filter( Q(category__id=row.id) & Q(exists=True)).count()
+        # recommended_number_count = recommended_number.objects.filter(Q(category__id=row.id)).aggregate(Sum('number'))['number__sum']
         # print(str(recommended_number_count))
-        worksheet.write(5+i_row,(j_col+4), str(total_items)+"/"+str(recommended_number_count),total_all_v_format)
+        # needed =recommended_number_count-total_items
+        # if needed < 0:
+        #     needed = 0
+        worksheet.write(5+i_row,(j_col+4), str(needed_comulitve),total_all_v_format)
         worksheet.write(4,(j_col+4), "SUM",total_all_format)
             
 
