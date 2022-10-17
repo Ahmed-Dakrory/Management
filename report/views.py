@@ -38,14 +38,45 @@ from django.http import HttpResponse
 
 @login_required
 def daily_report(request):
-
+    
+    show = False
+    context = None
     if request.method=='POST':
-        day_to_generate = request.POST['day_to_generate']
-    
-    
-    context = {
-        
-    }
+        try:
+            show = True
+            day_to_generate = request.POST['day_to_generate']
+            if day_to_generate!=None and day_to_generate!='':
+                all_category = category.objects.filter( Q(deleted_date=None))
+                all_size = size.objects.filter( Q(deleted_date=None))
+                companies = company.objects.filter( Q(deleted_date=None))
+                representatives = User.objects.filter( Q(deleted=None) ,Q(role__id=2))
+                factories = factory.objects.filter( Q(deleted_date=None))
+
+                total_in = companies.count()
+                total_out = representatives.count()+factories.count()
+                total = total_in+total_out
+                context = {
+                    'all_category':all_category,
+                    'all_size':all_size,
+                    'day_to_generate':day_to_generate,
+                    'total_in':total_in,
+                    'total_out':total_out,
+                    'total':total,
+                    'companies':companies,
+                    'representatives':representatives,
+                    'factories':factories,
+                    'show':show,
+                }
+            else:
+                show = False
+                context = None
+
+        except Exception as ee:
+            print(ee)
+            show = False
+            context = None
+            
+            
 
     return render (request, 'reports/daily_report.html', context)
 
