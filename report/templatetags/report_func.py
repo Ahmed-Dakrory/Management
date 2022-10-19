@@ -6,7 +6,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def get_in_by_fac_data(category,size,day_to_generate,factory):
+def get_in_by_fac_data(category,size,day_to_generate):
     # print(day_to_generate)
     col = size
     row = category
@@ -16,12 +16,11 @@ def get_in_by_fac_data(category,size,day_to_generate,factory):
         try:
             day_to_generate = datetime.strptime(day_to_generate, '%d/%m/%Y')
             sql_query = """
-                SELECT count(distinct(item.id)) FROM management.transaction 
+                SELECT count(*) FROM management.transaction 
                 left join item on transaction.item_id=item.id
                 left join size on item.size_id=size.id
                 left join category on item.category_id=category.id
-                left join factory on category.factory_id=factory.id
-                where category.id="""+str(row.id)+""" and factory.id="""+str(factory.id)+""" and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_ADD_TYPE_OF_TRANSACTION)+"""  or type_of_transaction_id="""+str(settings.ID_RETURN_TYPE_OF_TRANSACTION)+""")
+                where category.id="""+str(row.id)+""" and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_ADD_TYPE_OF_TRANSACTION)+""" )
                 and DATE_FORMAT(STR_TO_DATE(`item`.`created`, '%Y-%m-%d'), '%d-%m') = DATE_FORMAT(STR_TO_DATE('"""+str(day_to_generate.year)+"""-"""+str(day_to_generate.month)+"""-"""+str(day_to_generate.day)+"""','%Y-%m-%d'), '%d-%m')
 
             """
@@ -36,7 +35,68 @@ def get_in_by_fac_data(category,size,day_to_generate,factory):
 
 
 @register.simple_tag
-def get_out_by_rep_data(category,size,day_to_generate,rep):
+def get_in_by_company_data(category,size,day_to_generate):
+    # print(day_to_generate)
+    col = size
+    row = category
+    
+    
+    with connection.cursor() as cursorLast:
+        try:
+            day_to_generate = datetime.strptime(day_to_generate, '%d/%m/%Y')
+            sql_query = """
+                SELECT count(*) FROM management.transaction 
+                left join item on transaction.item_id=item.id
+                left join size on item.size_id=size.id
+                left join category on item.category_id=category.id
+                where category.id="""+str(row.id)+""" and transaction.company_id is not null and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_RETURN_TYPE_OF_TRANSACTION)+""")
+                and DATE_FORMAT(STR_TO_DATE(`item`.`created`, '%Y-%m-%d'), '%d-%m') = DATE_FORMAT(STR_TO_DATE('"""+str(day_to_generate.year)+"""-"""+str(day_to_generate.month)+"""-"""+str(day_to_generate.day)+"""','%Y-%m-%d'), '%d-%m')
+
+            """
+            print(sql_query)
+            cursorLast.execute(sql_query)
+            cursorAllData = cursorLast.fetchone()
+            in_items=cursorAllData[0]
+        except:
+            in_items = 0
+
+    return in_items
+
+
+
+
+@register.simple_tag
+def get_in_by_rep_data(category,size,day_to_generate):
+    # print(day_to_generate)
+    col = size
+    row = category
+    
+    
+    with connection.cursor() as cursorLast:
+        try:
+            day_to_generate = datetime.strptime(day_to_generate, '%d/%m/%Y')
+            sql_query = """
+                SELECT count(*) FROM management.transaction 
+                left join item on transaction.item_id=item.id
+                left join size on item.size_id=size.id
+                left join category on item.category_id=category.id
+                where category.id="""+str(row.id)+""" and transaction.representitive_id is not null and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_RETURN_TYPE_OF_TRANSACTION)+""")
+                and DATE_FORMAT(STR_TO_DATE(`item`.`created`, '%Y-%m-%d'), '%d-%m') = DATE_FORMAT(STR_TO_DATE('"""+str(day_to_generate.year)+"""-"""+str(day_to_generate.month)+"""-"""+str(day_to_generate.day)+"""','%Y-%m-%d'), '%d-%m')
+
+            """
+            # print(sql_query)
+            cursorLast.execute(sql_query)
+            cursorAllData = cursorLast.fetchone()
+            in_items=cursorAllData[0]
+        except:
+            in_items = 0
+
+    return in_items
+
+
+
+@register.simple_tag
+def get_out_by_rep_data(category,size,day_to_generate):
     # print(day_to_generate)
     col = size
     row = category
@@ -45,12 +105,11 @@ def get_out_by_rep_data(category,size,day_to_generate,rep):
         try:
             day_to_generate = datetime.strptime(day_to_generate, '%d/%m/%Y')
             sql_query = """
-                SELECT count(distinct(item.id)) FROM management.transaction 
+                SELECT count(*) FROM management.transaction 
                 left join item on transaction.item_id=item.id
                 left join size on item.size_id=size.id
                 left join category on item.category_id=category.id
-                left join userapp_user on transaction.representitive_id=userapp_user.id
-                where userapp_user.id="""+str(rep.id)+""" and category.id="""+str(row.id)+""" and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_OUT_TYPE_OF_TRANSACTION)+""")
+                where category.id="""+str(row.id)+""" and transaction.representitive_id is not null and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_OUT_TYPE_OF_TRANSACTION)+""")
                 and DATE_FORMAT(STR_TO_DATE(`item`.`created`, '%Y-%m-%d'), '%d-%m') = DATE_FORMAT(STR_TO_DATE('"""+str(day_to_generate.year)+"""-"""+str(day_to_generate.month)+"""-"""+str(day_to_generate.day)+"""','%Y-%m-%d'), '%d-%m')
 
             """
@@ -66,7 +125,7 @@ def get_out_by_rep_data(category,size,day_to_generate,rep):
 
 
 @register.simple_tag
-def get_out_by_comp_data(category,size,day_to_generate,comp):
+def get_out_by_comp_data(category,size,day_to_generate):
     # print(day_to_generate)
     col = size
     row = category
@@ -75,12 +134,11 @@ def get_out_by_comp_data(category,size,day_to_generate,comp):
         try:
             day_to_generate = datetime.strptime(day_to_generate, '%d/%m/%Y')
             sql_query = """
-                SELECT count(distinct(item.id)) FROM management.transaction 
+                SELECT count(*) FROM management.transaction 
                 left join item on transaction.item_id=item.id
                 left join size on item.size_id=size.id
                 left join category on item.category_id=category.id
-                left join company on transaction.company_id=company.id
-                where company.id="""+str(comp.id)+""" and category.id="""+str(row.id)+""" and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_OUT_TYPE_OF_TRANSACTION)+""")
+                where category.id="""+str(row.id)+""" and transaction.company_id is not null and size.id = """+str(col.id)+""" and ( type_of_transaction_id="""+str(settings.ID_OUT_TYPE_OF_TRANSACTION)+""")
                 and DATE_FORMAT(STR_TO_DATE(`item`.`created`, '%Y-%m-%d'), '%d-%m') = DATE_FORMAT(STR_TO_DATE('"""+str(day_to_generate.year)+"""-"""+str(day_to_generate.month)+"""-"""+str(day_to_generate.day)+"""','%Y-%m-%d'), '%d-%m')
 
             """
@@ -106,7 +164,7 @@ def get_total_by_data(category,size,day_to_generate):
         try:
             day_to_generate = datetime.strptime(day_to_generate, '%d/%m/%Y')
             sql_query = """
-                SELECT count(distinct(item.id)) FROM management.transaction 
+                SELECT count(*) FROM management.transaction 
                 left join item on transaction.item_id=item.id
                 left join size on item.size_id=size.id
                 left join category on item.category_id=category.id
@@ -123,7 +181,7 @@ def get_total_by_data(category,size,day_to_generate):
         # print(in_items)
         try:
             sql_query = """
-                SELECT count(distinct(item.id)) FROM management.transaction 
+                SELECT count(*) FROM management.transaction 
                 left join item on transaction.item_id=item.id
                 left join size on item.size_id=size.id
                 left join category on item.category_id=category.id

@@ -147,8 +147,8 @@
                               <label  class="pb-1" for="exists">{%  trans 'الحالة'%}</label>
                               <select required="" {% if type == 'edit' %}disabled{%endif%} class="form-control required mb-3" name="exists" value="{{itemData.exists}}" id="exists">
                                 <option value="">{%  trans 'اختر احد الأنواع'%}</option>
-                                <option value="1"  {% if itemData.exists %} selected {% endif %}>{% trans 'يوجد'%}</option>
-                                <option value="0"  {% if not itemData.exists %} selected {% endif %}>{% trans 'لايوجد'%}</option>
+                                <option value="1"  {% if itemData.exists %} selected {% endif %}>{% trans 'متاح بالمخزن'%}</option>
+                                <option value="0"  {% if not itemData.exists %} selected {% endif %}>{% trans 'غير متوفر بالمخزن'%}</option>
                               </select>
                               <div class="invalid-feedback">
                                 {%  trans 'الرجاء التحقق من هذه الخانة'%}

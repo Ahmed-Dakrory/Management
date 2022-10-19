@@ -139,18 +139,18 @@ def return_stock_item(request):
 
     if request.method=='POST':
         
-        try:
-            company_withObject = request.POST['company_with']
-            company_withObject = company.objects.get(id=company_withObject)
-        except:
-            company_withObject = None
+        # try:
+        #     company_withObject = request.POST['company_with']
+        #     company_withObject = company.objects.get(id=company_withObject)
+        # except:
+        #     company_withObject = None
         
 
-        try:
-            representitive_withObject = request.POST['representitive_with']
-            representitive_withObject = User.objects.get(id=representitive_withObject)
-        except:
-            representitive_withObject = None
+        # try:
+        #     representitive_withObject = request.POST['representitive_with']
+        #     representitive_withObject = User.objects.get(id=representitive_withObject)
+        # except:
+        #     representitive_withObject = None
 
 
         jsonArray_part_num = request.POST['jsonArray_part_num']
@@ -173,10 +173,16 @@ def return_stock_item(request):
             itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=False))
             if itemObject is not None and len(itemObject)>0:
                 # print("create")
-                itemObject.update(last_return_date=datetime.now(),exists=True,is_returned=True)
                 itemnew = item.objects.get(part_num=part_num)
-                
+                try:
+                    representitive_withObject = itemnew.representitive_with
+                except:
+                    representitive_withObject = None
 
+                try:
+                    company_withObject = itemnew.company_with
+                except:
+                    company_withObject = None
                 # print("create")
                 type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_RETURN_TYPE_OF_TRANSACTION)
                     
@@ -185,11 +191,15 @@ def return_stock_item(request):
                     item = itemnew,
                     type_of_transaction = type_of_transaction_object,
                     image = attachmentTranscriptObject,
-                    company = None,
-                    representitive = None,
+                    company = company_withObject,
+                    representitive = representitive_withObject,
                     note = note
                 )
                 transactionObject.save()
+                
+                
+                itemObject.update(company_with=None,representitive_with=None,last_return_date=datetime.now(),exists=True,is_returned=True)
+                
                 
 
     context = {

@@ -144,12 +144,14 @@
 
       .total_number{
         background-color: #84e4e4!important;
-        border: solid 2.5px black;
+        border: solid 1px black;
+        border-left: solid 5px black;
       }
 
       .total_head{
         background-color: #dddddd!important;
-        border: solid 2.5px black;
+        border: solid 1px black;
+        border-left: solid 5px black;
       }
 
       .in_head{
@@ -157,6 +159,9 @@
         border: solid 1px #757575;
       }
 
+      .out_total_head{
+        border-left: solid 5px black;
+      }
       .out_rep_head{
         background-color: #dddddd!important;
         border: solid 1px #757575;
@@ -188,7 +193,7 @@
                 <p class="text-center bold"></p>
               </td>
               {% for size in all_size %}
-                <td colspan="{{total}}" class="number_head">
+                <td colspan="5" class="number_head">
                   <p class="text-center bold">{{size.size}}</p>
                 </td>
                 <td colspan="1" rowspan="2" class="align-middle total_head">
@@ -203,43 +208,44 @@
                 <p class="text-center bold">Model</p>
               </td>
               {% for size in all_size %}
-              <td colspan="{{total_in}}" class="in_head">
+              <td colspan="3" class="in_head">
                 <p class="text-center bold">In</p>
               </td>
-              <td colspan="{{total_out}}" class="out_head">
+              <td colspan="2" class="out_head">
                 <p class="text-center bold">Out</p>
               </td>
               {% endfor %}
             </tr>
 
-            <tr>
+            <!-- <tr>
               <td colspan="1">
                 <p class="text-center bold"></p>
               </td>
               {% for size in all_size %}
-                {% for fac_in in factories %}
-                <td colspan="1" class="in_head">
-                  <p class="text-center bold">{{fac_in.name}}</p>
-                </td>
-                {%endfor%}
+                
+              <td colspan="1" class="in_head">
+                <p class="text-center bold">In</p>
+              </td>
+              <td colspan="1" class="in_head">
+                <p class="text-center bold">In</p>
+              </td>
+              <td colspan="1" class="in_head">
+                <p class="text-center bold">In</p>
+              </td>
 
-                {% for rep_out in representatives %}
                 <td colspan="1" class="out_rep_head">
-                  <p class="text-center bold">{{rep_out.username}}</p>
+                  <p class="text-center bold">Out</p>
                 </td>
-                {%endfor%}
 
-                {% for company_out in companies %}
                 <td colspan="1" class="out_comp_head">
-                  <p class="text-center bold">{{company_out.name}}</p>
+                  <p class="text-center bold">Out</p>
                 </td>
-                {%endfor%}
               
-              <td colspan="1" class="out_head">
+              <td colspan="1" class="out_total_head">
                 <p class="text-center bold">Total</p>
               </td>
               {% endfor %}
-            </tr>
+            </tr> -->
 
 
             <!-- Data Numbers -->
@@ -251,23 +257,23 @@
 
               
               {% for size in all_size %}
-                  {% for fac_in in factories %}
-                  <td colspan="1">
-                    <p class="text-center bold">{% get_in_by_fac_data category size day_to_generate fac_in %}</p>
-                  </td>
-                  {% endfor %}
+              <td colspan="1">
+                <p class="text-center bold">{% get_in_by_fac_data category size day_to_generate %}</p>
+              </td>
+              <td colspan="1">
+                <p class="text-center bold">{% get_in_by_company_data category size day_to_generate %}</p>
+              </td>
+              <td colspan="1">
+                <p class="text-center bold">{% get_in_by_rep_data category size day_to_generate %}</p>
+              </td>
                   
-                  {% for rep_out in representatives %}
                   <td colspan="1" class="out_rep_number">
-                    <p class="text-center bold">{% get_out_by_rep_data category size day_to_generate rep_out %}</p>
+                    <p class="text-center bold">{% get_out_by_rep_data category size day_to_generate %}</p>
                   </td>
-                  {% endfor %}
 
-                  {% for company_out in companies %}
                   <td colspan="1" class="out_comp_number">
-                    <p class="text-center bold">{% get_out_by_comp_data category size day_to_generate company_out %}</p>
+                    <p class="text-center bold">{% get_out_by_comp_data category size day_to_generate %}</p>
                   </td>
-                  {% endfor %}
                   
                   
                   <td colspan="1" class="total_number">

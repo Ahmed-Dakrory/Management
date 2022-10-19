@@ -282,7 +282,7 @@
                          
                         <br/>
                         <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
-                        <button type="submit" class="btn btn-primary" >{% trans "أمر خروج" %}</button>
+                        <button type="submit" class="btn btn-primary" >{% trans "أمر رجوع" %}</button>
 
                         <div class="clearfix"></div>
                       </form>
@@ -610,10 +610,10 @@
             {
               className: "", "mData": null,"mRender": function (item) { 
               if(item.exists == "1"){ 
-                exists = "{% trans 'يوجد'%}"
+                exists = "{% trans 'متاح بالمخزن'%}"
               }else if(item.exists == "0"){
                 
-                exists = "{% trans 'لا يوجد'%}"
+                exists = "{% trans 'غير متوفر بالمخزن'%}"
               }
                 return '<a>'+exists+'</a>'; 
                 

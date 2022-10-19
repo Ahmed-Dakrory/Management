@@ -175,8 +175,8 @@
                 <select  class="required js-select form-select" data-hs-tom-select-options='{ "placeholder": "{%  trans 'حالة وجوده'%}..." }' name="exists"  id="exists">
                   <option value="%%">{%  trans 'الكل'%}</option>
                     <option value="">{%  trans 'حالة وجوده'%}</option>
-                    <option value="1" >{% trans 'يوجد'%}</option>
-                    <option value="0" >{% trans 'لايوجد'%}</option>
+                    <option value="1" >{% trans 'متاح بالمخزن'%}</option>
+                    <option value="0" >{% trans 'غير متوفر بالمخزن'%}</option>
                 </select>
             <!-- End Col -->
             </div>
@@ -709,10 +709,10 @@
             {
               className: "", "mData": null,"mRender": function (item) { 
               if(item.exists == "1"){ 
-                exists = "{% trans 'يوجد'%}"
+                exists = "{% trans 'متاح بالمخزن'%}"
               }else if(item.exists == "0"){
                 
-                exists = "{% trans 'لا يوجد'%}"
+                exists = "{% trans 'غير متوفر بالمخزن'%}"
               }
                 return '<a>'+exists+'</a>'; 
                 
@@ -982,6 +982,7 @@ $('#name_category').on('change', function() {
                       if(result.Result == "Success"){
                           console.log(result.Data)
                           all_data = result.Data
+                          $('#category_add').empty()
                           for(var i=0;i<all_data.length;i++){
                             data = all_data[i]
                             element = `

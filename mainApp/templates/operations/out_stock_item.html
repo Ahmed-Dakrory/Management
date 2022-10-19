@@ -471,7 +471,7 @@ $('.company_holder :input').removeAttr('required')
         }else if (data.data[0].exists=='0'){
           Swal.fire(
          '{% trans "انتبه"%}',
-         '{% trans "هذه القطعة غير موجودة حاليا"%}',
+         '{% trans "هذه القطعة غير متوفر بالمخزنة حاليا"%}',
          'warning',
                            );
         }else{
@@ -683,10 +683,10 @@ $('.company_holder :input').removeAttr('required')
             {
               className: "", "mData": null,"mRender": function (item) { 
               if(item.exists == "1"){ 
-                exists = "{% trans 'يوجد'%}"
+                exists = "{% trans 'متاح بالمخزن'%}"
               }else if(item.exists == "0"){
                 
-                exists = "{% trans 'لا يوجد'%}"
+                exists = "{% trans 'غير متوفر بالمخزن'%}"
               }
                 return '<a>'+exists+'</a>'; 
                 
