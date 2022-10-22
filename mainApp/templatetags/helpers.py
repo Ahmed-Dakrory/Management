@@ -5,9 +5,9 @@ register = template.Library()
 
 
 @register.filter(name="get_size_number")
-def get_size_number(category,code):
+def get_size_number(tranche,code):
     try:
-        recommended_number_object = recommended_number.objects.filter(Q(category__id=category.id) & Q(size__code=code))
+        recommended_number_object = recommended_number.objects.filter(Q(tranche__id=tranche.id) & Q(size__code=code))
         return recommended_number_object[0].number
     except Exception as err:
         print(err)

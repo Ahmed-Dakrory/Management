@@ -273,15 +273,14 @@ def addnew_category(request):
     typeOfEntry = request.GET['type']
     if typeOfEntry == 'new':
         dataToInsert = None
-        recommended_numberObject_all = None
     elif typeOfEntry == 'edit':
         idOfelement = request.GET['id']
         dataToInsert = category.objects.get(id=idOfelement)
-        recommended_numberObject_all = recommended_number.objects.filter( Q(category__id=idOfelement))
         
     
     
     all_factory = factory.objects.filter( Q(deleted_date=None))
+    all_tranche = tranche.objects.filter( Q(deleted_date=None))
     all_color = color.objects.filter( Q(deleted_date=None))
     all_size = size.objects.filter( Q(deleted_date=None))
     
@@ -289,8 +288,8 @@ def addnew_category(request):
     context = {
         'categoryData':dataToInsert,
         'type':typeOfEntry,
-        'recommended_numberObject_all':recommended_numberObject_all,
         'all_factory':all_factory,
+        'all_tranche':all_tranche,
         'all_color':all_color,
         'all_size':all_size
         }
@@ -304,11 +303,18 @@ def addnew_category(request):
         colorObject = request.POST['color']
         details = request.POST['details']
         factoryObject = request.POST['factory']
+        trancheObject = request.POST['tranche']
 
         try:
             factoryObject = factory.objects.get(id=factoryObject)
         except:
             factoryObject = None
+
+
+        try:
+            trancheObject = tranche.objects.get(id=trancheObject)
+        except:
+            trancheObject = None
 
 
         
@@ -349,7 +355,7 @@ def addnew_category(request):
             except:
                 attachmentTranscriptObject = None
 
-            categorynew = category.objects.create(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, factory=factoryObject,color=colorObject,  created_by=request.user,image=attachmentTranscriptObject)
+            categorynew = category.objects.create(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, tranche=trancheObject,factory=factoryObject,color=colorObject,  created_by=request.user,image=attachmentTranscriptObject)
             categorynew.save()
             
             
@@ -363,30 +369,11 @@ def addnew_category(request):
                 attachmentTranscriptObject = dataToInsert.image
 
             dataToInsert = category.objects.filter(id=idOfelement)
-            dataToInsert.update(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, factory=factoryObject,color=colorObject,  updated_by=request.user,updated_date=datetime.now(),image=attachmentTranscriptObject)
+            dataToInsert.update(name=name,name_en=name_en,details=details,serial_start=serial_start,year=year, tranche=trancheObject, factory=factoryObject,color=colorObject,  updated_by=request.user,updated_date=datetime.now(),image=attachmentTranscriptObject)
             
             categorynew = category.objects.get(id=idOfelement)
 
         
-        for key in request.POST:
-            if 'size_' in key :
-                size_code = key.split('_')[1]
-                number = request.POST[key]
-                size_object = size.objects.get(code = size_code)
-                recommended_numberObject = recommended_number.objects.filter(Q(size__id=size_object.id)& Q(category__id=categorynew.id))
-                if recommended_numberObject is not None and len(recommended_numberObject)>0:
-                    recommended_numberObject.update(
-                        number=number,
-                    )
-                else:
-                    recommended_numberObject = recommended_number.objects.create(
-                        number=number,
-                        category=categorynew,
-                        size = size_object
-                    )
-                    recommended_numberObject.save()
-                
- 
         urlLink = reverse("mainApp:listOf_category")
         return redirect(urlLink)
     elif request.method=='GET':
@@ -1260,6 +1247,144 @@ def delete_factory(request):
     
 
 
+
+
+
+
+####################  tranche  #################3
+@login_required
+def listOf_tranche(request):
+    
+    return render(request,'tranche/list.html',None)
+
+
+@login_required
+def getListOf_tranche(request):
+    pageLength = int(request.GET['length'])
+    pageNumber = int(request.GET['start'])
+    draw = int(request.GET['draw'])
+    searchKey = request.GET['search[value]']
+    pageNumber = int(pageNumber/pageLength + 1)
+    
+    try:
+        if searchKey == '':
+            allElements = tranche.objects.filter( Q(deleted_date=None))
+        else:
+            allElements = tranche.objects.filter(Q(deleted_date=None) & 
+            (Q(name__contains=searchKey) |
+             Q(name_en__contains=searchKey)|
+             Q(id__contains=searchKey) ))
+
+        paginator = Paginator(allElements, pageLength)
+        
+        try:
+            response = paginator.page(pageNumber)
+        except PageNotAnInteger:
+            response = paginator.page(pageNumber)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        listResult = list(response)
+        allElementsJson = {"draw": draw,"recordsTotal": len(allElements),"recordsFiltered": len(allElements),"data":[]}
+
+        for result in listResult:
+            allElementsJson['data'].append(result.to_json())
+
+        return JsonResponse(allElementsJson)
+    except Exception as e:
+        print("Ahmed Error: "+str(e))
+        return JsonResponse({"draw": draw,"recordsTotal": 0,"recordsFiltered": 0,"data":[]})
+
+
+@login_required
+def addnew_tranche(request):
+    typeOfEntry = request.GET['type']
+    all_size = size.objects.filter( Q(deleted_date=None))
+    if typeOfEntry == 'new':
+        dataToInsert = None
+        recommended_numberObject_all = None
+    elif typeOfEntry == 'edit':
+        idOfelement = request.GET['id']
+        dataToInsert = tranche.objects.get(id=idOfelement)
+        recommended_numberObject_all = recommended_number.objects.filter( Q(tranche__id=idOfelement))
+    
+    
+    context = {
+        'trancheData':dataToInsert,
+        'type':typeOfEntry,
+        'recommended_numberObject_all':recommended_numberObject_all,
+        'all_size':all_size
+        }
+
+
+    if request.method=='POST':
+        name = request.POST['name']
+        name_en = request.POST['name_en']
+        
+        
+        if typeOfEntry == 'new':
+            tranchenew = tranche.objects.create(name=name,name_en=name_en)
+            tranchenew.save()
+            
+            
+        elif typeOfEntry == 'edit':
+            dataToInsert = tranche.objects.filter(id=idOfelement)
+            dataToInsert.update(name=name,name_en=name_en,  updated_by=request.user,updated_date=datetime.now())
+            
+            tranchenew = tranche.objects.get(id=idOfelement)
+
+
+        for key in request.POST:
+            if 'size_' in key :
+                size_code = key.split('_')[1]
+                number = request.POST[key]
+                size_object = size.objects.get(code = size_code)
+                recommended_numberObject = recommended_number.objects.filter(Q(size__id=size_object.id)& Q(tranche__id=tranchenew.id))
+                if recommended_numberObject is not None and len(recommended_numberObject)>0:
+                    recommended_numberObject.update(
+                        number=number,
+                    )
+                else:
+                    recommended_numberObject = recommended_number.objects.create(
+                        number=number,
+                        tranche=tranchenew,
+                        size = size_object
+                    )
+                    recommended_numberObject.save()
+                
+ 
+         
+
+ 
+        urlLink = reverse("mainApp:listOf_tranche")
+        return redirect(urlLink)
+    elif request.method=='GET':
+        return render(request,'tranche/addnew.html',context)
+    
+
+
+@login_required
+def delete_tranche(request):
+    trancheId = request.POST['id']
+
+
+    trancheDetails=tranche.objects.filter(Q(id=trancheId) & Q(deleted=None))
+    trancheDetails.update(deleted_date = datetime.now())
+
+
+
+   
+    allJson = {"Result": "Fail"}
+    
+    allJson['Result'] = "Success"
+
+
+    if allJson != None:
+        return JsonResponse(allJson, safe=False)
+    else:
+        allJson['Result'] = "Fail"
+        return JsonResponse(allJson, safe=False)
+    
 
 
 

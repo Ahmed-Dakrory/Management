@@ -574,9 +574,12 @@ def factory_needed_report(request):
             # 2 ==> 7
             # i ==> 3*i+1
             
+            categoryObject = category.objects.filter(Q(id=row.id)).first()
             total_items = item.objects.filter( Q(category__id=row.id) & Q(size__id=col.id) & Q(exists=True) ).count()
-            recommended_number_count = recommended_number.objects.filter(Q(category__id=row.id) & Q(size__id=col.id))[0].number
-            
+            try:
+                recommended_number_count = recommended_number.objects.filter(Q(tranche__id=categoryObject.tranche.id) & Q(size__id=col.id))[0].number
+            except:
+                recommended_number_count = 0
 
             needed =recommended_number_count-total_items
             if needed < 0:

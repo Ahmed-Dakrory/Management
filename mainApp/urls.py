@@ -59,6 +59,15 @@ urlpatterns = [
     path('delete_sector/',views.delete_sector,name='delete_sector'),
 
 
+
+
+    # tranche
+    path('listOf_tranche/',views.listOf_tranche,name='listOf_tranche'),
+    path('getListOf_tranche/',views.getListOf_tranche,name='getListOf_tranche'),
+    path('addnew_tranche/',views.addnew_tranche,name='addnew_tranche'),
+    path('delete_tranche/',views.delete_tranche,name='delete_tranche'),
+
+
     
     # company
     path('listOf_company/',views.listOf_company,name='listOf_company'),

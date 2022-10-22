@@ -2,7 +2,6 @@
 {% extends 'theme.html' %}
 {%load static%}
 {% load i18n %}
-{% load helpers %}
 {% get_current_language as LANGUAGE_CODE %}
 
 
@@ -160,7 +159,7 @@
 
 
 
-                          <div class="col-12 col-md-4">
+                          <div class="col-6 col-md-4">
                             <div class="form-group bmd-form-group">
                               <label  class="pb-1" for="factory">{%  trans 'المصنع'%}</label>
                               <select required="" class="form-control required mb-3" name="factory" value="{{categoryData.factory.id}}" id="factory">
@@ -175,31 +174,25 @@
                             </div>
                           </div>
 
+
+                          <div class="col-6 col-md-4">
+                            <div class="form-group bmd-form-group">
+                              <label  class="pb-1" for="tranche">{%  trans 'تابع لاى شريحة'%}</label>
+                              <select required="" class="form-control required mb-3" name="tranche" value="{{categoryData.tranche.id}}" id="tranche">
+                                <option value="">{%  trans 'اختر احد الأنواع'%}</option>
+                                {% for item in all_tranche %}
+                                <option value="{{item.id}}"  {% if item.id == categoryData.tranche.id %} selected {% endif %}>{{item.name}}</option>
+                                {% endfor %}
+                            </select>
+                              <div class="invalid-feedback">
+                                {%  trans 'الرجاء التحقق من هذه الخانة'%} 
+                              </div>  
+                            </div>
+                          </div>
+
                 
                         </div>
 
-
-                        <div class="row card">
-                          <div class="card-title bg-success pb-2 pt-2"><h2 class="text-center">{% trans 'الحد الأدنى للمقاسات'%}</h2></div>
-                          <div class="card-body container-fluid">
-                            <div class="row">
-                              
-                              {% for item in all_size %}
-
-                              <div class="col-3">
-                                <div class="form-group bmd-form-group">
-                                  <label  class="pb-1" for="size_{{item.code}}">{%  trans 'مقاس'%} {{item.code}}</label>
-                                  <input type="number"  class="form-control mb-3 required" required name="size_{{item.code}}" value="{{categoryData|get_size_number:item.code}}" id="size_{{item.code}}">
-                                  <div class="invalid-feedback">
-                                    {%  trans 'الرجاء التحقق من هذه الخانة'%}
-                                  </div>  
-                                </div>
-                              </div>
-                              {%endfor%}
-
-                            </div>
-                          </div>
-                        </div>
 
 
                      
