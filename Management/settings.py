@@ -42,7 +42,7 @@ SECRET_KEY = 'django-insecure-@ye3lef6pekg742=7392-03(h(&m+4+o#_i7#+9yw%dmol)sb3
 # SECURITY WARNING: don't run with debug turned on in production!
 Online = True
 if Online:
-    DEBUG = False
+    DEBUG = True
 else:
     DEBUG = True
 
