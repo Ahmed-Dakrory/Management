@@ -56,7 +56,7 @@ class permissionGeneral(models.Model):
 
 
     class Meta:
-        db_table = "permissionGeneral"
+        db_table = "permissiongeneral"
 
 
     def to_json(self):
@@ -122,6 +122,10 @@ class User(AbstractBaseUser):
     
 
     objects = CustomUserManager()
+
+
+    class Meta:
+        db_table = "userapp_user"
 
     def __str__(self): 
         return self.username
