@@ -31,13 +31,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@ye3lef6pekg742=7392-03(h(&m+4+o#_i7#+9yw%dmol)sb3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-Online = False
+Online = True
 if Online:
     DEBUG = False
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'userApp.User'
 # Application definition
@@ -108,7 +108,7 @@ else:
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'management',                      
         'USER': 'root',                      
-        'PASSWORD': 'password',          
+        'PASSWORD': '',          
         'HOST': '127.0.0.1',                 
         'PORT': '3306', 
         'TIME_ZONE': 'Africa/Cairo',                     
