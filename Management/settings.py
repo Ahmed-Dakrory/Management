@@ -164,7 +164,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/user/login'
 
 
-STATIC_ROOT = "/static/"
+if Online:
+    STATIC_ROOT = "/var/www/milano/static/"
+else:
+    STATIC_ROOT = "/static/"
+
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -178,8 +183,10 @@ MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(home , 'media')
 
 #Media Main Static
-MEDIA_ROOT = os.path.join(home , 'media')
-
+if Online:
+    MEDIA_ROOT = "/var/www/milano/media"
+else:
+    MEDIA_ROOT = os.path.join(home , 'media')
 
 
 # Default primary key field type
