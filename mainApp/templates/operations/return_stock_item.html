@@ -282,7 +282,7 @@
                          
                         <br/>
                         <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
-                        <button type="submit" class="btn btn-primary" >{% trans "أمر رجوع" %}</button>
+                        <button type="button" id="makeaction_submit" class="btn btn-primary" >{% trans "أمر رجوع" %}</button>
 
                         <div class="clearfix"></div>
                       </form>
@@ -322,13 +322,7 @@
         event.preventDefault();
     event.stopPropagation();
     }else{
-      if(jsonArray_part_num.length==0 ){
-        event.preventDefault();
-    event.stopPropagation();
-    Swal.fire('{% trans "انتبه"%}',
-         '{% trans "الرجاء مراجعة محتوى القائمة"%}',
-         'warning' )
-      }
+     
     
       
     
@@ -347,6 +341,39 @@
 
 
 // new functionality on submit checking if the item name doesn't exist before 
+
+
+
+
+$('#makeaction_submit').click(function(){
+  var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+    
+      
+      if (form.checkValidity() === false) {
+       
+    }else{
+     
+    
+      
+      
+  if(jsonArray_part_num.length==0 ){
+    Swal.fire('{% trans "انتبه"%}',
+         '{% trans "الرجاء مراجعة محتوى القائمة"%}',
+         'warning' )
+      }else{
+        form.submit();
+      }
+      
+   
+  
+    }
+    form.classList.add('was-validated');
+
+    });
+});
+
 
 
 

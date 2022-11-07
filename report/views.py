@@ -553,20 +553,21 @@ def factory_needed_report(request):
     
     worksheet.merge_range('F2:P2', "طليبة المصنع حسب الشريحة والعدد ", out_v_format)
 
-    worksheet.merge_range('A5:D5', "Size -Code",out_v_format)
+    worksheet.merge_range('A5:E5', "Size -Code",out_v_format)
     i_row = 0
     for row in all_category:
         worksheet.write(5+i_row,0, str(i_row+1),main_format)
-        worksheet.write(5+i_row,1, str(row.name),main_format)
-        worksheet.write(5+i_row,2, str(row.color.name),main_format)
-        worksheet.write(5+i_row,3, str(row.serial_start),model_format)
+        worksheet.write(5+i_row,1, str(row.factory.name),main_format)
+        worksheet.write(5+i_row,2, str(row.name),main_format)
+        worksheet.write(5+i_row,3, str(row.color.name),main_format)
+        worksheet.write(5+i_row,4, str(row.serial_start),model_format)
 
         j_col = 0
         needed_comulitve = 0
         for col in all_size:
             
             # Merge 3 cells.
-            worksheet.write(4,(j_col+4), str(col.code), size_format)
+            worksheet.write(4,(j_col+5), str(col.code), size_format)
             
             
             # 0 ==> 1
@@ -586,7 +587,7 @@ def factory_needed_report(request):
                 needed = 0
             
             needed_comulitve+=needed
-            worksheet.write(5+i_row,(j_col+4), str(needed),total_v_format)
+            worksheet.write(5+i_row,(j_col+5), str(needed),total_v_format)
             j_col = j_col + 1
 
         # total_items = item.objects.filter( Q(category__id=row.id) & Q(exists=True)).count()
@@ -595,8 +596,8 @@ def factory_needed_report(request):
         # needed =recommended_number_count-total_items
         # if needed < 0:
         #     needed = 0
-        worksheet.write(5+i_row,(j_col+4), str(needed_comulitve),total_all_v_format)
-        worksheet.write(4,(j_col+4), "SUM",total_all_format)
+        worksheet.write(5+i_row,(j_col+5), str(needed_comulitve),total_all_v_format)
+        worksheet.write(4,(j_col+5), "SUM",total_all_format)
             
 
         i_row = i_row + 1

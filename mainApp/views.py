@@ -386,7 +386,7 @@ def delete_category(request):
     categoryId = request.POST['id']
 
 
-    categoryDetails=category.objects.filter(Q(id=categoryId) & Q(deleted=None))
+    categoryDetails=category.objects.filter(Q(id=categoryId) & Q(deleted_date=None))
     categoryDetails.update(deleted_date = datetime.now())
 
 
@@ -1079,7 +1079,7 @@ def delete_item(request):
     itemId = request.POST['id']
 
 
-    itemDetails=item.objects.filter(Q(id=itemId) & Q(deleted=None))
+    itemDetails=item.objects.filter(Q(id=itemId) & Q(deleted_date=None))
     itemDetails.update(deleted_date = datetime.now())
 
 
@@ -1228,7 +1228,7 @@ def delete_factory(request):
     factoryId = request.POST['id']
 
 
-    factoryDetails=factory.objects.filter(Q(id=factoryId) & Q(deleted=None))
+    factoryDetails=factory.objects.filter(Q(id=factoryId) & Q(deleted_date=None))
     factoryDetails.update(deleted_date = datetime.now())
 
 
@@ -1368,7 +1368,7 @@ def delete_tranche(request):
     trancheId = request.POST['id']
 
 
-    trancheDetails=tranche.objects.filter(Q(id=trancheId) & Q(deleted=None))
+    trancheDetails=tranche.objects.filter(Q(id=trancheId) & Q(deleted_date=None))
     trancheDetails.update(deleted_date = datetime.now())
 
 
@@ -1513,7 +1513,7 @@ def delete_sector(request):
     sectorId = request.POST['id']
 
 
-    sectorDetails=sector.objects.filter(Q(id=sectorId) & Q(deleted=None))
+    sectorDetails=sector.objects.filter(Q(id=sectorId) & Q(deleted_date=None))
     sectorDetails.update(deleted_date = datetime.now())
 
 
@@ -1664,7 +1664,7 @@ def delete_company(request):
     companyId = request.POST['id']
 
 
-    companyDetails=company.objects.filter(Q(id=companyId) & Q(deleted=None))
+    companyDetails=company.objects.filter(Q(id=companyId) & Q(deleted_date=None))
     companyDetails.update(deleted_date = datetime.now())
 
 

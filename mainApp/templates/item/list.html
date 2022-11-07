@@ -56,7 +56,7 @@
                  
                     <!-- Datatable Info -->
                       <div class="d-flex align-items-center">
-                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_item'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة قطعة'%}</a>
+                        <a class="btn btn-success btn-sm"  type="button" href="{% url 'mainApp:addnew_category'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة موديل'%}</a>
                       </div>
                       <div class="d-flex align-items-center ms-2 me-2">
                         <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -306,7 +306,7 @@
                     <!-- Datatable Info -->
                     <div id="datatableCounterInfo">
                       <div class="d-flex align-items-center">
-                        <a class="btn btn-outline-success btn-sm"  type="button" href="{% url 'mainApp:addnew_item'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة موديل'%}</a>
+                        <a class="btn btn-success btn-sm"  type="button" href="{% url 'mainApp:addnew_category'%}?type=new">  <i class="tio-delete-outlined"></i> {% trans 'اضافة موديل'%}</a>
                       </div>
                     </div>
                     <!-- End Datatable Info -->
@@ -456,7 +456,7 @@
 
             <div class="col-12">
               <div class="form-group bmd-form-group">
-                <label  class="pb-1" for="details">{%  trans 'التفاصيل'%}</label>
+                <label  class="pb-1" for="details">{%  trans 'ملاحظة'%}</label>
                 <input type="text"  class="form-control  mb-3" name="details"  id="details">
                 <div class="invalid-feedback">
                   {%  trans 'الرجاء التحقق من هذه الخانة'%}
