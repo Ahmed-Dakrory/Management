@@ -638,9 +638,13 @@
             {
               className: "", "mData": null,"mRender": function (item) {
                 
-               
+               if(item.image==null || item.image==""){
+                image = '/static/img/160x160/img2.jpg'
+               }else{
+                image = '/media/'+item.image
+               }
                 
-                return '<img class="img_list" src="/media/'+item.image+'"/>';
+                return '<img class="img_list" src="'+image+'"/>';
                 
 
 
