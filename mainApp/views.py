@@ -115,7 +115,8 @@ def out_stock_item(request):
                     image = attachmentTranscriptObject,
                     company = company_withObject,
                     representitive = representitive_withObject,
-                    note = note
+                    note = note,
+                    created_by = request.user
                 )
                 transactionObject.save()
                 # print("create")
@@ -201,7 +202,8 @@ def return_stock_item(request):
                     image = attachmentTranscriptObject,
                     company = company_withObject,
                     representitive = representitive_withObject,
-                    note = note
+                    note = note,
+                    created_by = request.user
                 )
                 transactionObject.save()
                 
@@ -497,7 +499,8 @@ def listOf_item(request):
                     transactionObject = transaction.objects.create(
                         item = itemnew,
                         type_of_transaction = type_of_transaction_object,
-                        note = ''
+                        note = '',
+                        created_by = request.user
                     )
                     transactionObject.save()
                     
@@ -1019,7 +1022,8 @@ def addnew_item(request):
             transactionObject = transaction.objects.create(
                 item = itemnew,
                 type_of_transaction = type_of_transaction_object,
-                note = ''
+                note = '',
+                created_by = request.user
             )
             transactionObject.save()
             

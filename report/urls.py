@@ -12,6 +12,7 @@ urlpatterns = [
     path('export_daily_report',views.export_daily_report,name='export_daily_report'),
     path('export_total_report',views.export_total_report,name='export_total_report'),
     path('factory_needed_report',views.factory_needed_report,name='factory_needed_report'),
-  
+    path('factory_needed_report_by_factory',views.factory_needed_report_by_factory,name='factory_needed_report_by_factory'),
+    
 
 ]

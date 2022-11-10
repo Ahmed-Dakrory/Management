@@ -270,7 +270,7 @@
                                           <div class="col-4">
                                             
                                           <h5 class="mb-1">
-                                            <a class="text-dark" href="#">{{step.type_of_transaction.name}} {% if step.company is not None %} {% trans 'مع'%} {{ step.company.name }} {%elif step.representitive is not None%}  {% trans 'مع'%}  {{ step.representitive.username }} {%endif%}</a>
+                                            <a class="text-dark" href="#">{{step.type_of_transaction.name}} {% if step.company is not None %} {% trans 'مع'%} {{ step.company.name }} {%elif step.representitive is not None%}  {% trans 'مع'%}  {{ step.representitive.username }} {%endif%} {% trans 'بواسطة'%} {{step.created_by.first_name}}</a>
                                           </h5>
                     
                                           <a href="#">{{step.note}}</a>

@@ -141,6 +141,7 @@
                               <th>{% trans 'رقم هاتف المدير' %} </th>
                               <th>{% trans 'رقم هاتف الهيئة' %} </th>
                               <th>{% trans 'الرقم الضريبى' %} </th>
+                              <th>{% trans 'اصدار تقرير المصانع' %} </th>
                               <th>{% trans "التعديلات" %} </th>
                               <th>{% trans "Delete" %} </th>
 
@@ -410,6 +411,18 @@
             
             
             
+            ,
+            {
+              className: "", "mData": null,"mRender": function (item) { 
+              
+                return `<a class="ml-4 bluefont btn btn-success" href="{% url 'report:factory_needed_report_by_factory'%}?id=`+item.id+`"><i class="fa fa-send"></i> {% trans 'تقرير المصنع'%}</a>`;
+             
+                
+
+             
+
+                }
+            }                 
             ,
             {
               className: "", "mData": null,"mRender": function (item) { 

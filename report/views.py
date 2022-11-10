@@ -615,3 +615,176 @@ def factory_needed_report(request):
 
     # return the response
     return response
+
+
+
+
+def factory_needed_report_by_factory(request):
+
+    factoryId = request.GET['id']
+    output = BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet()
+    factoryobject = factory.objects.get(id=factoryId)
+    all_category = category.objects.filter( Q(deleted_date=None) and Q(factory__id=factoryId))
+    all_size = size.objects.filter( Q(deleted_date=None))
+    
+    
+
+    size_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#e8e8e8'})
+
+    out_v_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#e8e8e8'})
+    out_v_format.set_bottom(2)
+    out_v_format.set_top(2)
+    out_v_format.set_right(2)
+    out_v_format.set_left(2)
+
+
+    in_v_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#FFFFFF'})
+    in_v_format.set_bottom(1)
+    in_v_format.set_top(1)
+    in_v_format.set_right(1)
+    in_v_format.set_left(1)
+
+
+    main_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#FFFFFF'})
+    main_format.set_bottom(1)
+    main_format.set_top(1)
+    main_format.set_right(1)
+    main_format.set_left(1)
+
+   
+    
+    total_all_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#e8e8e8'})
+    total_all_format.set_bottom(6)
+    total_all_format.set_top(6)
+    total_all_format.set_right(6)
+    total_all_format.set_left(6)
+
+
+
+    total_all_v_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#FFFFFF'})
+    total_all_v_format.set_bottom(6)
+    total_all_v_format.set_top(6)
+    total_all_v_format.set_right(6)
+    total_all_v_format.set_left(6)
+
+
+    total_v_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#FFFFFF'})
+    total_v_format.set_border(style=2)
+
+    model_format = workbook.add_format({
+    'bold': True,
+    'border': True,
+    'align': 'center',
+    'valign': 'vcenter',
+    'fg_color': '#1346be'})
+    
+    model_format.set_bottom(8)
+    model_format.set_top(8)
+    model_format.set_right(8)
+    model_format.set_left(8)
+    model_format.set_border(style=2)
+
+    
+    worksheet.merge_range('F2:P2', "طليبة المصنع حسب الشريحة والعدد ", out_v_format)
+
+    worksheet.merge_range('A5:E5', "Size -Code",out_v_format)
+    i_row = 0
+    for row in all_category:
+        worksheet.write(5+i_row,0, str(i_row+1),main_format)
+        worksheet.write(5+i_row,1, str(row.factory.name),main_format)
+        worksheet.write(5+i_row,2, str(row.name),main_format)
+        worksheet.write(5+i_row,3, str(row.color.name),main_format)
+        worksheet.write(5+i_row,4, str(row.serial_start),model_format)
+
+        j_col = 0
+        needed_comulitve = 0
+        for col in all_size:
+            
+            # Merge 3 cells.
+            worksheet.write(4,(j_col+5), str(col.code), size_format)
+            
+            
+            # 0 ==> 1
+            # 1 ==> 4
+            # 2 ==> 7
+            # i ==> 3*i+1
+            
+            categoryObject = category.objects.filter(Q(id=row.id)).first()
+            total_items = item.objects.filter( Q(category__id=row.id) & Q(size__id=col.id) & Q(exists=True) ).count()
+            try:
+                recommended_number_count = recommended_number.objects.filter(Q(tranche__id=categoryObject.tranche.id) & Q(size__id=col.id))[0].number
+            except:
+                recommended_number_count = 0
+
+            needed =recommended_number_count-total_items
+            if needed < 0:
+                needed = 0
+            
+            needed_comulitve+=needed
+            worksheet.write(5+i_row,(j_col+5), str(needed),total_v_format)
+            j_col = j_col + 1
+
+        # total_items = item.objects.filter( Q(category__id=row.id) & Q(exists=True)).count()
+        # recommended_number_count = recommended_number.objects.filter(Q(category__id=row.id)).aggregate(Sum('number'))['number__sum']
+        # print(str(recommended_number_count))
+        # needed =recommended_number_count-total_items
+        # if needed < 0:
+        #     needed = 0
+        worksheet.write(5+i_row,(j_col+5), str(needed_comulitve),total_all_v_format)
+        worksheet.write(4,(j_col+5), "SUM",total_all_format)
+            
+
+        i_row = i_row + 1
+            
+    workbook.close()
+
+    # create a response
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+
+    # tell the browser what the file is named
+    response['Content-Disposition'] = 'attachment;filename="'+factoryobject.name_en+'.xlsx"'
+
+    # put the spreadsheet data into the response
+    response.write(output.getvalue())
+
+    # return the response
+    return response
+
+
