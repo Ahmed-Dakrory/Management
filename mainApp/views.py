@@ -58,17 +58,25 @@ def out_stock_item(request):
     
 
     if request.method=='POST':
-        
+        comp_or_rep = request.POST['comp_or_rep']
+
+
         try:
-            company_withObject = request.POST['company_with']
-            company_withObject = company.objects.get(id=company_withObject)
+            if comp_or_rep=='1':
+                company_withObject = request.POST['company_with']
+                company_withObject = company.objects.get(id=company_withObject)
+            else:
+                company_withObject = None
         except:
             company_withObject = None
         
 
         try:
-            representitive_withObject = request.POST['representitive_with']
-            representitive_withObject = User.objects.get(id=representitive_withObject)
+            if comp_or_rep=='0':
+                representitive_withObject = request.POST['representitive_with']
+                representitive_withObject = User.objects.get(id=representitive_withObject)
+            else:
+                representitive_withObject = None
         except:
             representitive_withObject = None
 
