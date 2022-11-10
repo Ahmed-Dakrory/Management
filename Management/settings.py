@@ -105,7 +105,7 @@ if Online:
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'management',                      
         'USER': 'root',                      
-        'PASSWORD': 'mil@no@2022',          
+        'PASSWORD': 'password',          
         'HOST': '127.0.0.1',                 
         'PORT': '3306',  
         'TIME_ZONE': 'Africa/Cairo',                    
