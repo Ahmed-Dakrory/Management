@@ -138,11 +138,11 @@
     </style>
     <div class="row ">
       <div class="col-12 table-responsive">
-        <table class="table border">
-          <tbody>
+        <table class="table border" style=" height: 75vh; overflow-y: scroll; display: block; ">
+          <thead style=" position: sticky; top: 0; background: white; ">
 
             <tr>
-              <td colspan="3">
+              <td colspan="3" style=" width: 11%; ">
                 <p class="text-center bold">{% trans 'Size Code'%}</p>
               </td>
               {% for size in all_size %}
@@ -156,6 +156,11 @@
             </tr>
 
 
+
+          </thead>
+          <tbody>
+
+           
             
 
           
@@ -169,7 +174,7 @@
               </td>
               
               <td colspan="1" class="model_name">
-                <p class="text-center bold">{{category.name}}</p>
+                <p class="text-center bold">{{category.name_en}}</p>
               </td>
               
               <td colspan="1" class="model_name">
