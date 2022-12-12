@@ -68,7 +68,7 @@
                               <input type="text"  data-hs-flatpickr-options='{
                                 "dateFormat": "d/m/Y",
                                 "enableTime": false
-                              }' class="js-flatpickr form-control flatpickr-custom"  name="day_to_generate"  id="day_to_generate">
+                              }' class="js-flatpickr form-control flatpickr-custom" value="{{day_to_generate}}"  name="day_to_generate"  id="day_to_generate">
                               <div class="invalid-feedback">
                                 {%  trans 'الرجاء التحقق من هذه الخانة' %}
                               </div>  
@@ -148,6 +148,12 @@
         border-left: solid 5px black;
       }
 
+      .over_all{
+        background-color: #36ff3d!important;
+        border: solid 1px black;
+        border-left: solid 5px black;
+      }
+
       .total_head{
         background-color: #dddddd!important;
         border: solid 1px black;
@@ -177,6 +183,7 @@
       }
 
       .bold{
+        direction: ltr;
         font-weight: 700;
         font-size: 19px;
         padding: 0px;
@@ -199,6 +206,10 @@
                   <p class="text-center bold">Total</p>
                 </td>
               {% endfor %}
+
+              <td colspan="1" rowspan="2" class="align-middle total_head">
+                <p class="text-center bold">Overall</p>
+              </td>
             </tr>
 
 
@@ -217,39 +228,6 @@
             </tr>
           </thead>
           <tbody >
-
-          
-
-            <!-- <tr>
-              <td colspan="1">
-                <p class="text-center bold"></p>
-              </td>
-              {% for size in all_size %}
-                
-              <td colspan="1" class="in_head">
-                <p class="text-center bold">In</p>
-              </td>
-              <td colspan="1" class="in_head">
-                <p class="text-center bold">In</p>
-              </td>
-              <td colspan="1" class="in_head">
-                <p class="text-center bold">In</p>
-              </td>
-
-                <td colspan="1" class="out_rep_head">
-                  <p class="text-center bold">Out</p>
-                </td>
-
-                <td colspan="1" class="out_comp_head">
-                  <p class="text-center bold">Out</p>
-                </td>
-              
-              <td colspan="1" class="out_total_head">
-                <p class="text-center bold">Total</p>
-              </td>
-              {% endfor %}
-            </tr> -->
-
 
             <!-- Data Numbers -->
             {% for category in all_category %}
@@ -285,7 +263,9 @@
                   
                   
               {% endfor %}
-
+              <td colspan="1" class="over_all">
+                <p class="text-center bold">{% get_total_row_by_data category day_to_generate %}</p>
+              </td>
             </tr>
             {% endfor %}
             <!-- End Data Numbers -->
