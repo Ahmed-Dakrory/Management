@@ -79,10 +79,20 @@
 
                          
 
+
+
+
+                          <div class="col-md-4"></div>
                          
+                          {% if show %}
+                          <div class="col-md-4" style=" font-size: 20px; font-weight: 700; ">
+                            الإجمالى 
+                            <span>
+                              {% get_total_all_by_data day_to_generate %}
+                            </span>
+                          </div>
 
-
-                          
+                          {%endif%}
 
                          
 
