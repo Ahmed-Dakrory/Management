@@ -419,7 +419,7 @@ def delete_category(request):
 def get_all_categories_by_name(request):
     try:
         name = request.POST['name']
-        all_category = category.objects.filter(Q(name=name) & Q(deleted_date=None))
+        all_category = category.objects.filter((Q(name=name) | Q(name_en=name)) & Q(deleted_date=None))
 
         all_category = list(all_category)
         all_category_json = []
