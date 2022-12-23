@@ -18,6 +18,17 @@
 
 
 <link rel="stylesheet" href="{% static 'vendor/flatpickr/dist/flatpickr.min.css'%}">
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.1/css/fixedColumns.dataTables.min.css"> -->
+
+<style>
+  table.dataTable thead tr>.dtfc-fixed-left, table.dataTable thead tr>.dtfc-fixed-right, table.dataTable tfoot tr>.dtfc-fixed-left, table.dataTable tfoot tr>.dtfc-fixed-right {
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    background-color: #7e99b3;
+}
+
+</style>
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
 
@@ -153,7 +164,7 @@
                                  
                     <option value="%%">{%  trans 'الكل'%}</option>
                     {% for item in all_category %}
-                    <option value="{{item.id}}"  data-option-template='<div class="d-flex align-items-start"><div class="flex-shrink-0"><img class="img_list2" src="{% if item.image is None or item.image == "" %}{% static "img/160x160/img2.jpg" %}{% else %}{{item.image.file.url}}{%endif%}"/></div><div class="flex-grow-1 ms-2"><span class="d-block fw-semi-bold">{{item.serial_start}} ({{item.name}} {{item.color.name}} )</span></div></div>'>{{item.serial_start}} ({{item.name}} {{item.color.name}})</option>
+                    <option value="{{item.id}}"  data-option-template='<div class="d-flex align-items-start"><div class="flex-shrink-0"><img class="img_list2" src="{% if item.image is None or item.image == "" %}{% static "img/160x160/img2.jpg" %}{% else %}{{item.image.file.url}}{%endif%}"/></div><div class="flex-grow-1 ms-2"><span class="d-block fw-semi-bold">{{item.serial_start}} ({{item.name_en}} {{item.color.name}} )</span></div></div>'>{{item.serial_start}} ({{item.name_en}} {{item.color.name}})</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -405,7 +416,7 @@
                   <select required=""  class="required js-select form-select" name="name_category"  id="name_category">
                    
                     {% for item in all_category_group %}
-                    <option value="{{item.name}}" >{{item.name}}</option>
+                    <option value="{{item.name_en}}" >{{item.name_en}}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -538,7 +549,7 @@
 
 
 
-
+<!-- <script  src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js" ></script> -->
 
 
 
@@ -570,7 +581,7 @@
               </div>`
         },
         "columnDefs": [{
-                        "targets": [0, 1, 4],
+                        "targets": [0, 1, 2,3,4,5,6,7,8,9,10],
                         "orderable": false
                       }],
         "order": [],
@@ -581,6 +592,10 @@
         "entries": "#datatableEntries",
         "pageLength": 20,
         "isResponsive": false,
+        // "scrollX":        true,
+        // "fixedColumns":   {
+        //     "left": 3
+        // },
         "dom": "Bfrtip",
         "buttons": [
           {
