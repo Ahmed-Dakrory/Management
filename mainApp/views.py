@@ -443,7 +443,7 @@ def listOf_item(request):
     all_size = size.objects.filter( Q(deleted_date=None))
     all_sector = sector.objects.filter( Q(deleted_date=None))
 
-    all_category_group = category.objects.values('name').annotate(dcount=Count('name'))
+    all_category_group = category.objects.values('name_en').annotate(dcount=Count('name_en'))
     # for item in all_category_group:
     #     print(item)
     
