@@ -314,5 +314,10 @@ def get_total_remain_data(category):
     total_items = item.objects.filter( Q(category__id=category.id) & Q(exists=True) & Q(deleted_date=None)).count()
     return total_items
 
+@register.simple_tag
+def get_total_remain_data_all():
+    total_items = item.objects.filter( Q(exists=True) & Q(deleted_date=None)).count()
+    return total_items
+
 
 
