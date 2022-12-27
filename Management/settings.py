@@ -40,7 +40,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@ye3lef6pekg742=7392-03(h(&m+4+o#_i7#+9yw%dmol)sb3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-Online = False
+Online = True
 if Online:
     DEBUG = True
 else:
@@ -105,7 +105,7 @@ if Online:
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'management',                      
         'USER': 'root',                      
-        'PASSWORD': 'asasas',          
+        'PASSWORD': '0rspmil@nm@2o@~22',          
         'HOST': '127.0.0.1',                 
         'PORT': '3306',  
         'TIME_ZONE': 'Africa/Cairo',                    
@@ -149,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Cairo'
 
 USE_I18N = True
 
