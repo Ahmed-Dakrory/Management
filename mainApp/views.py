@@ -97,12 +97,15 @@ def out_stock_item(request):
                 note = request.POST['note_'+str(part_num)]
             except:
                 note = None
-            
-            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True))
+
+
+          
+
+            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & ~Q(deleted_date=None))
             if itemObject is not None and len(itemObject)>0:
                 # print("create")
                 itemObject.update(last_out_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=False,is_returned=False)
-                itemnew = item.objects.get(part_num=part_num)
+                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & ~Q(deleted_date=None)).last()
                 
 
                 # print("create")
@@ -179,10 +182,10 @@ def return_stock_item(request):
             except:
                 note = None
             
-            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=False))
+            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=False) & Q(deleted_date=None))
             if itemObject is not None and len(itemObject)>0:
                 # print("create")
-                itemnew = item.objects.get(part_num=part_num)
+                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=False) & Q(deleted_date=None)).last()
                 try:
                     representitive_withObject = itemnew.representitive_with
                 except:
