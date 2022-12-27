@@ -3,7 +3,7 @@
 {%load static%}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
-
+{% load tz %}
 
 
 {% block 'title' %}
@@ -274,8 +274,9 @@
                                           </h5>
                     
                                           <a href="#">{{step.note}}</a>
+                                          {% localtime on %}
                                           <p class="fs-6 mb-0">{{step.created|date:"d/m/Y H:i"}}</p>
- 
+                                          {% endlocaltime %}
                                           </div>
                                           <div class="col-6">
                                             <img class="img-step" src='{% if step.image is None or step.image == "" %}{% if itemData.category.image is None or itemData.category.image == "" %}{% static "img/1920x400/img2.jpg" %}{% else %}{{itemData.category.image.file.url}}{%endif%}{% else %}{{step.image.file.url}}{%endif%}'/>
