@@ -55,6 +55,17 @@
                       <!-- <p class="card-category">{%  trans 'برجاء ادخال تاريخ اليوم المراد' %}</p> -->
                     </div>
                     <div class="card-body" style="text-align: justify;">
+                      {% if show %}
+                        <div class="p-1 text-start" style="font-size: 20px;font-weight: 700;direction: ltr!important;width: fit-content;height: 35px;background: cadetblue;color: white;border-radius: 3px;margin-top: 29px;">
+                           
+                          <span>
+                            {% get_total_remain_data_all  %}
+                          </span>
+
+                          الإجمالى
+                        </div>
+
+                        {%endif%}
                       <form  method="GET" enctype="multipart/form-data" id="form" class="needs-validation form-horizontal" novalidate>
                         {% csrf_token %}
 
@@ -65,6 +76,8 @@
                         <br/>
                         <!-- <button type="submit" class="btn btn-primary pull-right">حفظ</button> -->
                         <button type="submit" class="btn btn-primary" >{% trans "تحديث" %}</button>
+
+                        
 
                         <div class="clearfix"></div>
                       </form>
