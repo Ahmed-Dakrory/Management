@@ -104,9 +104,8 @@ def out_stock_item(request):
             itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & Q(deleted_date=None))
             if itemObject is not None and len(itemObject)>0:
                 # print("create")
-                itemObject.update(last_out_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=False,is_returned=False)
-                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & Q(deleted_date=None)).last()
-                
+                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & Q(deleted_date=None))[0]
+                # itemnew = item.objects.get(id=itemnew.id)
 
                 # print("create")
                 type_of_transaction_object = type_of_transaction.objects.get(id=settings.ID_OUT_TYPE_OF_TRANSACTION)
@@ -122,6 +121,8 @@ def out_stock_item(request):
                     created_by = request.user
                 )
                 transactionObject.save()
+                itemObject.update(last_out_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=False,is_returned=False)
+                
                 # print("create")
 
             
@@ -185,7 +186,7 @@ def return_stock_item(request):
             itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=False) & Q(deleted_date=None))
             if itemObject is not None and len(itemObject)>0:
                 # print("create")
-                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=False) & Q(deleted_date=None)).last()
+                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=False) & Q(deleted_date=None))[0]
                 try:
                     representitive_withObject = itemnew.representitive_with
                 except:
