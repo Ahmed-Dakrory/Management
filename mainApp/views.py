@@ -101,11 +101,11 @@ def out_stock_item(request):
 
           
 
-            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & ~Q(deleted_date=None))
+            itemObject = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & Q(deleted_date=None))
             if itemObject is not None and len(itemObject)>0:
                 # print("create")
                 itemObject.update(last_out_date=datetime.now(),company_with=company_withObject,representitive_with=representitive_withObject,exists=False,is_returned=False)
-                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & ~Q(deleted_date=None)).last()
+                itemnew = item.objects.filter(Q(part_num=part_num) & Q(exists=True) & Q(deleted_date=None)).last()
                 
 
                 # print("create")
