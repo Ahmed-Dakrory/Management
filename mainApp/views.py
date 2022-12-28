@@ -96,7 +96,7 @@ def out_stock_item(request):
             try:
                 note = request.POST['note_'+str(part_num)]
             except:
-                note = None
+                note = ""
 
 
           
